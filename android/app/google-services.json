@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1003762681522",
+    "project_id": "your-salon-directory",
+    "storage_bucket": "your-salon-directory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003762681522:android:7fa632b981494a33432bab",
+        "android_client_info": {
+          "package_name": "com.coveredncurly.coveredncurly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003762681522-9tl25g4401fif7onmchugorhnk652aq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL-vW9bIsp2NlEFrZ5-JjVE3-ZwpOSdl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003762681522-9tl25g4401fif7onmchugorhnk652aq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
