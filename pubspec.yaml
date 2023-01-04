@@ -1,5 +1,5 @@
 name: coveredncurly
-description: A new Flutter project.
+description: Looking for a hair salon? Look no further. Have all salons in the palm of your hand!
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -40,6 +40,8 @@ dependencies:
   firebase_auth: ^4.1.4
   cloud_firestore: ^4.1.0
   firebase_analytics: ^10.0.6
+  dots_indicator: ^2.1.0
+  get: ^4.1.4
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +61,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - images/
       
   
 
@@ -74,21 +76,20 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #  - family: Inknut Antiqua
-  #    fonts:
-  #      - asset: fonts/Inknut Antiqua-Bold.ttf
-   #       weight: 400
-   #     - asset: fonts/Inknut Antiqua-Bold-Medium.ttf
-   #       weight: 500
-   #     - asset: fonts/Inknut Antiqua-Bold-Regular.ttf
-   #       weight: 300
-   #       style: normal
-   # - family: Inter
-   #   fonts:
-   #    - asset: fonts/Inter.ttf
-   #     - asset: fonts/Inter_Bold.ttf
-    #      weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: InknutAntiqua
+      fonts:
+        - asset: fonts/InknutAntiqua-Bold.ttf
+        - asset: fonts/InknutAntiqua-Medium.ttf
+        - asset: fonts/InknutAntiqua-Regular.ttf
+          style: normal
+          weight: 400
+    - family: GentiumPlus
+      fonts:
+        - asset: fonts/GentiumPlus-Regular.ttf
+        - asset: fonts/GentiumPlus-Italic.ttf
+        - asset: fonts/GentiumPlus-Bold.ttf
+        - asset: fonts/GentiumPlus-BoldItalic.ttf
+          style: normal
+          weight: 300
+
