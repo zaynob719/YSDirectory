@@ -1,3 +1,4 @@
+import 'package:coveredncurly/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,7 +12,7 @@ class BigText extends StatelessWidget {
       {Key? key,
       this.color = const Color(0xFF332D2B),
       required this.text,
-      this.size = 20,
+      this.size = 0,
       this.overFlow = TextOverflow.ellipsis})
       : super(key: key);
 
@@ -22,10 +23,10 @@ class BigText extends StatelessWidget {
       maxLines: 1,
       overflow: overFlow,
       style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: size,
+          fontFamily: 'InknutAntiqua',
+          fontSize: size == 0 ? Dimensions.font20 : size,
           color: color,
-          fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w700),
     );
   }
 }
