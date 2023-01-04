@@ -1,7 +1,8 @@
 import 'dart:ui';
 
-import 'package:coveredncurly/colors/colors.dart';
+import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/home/salon_page_body.dart';
+import 'package:coveredncurly/utils/dimensions.dart';
 import 'package:coveredncurly/widgets/big_text.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +20,9 @@ class _MainSalonPageState extends State<MainSalonPage> {
         body: Column(children: [
       Container(
         child: Container(
-          margin: EdgeInsets.only(top: 60, bottom: 15),
-          padding: EdgeInsets.only(left: 22, right: 22),
+          margin: EdgeInsets.only(
+              top: Dimensions.height45, bottom: Dimensions.height15),
+          padding: EdgeInsets.only(left: 20, right: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -35,18 +37,20 @@ class _MainSalonPageState extends State<MainSalonPage> {
               ),
               Center(
                   child: Container(
-                width: 45,
-                height: 45,
                 child: Icon(
                   Icons.search,
                   color: Colors.black,
+                  size: Dimensions.iconSize24,
                 ),
               ))
             ],
           ),
         ),
       ),
-      SalonPageBody(),
+      Expanded(
+          child: SingleChildScrollView(
+        child: SalonPageBody(),
+      ))
     ]));
   }
 }
