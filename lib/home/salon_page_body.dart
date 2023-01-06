@@ -89,35 +89,84 @@ class _SalonPageBodyState extends State<SalonPageBody> {
           ),
         ),
         // list of salons and images
-        Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            height: 900,
-            child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                //shrinkWrap: true,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                      margin: EdgeInsets.only(
-                          left: Dimensions.width20,
-                          right: Dimensions.width20,
-                          bottom: Dimensions.height10),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.radius20),
-                                color: Colors.white38,
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage("images/pinksalon.jpg"))),
-                          )
-                        ],
-                      ));
-                })),
+        ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Container(
+                  margin: EdgeInsets.only(
+                      left: Dimensions.width20,
+                      right: Dimensions.width20,
+                      bottom: 20),
+                  child: Row(
+                    children: [
+                      //image section
+                      Container(
+                        width: Dimensions.ListViewImgSize,
+                        height: Dimensions.ListViewImgSize,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radius20),
+                            color: Colors.white38,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage("images/pinksalon.jpg"))),
+                      ),
+                      // text section
+                      Expanded(
+                        child: Container(
+                          height: Dimensions.listViewTextContsize,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(Dimensions.radius20),
+                              bottomRight: Radius.circular(Dimensions.radius20),
+                            ),
+                            color: Color(0xFFF1E6DB),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: Dimensions.width10,
+                                right: Dimensions.width10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                BigText(text: "First Named Salon"),
+                                SizedBox(
+                                  width: Dimensions.height10,
+                                ),
+                                SmallText(
+                                    text:
+                                        "Based in London, specialising in all hair types!"),
+                                SizedBox(
+                                  width: Dimensions.height10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    IconAndTextWidget(
+                                        icon: Icons.location_on_rounded,
+                                        text: "1.5km",
+                                        iconColor: AppColors.secondBrownColor),
+                                    IconAndTextWidget(
+                                        icon: Icons.comment_rounded,
+                                        text: "30 rev ",
+                                        iconColor: AppColors.secondBrownColor),
+                                    IconAndTextWidget(
+                                        icon: Icons.link_rounded,
+                                        text: "socials",
+                                        iconColor: AppColors.secondBrownColor)
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ) // text section
+                    ],
+                  ));
+            })
       ],
     );
   }
@@ -212,15 +261,15 @@ class _SalonPageBodyState extends State<SalonPageBody> {
                             children: [
                               IconAndTextWidget(
                                   icon: Icons.location_on_rounded,
-                                  text: "15 Mil",
+                                  text: "15 km",
                                   iconColor: AppColors.secondBrownColor),
                               IconAndTextWidget(
                                   icon: Icons.comment_rounded,
-                                  text: "30 Reviwes",
+                                  text: "30 reviwes",
                                   iconColor: AppColors.secondBrownColor),
                               IconAndTextWidget(
                                   icon: Icons.link_rounded,
-                                  text: "Socials",
+                                  text: "socials",
                                   iconColor: AppColors.secondBrownColor)
                             ],
                           )
