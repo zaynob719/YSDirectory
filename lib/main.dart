@@ -1,4 +1,5 @@
-import 'package:coveredncurly/home/main_salon_page.dart';
+import 'package:coveredncurly/pages/home/main_salon_page.dart';
+import 'package:coveredncurly/pages/salon/popular_salon_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: MainSalonPage(),
+      home: PopularSalonDetail(),
     );
   }
 }
