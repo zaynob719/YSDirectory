@@ -8,4 +8,5 @@ class AppColors {
   static final Color mainBrownColor = const Color(0xFFF1E6DB);
   static final Color white = const Color(0xFFFFFF);
   static final Color tagColor = Color.fromARGB(255, 228, 228, 228);
+  static final Color textColor2 = Color.fromARGB(255, 116, 115, 123);
 }

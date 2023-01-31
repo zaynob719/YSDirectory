@@ -1,10 +1,21 @@
-import 'package:coveredncurly/pages/home/main_salon_page.dart';
-import 'package:coveredncurly/pages/salon/popular_salon_detail.dart';
+import 'package:coveredncurly/bindings/initial_bindings.dart';
+import 'package:coveredncurly/routes/app_routes.dart';
+import 'package:coveredncurly/screens/pages/home_salon_page.dart';
+import 'package:coveredncurly/screens/introduction/introduction.dart';
+import 'package:coveredncurly/screens/pages/main_page.dart';
+import 'package:coveredncurly/screens/pages/salon_page_body.dart';
+import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
+import 'package:coveredncurly/screens/splash/splash_screen.dart';
+import 'package:coveredncurly/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'data_uploader_screen.dart';
+
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  InitialBindings().dependencies();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,12 +24,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
-      home: PopularSalonDetail(),
+      getPages: AppRoutes.routes(),
     );
   }
 }
+
+/*Future<void> main() async {
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await dep.init();
+  runApp(GetMaterialApp(home: DataUploaderScreen()));
+}*/
