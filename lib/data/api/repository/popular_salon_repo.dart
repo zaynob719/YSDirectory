@@ -1,5 +1,4 @@
 import 'package:coveredncurly/data/api/api_client.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
 
 class PopularSalonRepo extends GetxService {

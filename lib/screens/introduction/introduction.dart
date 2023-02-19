@@ -8,6 +8,7 @@ import 'package:coveredncurly/widgets/responsive_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 
 class AppIntroduction extends StatefulWidget {
   const AppIntroduction({Key? key}) : super(key: key);
@@ -76,8 +77,11 @@ class _AppIntroductionState extends State<AppIntroduction> {
                                   borderRadius: BorderRadius.circular(30),
                                   color: Colors.brown),
                               child: AppButton(
-                                onTap: (() => null),
-                                child: const Icon(Icons.arrow_forward_ios),
+                                onTap: () => Get.offAndToNamed("/home"),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 35,
+                                ),
                               ),
                             ),
                         ],

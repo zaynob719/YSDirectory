@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/screens/pages/salon_page_body.dart';
 import 'package:coveredncurly/utils/dimensions.dart';
