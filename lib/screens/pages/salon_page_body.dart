@@ -112,7 +112,7 @@ class _SalonPageBodyState extends State<SalonPageBody> {
                             color: Colors.white38,
                             image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage("images/pinksalon.jpg"))),
+                                image: AssetImage("images/ysds003.png"))),
                       ),
                       // text section
                       Expanded(
@@ -212,7 +212,7 @@ class _SalonPageBodyState extends State<SalonPageBody> {
                     color: index.isEven ? Color(0xFFD8BA9E) : Color(0xFFF1E6DB),
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage("images/salon.jpg")))),
+                        image: AssetImage("images/ysds001.png")))),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
