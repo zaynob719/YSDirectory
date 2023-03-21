@@ -9,7 +9,9 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class MainSalonDetail extends StatelessWidget {
-  const MainSalonDetail({Key? key}) : super(key: key);
+  const MainSalonDetail(
+      {Key? key, required String category, required void Function() onClose})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +137,7 @@ class MainSalonDetail extends StatelessWidget {
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
                 background: Image.asset(
-              "images/blacksalon.jpeg",
+              "images/ysds001.png",
               width: double.maxFinite,
               fit: BoxFit.cover,
             )),

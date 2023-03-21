@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/dimensions.dart';
 import 'package:coveredncurly/widgets/app_column.dart';
@@ -6,10 +5,7 @@ import 'package:coveredncurly/widgets/big_text.dart';
 import 'package:coveredncurly/widgets/icon_and_text_widget.dart';
 import 'package:coveredncurly/widgets/small_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:get/get.dart';
 
 class SalonPageBody extends StatefulWidget {
   const SalonPageBody({Key? key}) : super(key: key);
@@ -27,16 +23,19 @@ class _SalonPageBodyState extends State<SalonPageBody> {
   @override
   void initState() {
     super.initState();
-    pageController.addListener(() {
-      setState(() {
-        _currPageValue = pageController.page!;
+    if (pageController != null) {
+      pageController.addListener(() {
+        setState(() {
+          _currPageValue = pageController.page ?? 0.0;
+        });
       });
-    });
+    }
   }
 
   @override
   void dispose() {
     pageController.dispose();
+    super.dispose();
   }
 
   @override
