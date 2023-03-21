@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+const Color backgroundColor = Color(0xffebecee);
+const Color brown = Color(0xFFD8BA9E);
+
 class AppColors {
   static final Color textColor = const Color(0x000000);
   static final Color secondBrownColor = const Color(0xFFD8BA9E);
