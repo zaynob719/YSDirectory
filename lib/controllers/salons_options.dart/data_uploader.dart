@@ -38,7 +38,7 @@ class DataUploader extends GetxController {
       salonsOptions
           .add(SalonListModel.fromJson(json.decode(stringSalonContent)));
     }
-    //print('Items number ${salons[0].id}');
+    //print('Items number ${salonsOptions[0].id}');
     var batch = fireStore.batch();
 
     for (var salon in salonsOptions) {

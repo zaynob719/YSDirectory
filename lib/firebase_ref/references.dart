@@ -11,9 +11,9 @@ DocumentReference salonProfileRF({
 
 Reference get fireBaseStorage => FirebaseStorage.instance.ref();
 
-final popularSalonRF = fireStore.collection('popularSalon');
-DocumentReference nameRF({
-  required String salonId,
-  required String nameId,
-}) =>
-    popularSalonRF.doc(salonId).collection("names").doc(nameId);
+// final popularSalonRF = fireStore.collection('popularSalon');
+// DocumentReference nameRF({
+//   required String salonId,
+//   required String nameId,
+// }) =>
+//     popularSalonRF.doc(salonId).collection("names").doc(nameId);
