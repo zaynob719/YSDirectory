@@ -2,6 +2,7 @@ import 'package:coveredncurly/controllers/salons_options.dart/salon_options_cont
 import 'package:coveredncurly/screens/home/home_screen.dart';
 import 'package:coveredncurly/screens/introduction/introduction.dart';
 import 'package:coveredncurly/screens/pages/home_salon_page.dart';
+import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/splash/splash_screen.dart';
 import 'package:coveredncurly/services/firebase_storage_service.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,7 @@ class AppRoutes {
         ),
         GetPage(
             name: "/home",
-            page: () => const HomeSalonPage(),
+            page: () => const HomeScreen(),
             binding: BindingsBuilder(() {
               Get.put(SalonOptionsController());
             })),
