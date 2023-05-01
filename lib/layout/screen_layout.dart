@@ -29,7 +29,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         body: PageView(
           controller: pageController,
@@ -46,7 +46,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                   border: Border(
                 top: BorderSide(
                   color: AppColors.secondBrownColor,
-                  width: 4,
+                  width: 3,
                 ),
               )),
               onTap: changePage,
@@ -70,19 +70,19 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     size: currentPage == 1 ? 33 : 24,
                   ),
                 ),
-                Tab(
-                  child: Icon(
-                    Icons.search,
-                    color: currentPage == 2
-                        ? AppColors.secondBrownColor
-                        : Colors.black,
-                    size: currentPage == 2 ? 33 : 24,
-                  ),
-                ),
+                // Tab(
+                //   child: Icon(
+                //     Icons.search,
+                //     color: currentPage == 2
+                //         ? AppColors.secondBrownColor
+                //         : Colors.black,
+                //     size: currentPage == 2 ? 33 : 24,
+                //   ),
+                // ),
                 Tab(
                   child: Icon(
                     Icons.person,
-                    color: currentPage == 3
+                    color: currentPage == 2
                         ? AppColors.secondBrownColor
                         : Colors.black,
                     size: currentPage == 3 ? 33 : 24,
