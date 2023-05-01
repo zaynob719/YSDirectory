@@ -4,10 +4,16 @@ import 'package:coveredncurly/utils/constants.dart';
 import 'package:coveredncurly/utils/utils.dart';
 
 class SearchBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  final bool isReadOnly;
   final bool hasBackButton;
+  //final VoidCallback onTap;
 
-  const SearchBarWidget({Key? key, required this.hasBackButton})
-      : preferredSize = const Size.fromHeight(kAppBarHeight),
+  const SearchBarWidget({
+    Key? key,
+    required this.isReadOnly,
+    required this.hasBackButton,
+    //required this.onTap
+  })  : preferredSize = const Size.fromHeight(kAppBarHeight),
         super(key: key);
 
   @override
@@ -41,7 +47,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           widget.hasBackButton
               ? IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back),
                 )

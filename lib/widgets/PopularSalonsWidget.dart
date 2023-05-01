@@ -1,10 +1,14 @@
 //import 'dart:html';
-
+import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/utils/colors.dart';
+import 'package:coveredncurly/widgets/review_rating_location.dart';
+import 'package:coveredncurly/widgets/salon_information_widget.dart';
+import 'package:coveredncurly/widgets/salon_summary_widget.dart';
 import 'package:flutter/material.dart';
 
 class PopularSalonsWidget extends StatelessWidget {
-  const PopularSalonsWidget({Key? key}) : super(key: key);
+  final SalonModel salon;
+  const PopularSalonsWidget({Key? key, required this.salon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +26,13 @@ class PopularSalonsWidget extends StatelessWidget {
               Container(
                 width: 110,
                 height: 110,
-                decoration: BoxDecoration(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
+                  child: Image.network(
+                    salon.url,
                     fit: BoxFit.cover,
-                    image: AssetImage('images/ysds001.png'),
                   ),
                 ),
               ),
@@ -36,67 +42,72 @@ class PopularSalonsWidget extends StatelessWidget {
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     color: lightBrown,
-                    borderRadius: BorderRadius.circular(10
-                        //topRight: Radius.circular(10),
-                        //bottomRight: Radius.circular(10),
-                        ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Salon Name $index',
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16.0,
-                            fontFamily: 'InknutAntiqua'),
+                      SalonInformationWidget(
+                        salonName: salon.salonName,
                       ),
-                      //SizedBox(height: 10.0),
-                      Text(
-                        'Specialise in Afrocare services',
-                        style: TextStyle(
-                            fontSize: 14.0, fontFamily: 'GentiumPlus'),
-                      ),
+                      SalonSummaryWidget(summary: salon.summary),
                       SizedBox(height: 5.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(Icons.comment, color: Colors.black),
-                              SizedBox(width: 8.0),
-                              Text(
-                                '20 reviews',
-                                style: TextStyle(
-                                    fontSize: 12.0, fontFamily: 'GentiumPlus'),
-                              ),
-                            ],
-                          ),
-                          // Row(
-                          //   children: [
-                          //     Icon(Icons.comment, color: Colors.black),
-                          //     SizedBox(width: 5.0),
-                          //     Text(
-                          //       '20 socials',
-                          //       style: TextStyle(fontSize: 12.0),
-                          //     ),
-                          //   ],
-                          // ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                              ),
-                              SizedBox(width: 8.0),
-                              Text(
-                                '1.5 mi',
-                                style: TextStyle(
-                                    fontSize: 13.0, fontFamily: 'GentiumPlus'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      ReviewRatingLocation(
+                        noOfRating: salon.noOfRating,
+                        noOfReview: salon.noOfReview,
+                        //rating: salon.rating,
+                        //review: salon.review,
+                        salonDistance: salon.salonDistance,
+                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //   children: [
+                      //     Row(
+                      //       children: [
+                      //         Icon(
+                      //           Icons.comment,
+                      //           color: Colors.black,
+                      //           size: 17,
+                      //         ),
+                      //         SizedBox(width: 5.0),
+                      //         Text(
+                      //           '$index reviews',
+                      //           style: TextStyle(
+                      //               fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     Row(
+                      //       children: [
+                      //         Icon(
+                      //           Icons.star,
+                      //           color: Colors.black,
+                      //           size: 17,
+                      //         ),
+                      //         SizedBox(width: 5.0),
+                      //         Text(
+                      //           '$index ratings',
+                      //           style: TextStyle(
+                      //               fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     Row(
+                      //       children: [
+                      //         Icon(
+                      //           Icons.location_on,
+                      //           size: 17,
+                      //         ),
+                      //         SizedBox(width: 5.0),
+                      //         Text(
+                      //           '1.5 mi',
+                      //           style: TextStyle(
+                      //               fontSize: 13.0, fontFamily: 'GentiumPlus'),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

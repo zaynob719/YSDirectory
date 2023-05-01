@@ -14,11 +14,11 @@ class AppRoutes {
           name: "/introduction",
           page: () => const AppIntroduction(),
         ),
-        GetPage(
-            name: "/home",
-            page: () => const HomeScreen(),
-            binding: BindingsBuilder(() {
-              Get.put(SalonOptionsController());
-            })),
+        // GetPage(
+        //     name: "/home",
+        //     page: () => const HomeScreen(),
+        //     binding: BindingsBuilder(() {
+        //       Get.put(SalonOptionsController());
+        //     })),
       ];
 }

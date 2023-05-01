@@ -1,7 +1,9 @@
 import 'package:coveredncurly/screens/pages/home_screen.dart';
+import 'package:coveredncurly/screens/pages/profile_page.dart';
 import 'package:coveredncurly/screens/pages/salon_page_body.dart';
+import 'package:coveredncurly/screens/result_screen.dart';
 import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
-import 'package:coveredncurly/screens/search_screen.dart';
+import 'package:coveredncurly/screens/show_more.dart';
 import 'package:flutter/material.dart';
 
 const double kAppBarHeight = 100;
@@ -14,20 +16,40 @@ const List<String> categoryList = [
   "Mobile",
   "Ratings",
   "Curls",
-  "Essentials",
-  "Reservations",
   "Last minute",
+  "Essentials"
 ];
 
+const List<String> categoryLogos = [
+  //hijabi
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fhijabi.png?alt=media&token=3f4c8172-d060-465f-b1ad-252089fa4e6b",
+  //kids space
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fkid%20friendly.png?alt=media&token=15a5e8b6-3ce3-462b-a5af-6b5ce94734b5",
+  //afro care
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fafro.png?alt=media&token=c2227ddf-0d9e-40ed-b270-4ff5306ff1a2",
+  //location
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Flocation.png?alt=media&token=66d8cbb2-3640-4337-8c3d-d5c1936b735a",
+  //mobile
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fmobile.png?alt=media&token=ce9ece8b-2be4-4493-a648-49ce168ada7e",
+  //ratings
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Frating.png?alt=media&token=6f92532a-6aa6-47c3-9e6a-1c93679df86f",
+  //curls
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fcurls.png?alt=media&token=d372e898-9a0c-48ff-bb1c-19471767a0dd",
+  //last minute
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Flast%20minute.png?alt=media&token=d802f984-6e5c-49ee-9951-c2dd2e2ac90c",
+  //essential
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fessential.png?alt=media&token=71b2ba4c-799c-4126-9d45-c56e5e44efa7",
+];
+
+// app navigation bar pages
 const List<Widget> screens = [
   HomeScreen(),
+  //AddReviewPage(),
   Center(
-    child: Text("add review"),
+    child: Text("add review2"),
   ),
-  SearchScreen(),
-  Center(
-    child: Text("profile"),
-  ),
+  //ResultScreen(),
+  ProfilePage(),
 ];
 
 const List<String> newSalonAdd = [
