@@ -72,13 +72,13 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                             SizedBox(height: 1),
                             Chip(
                               label: Text(
-                                'Hijabi space',
+                                'Hijaby space',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 14,
                                     fontFamily: 'GentiumPlus'),
                               ),
-                              backgroundColor: Colors.black.withOpacity(0.5),
+                              backgroundColor: tagColor,
                             ),
                           ],
                         ),

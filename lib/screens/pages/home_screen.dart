@@ -96,10 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Popular Salons",
+                  "Trending Salons ",
                   style: TextStyle(
-                      fontFamily: 'InknutAntiqua',
-                      fontSize: 18,
+                      fontFamily: 'GentiumPlus',
+                      fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: PopularSalonsWidget(
-                  salon: SalonModel(
+                  salonModel: SalonModel(
                 url:
                     "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
                 salonName: "MeYou hair",

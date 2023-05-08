@@ -29,7 +29,7 @@ class _ShowMoreState extends State<ShowMore> {
         ),
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
             color: Colors.black,
           ),
           onPressed: () {
@@ -146,11 +146,13 @@ class DataSerch extends SearchDelegate<String> {
     // TODO: implement buildSuggestions
     final suggestionList = query.isEmpty
         ? recentSalons
-        : salons.where((p) => p.startsWith(query)).toList();
+        : salons
+            .where((p) => p.toLowerCase().contains(query.toLowerCase()))
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-        leading: Icon(Icons.bookmark),
+        leading: Icon(Icons.search),
         title: Text(suggestionList[index]),
       ),
       itemCount: suggestionList.length,

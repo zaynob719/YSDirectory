@@ -2,7 +2,7 @@
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:intl/intl.dart';
-//import 'package:coveredncurly/utils/utils.dart';
+// import 'package:coveredncurly/utils/utils.dart';
 
 // class AddReviewPage extends StatefulWidget {
 //   const AddReviewPage({Key? key}) : super(key: key);
@@ -31,8 +31,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-
-//Size screenSize = Utils().getScreenSize();
+//     Size screenSize = Utils().getScreenSize();
 //     return Scaffold(
 //       appBar: AppBar(
 //         title: Text('Add Review'),

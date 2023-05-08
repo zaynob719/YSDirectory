@@ -1,8 +1,10 @@
 import 'package:coveredncurly/bindings/initial_bindings.dart';
 import 'package:coveredncurly/layout/screen_layout.dart';
+import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/routes/app_routes.dart';
 import 'package:coveredncurly/screens/pages/DP_home_salon_page.dart';
 import 'package:coveredncurly/screens/introduction/introduction.dart';
+import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/screens/pages/salon_page_body.dart';
 import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
 import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
