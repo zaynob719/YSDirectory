@@ -1,9 +1,12 @@
+import 'package:coveredncurly/models/salon_model.dart';
+import 'package:coveredncurly/screens/pages/addReviewPage.dart';
 import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/pages/profile_page.dart';
 import 'package:coveredncurly/screens/pages/salon_page_body.dart';
 import 'package:coveredncurly/screens/result_screen.dart';
 import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
 import 'package:coveredncurly/screens/show_more.dart';
+import 'package:coveredncurly/widgets/PopularSalonsWidget.dart';
 import 'package:flutter/material.dart';
 
 const double kAppBarHeight = 100;
@@ -86,11 +89,69 @@ const List<String> favouriteSalonShowcase = [
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
 ];
 
-// const List<String> favouriteSalonShowcaseNames = [
-//   "Add reviews", // link to add review page
-//   "Discounts", // link to YSD discounts
-//   "Reservations", //link to salons that require reservations before you go
-//   "Read reviews", //link to list of salons that have reviews
-//   "Save", //link to profile
-//   "Share", // link to social media
+List<String> keysOfRating = [
+  "Very bad",
+  "Poor",
+  "Average",
+  "Good",
+  "Excellent"
+];
+
+// List<Widget> testChildren = [
+//   PopularSalonsWidget(
+//       salonModel: SalonModel(
+//     url:
+//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+//     salonName: "MeYou hair",
+//     uid: "123",
+//     summary:
+//         "A private hijabi friendly salon that specialises in afro curly hair",
+//     //rating: 2,
+//     noOfRating: 3,
+//     salonDistance: 1.3,
+//     noOfReview: 20,
+//     //review: 20
+//   )),
+//   PopularSalonsWidget(
+//       salonModel: SalonModel(
+//     url:
+//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+//     salonName: "MeYou hair",
+//     uid: "123",
+//     summary:
+//         "A private hijabi friendly salon that specialises in afro curly hair",
+//     //rating: 2,
+//     noOfRating: 3,
+//     salonDistance: 1.3,
+//     noOfReview: 20,
+//     //review: 20
+//   )),
+//   PopularSalonsWidget(
+//       salonModel: SalonModel(
+//     url:
+//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+//     salonName: "MeYou hair",
+//     uid: "123",
+//     summary:
+//         "A private hijabi friendly salon that specialises in afro curly hair",
+//     //rating: 2,
+//     noOfRating: 3,
+//     salonDistance: 1.3,
+//     noOfReview: 20,
+//     //review: 20
+//   )),
+//   PopularSalonsWidget(
+//       salonModel: SalonModel(
+//     url:
+//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+//     salonName: "MeYou hair",
+//     uid: "123",
+//     summary:
+//         "A private hijabi friendly salon that specialises in afro curly hair",
+//     //rating: 2,
+//     noOfRating: 3,
+//     salonDistance: 1.3,
+//     noOfReview: 20,
+//     //review: 20
+//   )),
 // ];
