@@ -2,7 +2,7 @@ class ReviewModel {
   final String senderName;
   final String description;
   final int rating;
-  final int attendanceDate;
+  final String attendanceDate;
 
   const ReviewModel({
     required this.senderName,

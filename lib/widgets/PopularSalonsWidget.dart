@@ -65,10 +65,8 @@ class PopularSalonsWidget extends StatelessWidget {
                         SizedBox(height: 5.0),
                         ReviewRatingLocation(
                           noOfRating: salonModel.noOfRating,
-                          noOfReview: salonModel.noOfReview,
-                          //rating: salon.rating,
-                          //review: salon.review,
                           salonDistance: salonModel.salonDistance,
+                          noOfReview: salonModel.noOfReview,
                         ),
                       ],
                     ),
@@ -82,56 +80,3 @@ class PopularSalonsWidget extends StatelessWidget {
     );
   }
 }
-
-
-
-
-// Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        //   children: [
-                        //     Row(
-                        //       children: [
-                        //         Icon(
-                        //           Icons.comment,
-                        //           color: Colors.black,
-                        //           size: 17,
-                        //         ),
-                        //         SizedBox(width: 5.0),
-                        //         Text(
-                        //           '$index reviews',
-                        //           style: TextStyle(
-                        //               fontSize: 12.0, fontFamily: 'GentiumPlus'),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     Row(
-                        //       children: [
-                        //         Icon(
-                        //           Icons.star,
-                        //           color: Colors.black,
-                        //           size: 17,
-                        //         ),
-                        //         SizedBox(width: 5.0),
-                        //         Text(
-                        //           '$index ratings',
-                        //           style: TextStyle(
-                        //               fontSize: 12.0, fontFamily: 'GentiumPlus'),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     Row(
-                        //       children: [
-                        //         Icon(
-                        //           Icons.location_on,
-                        //           size: 17,
-                        //         ),
-                        //         SizedBox(width: 5.0),
-                        //         Text(
-                        //           '1.5 mi',
-                        //           style: TextStyle(
-                        //               fontSize: 13.0, fontFamily: 'GentiumPlus'),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),

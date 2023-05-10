@@ -3,19 +3,15 @@ import 'package:coveredncurly/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ReviewRatingLocation extends StatelessWidget {
-  //final int rating;
   final int noOfRating;
   final double salonDistance;
-  //final int review;
   final int noOfReview;
-  const ReviewRatingLocation({
-    Key? key,
-    required this.noOfRating,
-    required this.noOfReview,
-    //required this.rating,
-    //required this.review,
-    required this.salonDistance,
-  }) : super(key: key);
+  const ReviewRatingLocation(
+      {Key? key,
+      required this.noOfRating,
+      required this.salonDistance,
+      required this.noOfReview})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +30,7 @@ class ReviewRatingLocation extends StatelessWidget {
               ),
               SizedBox(width: 5.0),
               Text(
-                'reviews',
+                noOfReview.toString(),
                 style: TextStyle(fontSize: 12.0, fontFamily: 'GentiumPlus'),
               ),
             ],
@@ -48,7 +44,7 @@ class ReviewRatingLocation extends StatelessWidget {
               ),
               SizedBox(width: 5.0),
               Text(
-                'ratings',
+                noOfRating.toString(),
                 style: TextStyle(fontSize: 12.0, fontFamily: 'GentiumPlus'),
               ),
             ],
@@ -61,7 +57,7 @@ class ReviewRatingLocation extends StatelessWidget {
               ),
               SizedBox(width: 5.0),
               Text(
-                '1.5 mi',
+                "${salonDistance.toString()} mi",
                 style: TextStyle(fontSize: 13.0, fontFamily: 'GentiumPlus'),
               ),
             ],
