@@ -47,16 +47,19 @@ class _ShowMoreState extends State<ShowMore> {
               ))
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 2.2 / 3.5,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10),
-          itemCount: categoryList.length,
-          itemBuilder: (context, index) => CategoryWidget(index: index),
+      body: GestureDetector(
+        onTap: (() {}),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 2.2 / 3.5,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10),
+            itemCount: categoryList.length,
+            itemBuilder: (context, index) => CategoryWidget(index: index),
+          ),
         ),
       ),
     );

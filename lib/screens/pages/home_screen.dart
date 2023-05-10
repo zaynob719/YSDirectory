@@ -108,21 +108,21 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 15,
             ),
             SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: PopularSalonsWidget(
                   salonModel: SalonModel(
-                url:
-                    "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-                salonName: "MeYou hair",
-                uid: "123",
-                summary:
-                    "A private hijabi friendly salon that specialises in afro curly hair",
-                //rating: 2,
-                noOfRating: 3,
-                salonDistance: 1.3,
-                noOfReview: 20,
-                //review: 20
-              )),
+                      url:
+                          "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+                      salonName: "MeYou hair",
+                      uid: "123",
+                      summary:
+                          "A private hijabi friendly salon that specialises in afro curly hair",
+                      rating: 4,
+                      noOfRating: 4,
+                      salonDistance: 1.3,
+                      noOfReview: 5,
+                      //review: 20
+                      location: "East Ham, E6 London, UK")),
             ),
             SizedBox(
               height: 5,

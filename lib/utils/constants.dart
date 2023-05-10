@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 
 const double kAppBarHeight = 100;
 
+const Color backgroundColor = Color(0xffebecee);
+
 const List<String> categoryList = [
   "Hijaby space",
   "Kids space",
@@ -47,10 +49,10 @@ const List<String> categoryLogos = [
 // app navigation bar pages
 const List<Widget> screens = [
   HomeScreen(),
-  //AddReviewPage(),
-  Center(
-    child: Text("add review2"),
-  ),
+  AddReviewPage(),
+  // Center(
+  //   child: Text("add review2"),
+  // ),
   //ResultScreen(),
   ProfilePage(),
 ];
