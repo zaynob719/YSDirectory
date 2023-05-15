@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   TextEditingController confirmEmailAddressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
   bool isLoading = false;
 
   // @override
@@ -94,9 +94,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                   ),
                   SizedBox(height: 25),
                   TextFormField(
-                    controller: countryController,
+                    controller: cityController,
                     decoration: InputDecoration(
-                      labelText: ' Country',
+                      labelText: ' City',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
@@ -201,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               confirmEmailAddressController.text,
                           password: passwordController.text,
                           confirmPassword: confirmPasswordController.text,
-                          country: countryController.text);
+                          city: cityController.text);
                       setState(() {
                         isLoading = false;
                       });

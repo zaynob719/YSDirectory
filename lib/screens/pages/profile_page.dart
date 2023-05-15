@@ -1,9 +1,12 @@
 import 'package:coveredncurly/models/user_details_model.dart';
+import 'package:coveredncurly/provider/user_details_provider.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:coveredncurly/widgets/custom_main_button.dart';
 import 'package:coveredncurly/widgets/user_detail_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,13 +16,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String userName = "Zaynob Sumon";
-  String avatarUrl = "https://picsum.photos/200";
+  //String avatarUrl = "https://picsum.photos/200";
+  Uint8List? image;
   String bigFontFamily = 'InknutAntiqua';
   String smallFontFamily = 'GentiumPlus';
 
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userDetails;
     Size screenSize = Utils().getScreenSize();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -49,29 +54,51 @@ class _ProfilePageState extends State<ProfilePage> {
             height: screenSize.height,
             width: screenSize.width,
             child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 UserDetailBar(
                   offset: 0,
-                  userDetails: UserDetailsModel(
-                      name: "Zaynob", country: "United Kingdom"),
                 ),
                 SizedBox(height: 20),
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(avatarUrl),
+                Stack(
+                  children: [
+                    image == null
+                        ? Image.network(
+                            "https://picsum.photos/200",
+                            height: screenSize.height / 10,
+                          )
+                        : Image.memory(
+                            image!,
+                            height: screenSize.height / 10,
+                          ),
+                    IconButton(
+                        onPressed: () async {
+                          Uint8List? temp = await Utils().pickImage();
+                          if (temp != null) {
+                            setState(() {
+                              image = temp;
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          Icons.file_upload,
+                          color: Colors.white,
+                        ))
+                  ],
+                  // child: CircleAvatar(
+                  //   radius: 50,
+                  //   backgroundImage: NetworkImage(avatarUrl),
+                  // ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  //"${userDetails.name}",
-                  userName,
+                  "${userDetailsModel.name}",
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: smallFontFamily),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: 150,
                   child: ElevatedButton(
@@ -91,11 +118,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -106,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.bold,
                             fontFamily: smallFontFamily),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       // TODO: Implement list of saved salons
                     ],
                   ),
@@ -131,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
@@ -148,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
@@ -165,7 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomMainButton(
                     child: Text(
                       "Sign out",
@@ -177,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: backgroundColor,
                     isLoading: false,
                     onPressed: () {}),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),

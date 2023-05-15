@@ -1,3 +1,4 @@
+import 'package:coveredncurly/screens/result_screen.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,7 +11,14 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(query: categoryList[index]),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white,

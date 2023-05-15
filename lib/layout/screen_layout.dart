@@ -1,6 +1,9 @@
+import 'package:coveredncurly/provider/user_details_provider.dart';
+import 'package:coveredncurly/resources/cloudfirestore_methods.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:coveredncurly/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class ScreenLayout extends StatefulWidget {
   const ScreenLayout({Key? key}) : super(key: key);
@@ -27,7 +30,14 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    CloudFirestoreClass().getNameAndCity();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Provider.of<UserDetailsProvider>(context).getData();
     return DefaultTabController(
       length: 3,
       child: Scaffold(

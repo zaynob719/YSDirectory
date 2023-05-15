@@ -12,12 +12,12 @@ class AuthenticationMethods {
       required String confirmEmailAddress,
       required String password,
       required String confirmPassword,
-      required String country}) async {
+      required String city}) async {
     firstName.trim();
     lastName.trim();
     emailAddress.trim();
     password.trim();
-    country.trim();
+    city.trim();
     String output = "Ops! Something went wrong";
     if (firstName != "" &&
         lastName != "" &&
@@ -25,12 +25,11 @@ class AuthenticationMethods {
         confirmEmailAddress != "" &&
         password != "" &&
         confirmPassword != "" &&
-        country != "") {
+        city != "") {
       try {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: emailAddress, password: confirmPassword);
-        UserDetailsModel user =
-            UserDetailsModel(name: firstName, country: country);
+        UserDetailsModel user = UserDetailsModel(name: firstName, city: city);
         await cloudFirestoreClass.uploadNameAndAddressToDatabase(user: user);
         output = "success";
       } on FirebaseAuthException catch (e) {
