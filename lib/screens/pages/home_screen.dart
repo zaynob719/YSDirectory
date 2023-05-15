@@ -7,6 +7,7 @@ import 'package:coveredncurly/widgets/category_chip_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:coveredncurly/utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -74,20 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CategoryChipWidget(
-              categoryList: [
-                "Hijaby space",
-                "Kids space",
-                "Afrocare",
-                "Location",
-                "Mobile",
-                "Ratings",
-                "Curls",
-                "Essentials",
-                "Last minute",
-              ],
+            const CategoryChipWidget(),
+            BannerAddWidget(
+              salonModel: SalonModel(
+                  url:
+                      "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+                  uid: "123",
+                  salonName: "MeYou hair",
+                  summary:
+                      "A private hijabi friendly salon that specialises in afro curly hair",
+                  rating: 4,
+                  noOfRating: 4,
+                  salonDistance: 1.3,
+                  noOfReview: 5,
+                  location: "East Ham, E6 London, UK"),
             ),
-            const BannerAddWidget(),
             const SizedBox(
               height: 15,
             ),

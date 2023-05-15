@@ -1,3 +1,5 @@
+import 'package:coveredncurly/models/salon_model.dart';
+import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -5,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:coveredncurly/utils/utils.dart';
 
 class BannerAddWidget extends StatefulWidget {
-  const BannerAddWidget({Key? key}) : super(key: key);
+  final SalonModel salonModel;
+  const BannerAddWidget({Key? key, required this.salonModel}) : super(key: key);
 
   @override
   _BannerAddWidgetState createState() => _BannerAddWidgetState();
@@ -38,52 +41,76 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             controller: _controller,
             children: newSalonAdd
                 .map(
-                  (imageUrl) => Stack(
-                    children: [
-                      FadeInImage.assetNetwork(
-                        placeholder: 'images/placeholder_image.png',
-                        image: imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                      Positioned(
-                        bottom: 5,
-                        left: 10,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Salon Name',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'InknutAntiqua'),
-                            ),
-                            SizedBox(height: 1),
-                            Text(
-                              'Salon Address, Salon Address EE4',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'GentiumPlus'),
-                            ),
-                            SizedBox(height: 1),
-                            Chip(
-                              label: Text(
-                                'Hijaby space',
+                  (imageUrl) => GestureDetector(
+                    onTap: () {
+                      // Navigate to SalonDetail screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SalonDetailScreen(
+                            salonModel: SalonModel(
+                                url:
+                                    "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
+                                uid: "123",
+                                salonName: "MeYou hair",
+                                summary:
+                                    "A private hijabi friendly salon that specialises in afro curly hair",
+                                rating: 4,
+                                noOfRating: 4,
+                                salonDistance: 1.3,
+                                noOfReview: 5,
+                                location: "East Ham, E6 London, UK"),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        FadeInImage.assetNetwork(
+                          placeholder: 'images/placeholder_image.png',
+                          image: widget.salonModel.url,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                        Positioned(
+                          bottom: 5,
+                          left: 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.salonModel.salonName,
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'InknutAntiqua'),
+                              ),
+                              SizedBox(height: 1),
+                              Text(
+                                widget.salonModel.location,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                     fontFamily: 'GentiumPlus'),
                               ),
-                              backgroundColor: tagColor,
-                            ),
-                          ],
+                              SizedBox(height: 1),
+                              Chip(
+                                label: Text(
+                                  'Hijaby space',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontFamily: 'GentiumPlus'),
+                                ),
+                                backgroundColor: tagColor,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
                 .toList(),
@@ -134,31 +161,35 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
   Widget appOffersHomePageFromIndex(int index, double height) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Container(
-        height: height,
-        width: height,
-        decoration: ShapeDecoration(
-            color: Colors.white,
-            shadows: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 5,
-                  spreadRadius: 3),
-            ],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            )),
-        child: Center(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Image.asset(appOffersHomePage[index]),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              appOffersHomePageNames[index],
-              style: TextStyle(fontFamily: 'GentiumPlus'),
-            ),
-          ]),
+      child: GestureDetector(
+        onTap: () {},
+        // each one needs to go to a spacific screen
+        child: Container(
+          height: height,
+          width: height,
+          decoration: ShapeDecoration(
+              color: Colors.white,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    spreadRadius: 3),
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )),
+          child: Center(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Image.asset(appOffersHomePage[index]),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                appOffersHomePageNames[index],
+                style: TextStyle(fontFamily: 'GentiumPlus'),
+              ),
+            ]),
+          ),
         ),
       ),
     );

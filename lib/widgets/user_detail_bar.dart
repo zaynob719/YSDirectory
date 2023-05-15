@@ -1,21 +1,23 @@
 import 'package:coveredncurly/models/user_details_model.dart';
+import 'package:coveredncurly/provider/user_details_provider.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserDetailBar extends StatelessWidget {
   final double offset;
-  final UserDetailsModel userDetails;
   const UserDetailBar({
     Key? key,
     required this.offset,
-    required this.userDetails,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = Utils().getScreenSize();
+    UserDetailsModel userDetails =
+        Provider.of<UserDetailsProvider>(context).userDetails;
     return Container(
       height: kAppBarHeight / 2,
       decoration: BoxDecoration(
@@ -40,7 +42,7 @@ class UserDetailBar extends StatelessWidget {
           SizedBox(
             width: screenSize.width * 0.7,
             child: Text(
-              "Location - ${userDetails.country}",
+              "Location - ${userDetails.city}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.black, fontFamily: 'GentiumPlus'),
