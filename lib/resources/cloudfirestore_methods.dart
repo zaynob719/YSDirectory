@@ -14,4 +14,16 @@ class CloudFirestoreClass {
         .doc(firebaseAuth.currentUser!.uid)
         .set(user.getJson());
   }
+
+  Future getNameAndCity() async {
+    DocumentSnapshot snap = await firebaseFirestore
+        .collection("users")
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
+
+    UserDetailsModel userModel = UserDetailsModel.getModelFromJson(
+      (snap.data() as dynamic),
+    );
+    return userModel;
+  }
 }

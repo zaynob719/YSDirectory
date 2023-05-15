@@ -14,7 +14,7 @@ const double kAppBarHeight = 100;
 const Color backgroundColor = Color(0xffebecee);
 
 const List<String> categoryList = [
-  "Hijaby space",
+  "Hijabi space",
   "Kids space",
   "Afrocare",
   "Location",
@@ -50,10 +50,6 @@ const List<String> categoryLogos = [
 const List<Widget> screens = [
   HomeScreen(),
   AddReviewPage(),
-  // Center(
-  //   child: Text("add review2"),
-  // ),
-  //ResultScreen(),
   ProfilePage(),
 ];
 
@@ -98,62 +94,3 @@ List<String> keysOfRating = [
   "Good",
   "Excellent"
 ];
-
-// List<Widget> testChildren = [
-//   PopularSalonsWidget(
-//       salonModel: SalonModel(
-//     url:
-//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-//     salonName: "MeYou hair",
-//     uid: "123",
-//     summary:
-//         "A private hijabi friendly salon that specialises in afro curly hair",
-//     //rating: 2,
-//     noOfRating: 3,
-//     salonDistance: 1.3,
-//     noOfReview: 20,
-//     //review: 20
-//   )),
-//   PopularSalonsWidget(
-//       salonModel: SalonModel(
-//     url:
-//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-//     salonName: "MeYou hair",
-//     uid: "123",
-//     summary:
-//         "A private hijabi friendly salon that specialises in afro curly hair",
-//     //rating: 2,
-//     noOfRating: 3,
-//     salonDistance: 1.3,
-//     noOfReview: 20,
-//     //review: 20
-//   )),
-//   PopularSalonsWidget(
-//       salonModel: SalonModel(
-//     url:
-//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-//     salonName: "MeYou hair",
-//     uid: "123",
-//     summary:
-//         "A private hijabi friendly salon that specialises in afro curly hair",
-//     //rating: 2,
-//     noOfRating: 3,
-//     salonDistance: 1.3,
-//     noOfReview: 20,
-//     //review: 20
-//   )),
-//   PopularSalonsWidget(
-//       salonModel: SalonModel(
-//     url:
-//         "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-//     salonName: "MeYou hair",
-//     uid: "123",
-//     summary:
-//         "A private hijabi friendly salon that specialises in afro curly hair",
-//     //rating: 2,
-//     noOfRating: 3,
-//     salonDistance: 1.3,
-//     noOfReview: 20,
-//     //review: 20
-//   )),
-// ];

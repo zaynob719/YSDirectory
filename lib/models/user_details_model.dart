@@ -1,10 +1,13 @@
 class UserDetailsModel {
   final String name;
-  final String country;
-  UserDetailsModel({required this.name, required this.country});
+  final String city;
+  UserDetailsModel({required this.name, required this.city});
 
   Map<String, dynamic> getJson() => {
         'name': name,
-        'country': country,
+        'city': city,
       };
+  factory UserDetailsModel.getModelFromJson(Map<String, dynamic> json) {
+    return UserDetailsModel(name: json["name"], city: json["city"]);
+  }
 }
