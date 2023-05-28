@@ -74,6 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                       labelText: 'First Name',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
                         ),
@@ -86,6 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                       labelText: 'Last Name',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
                         ),
@@ -98,6 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                       labelText: ' City',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
                         ),
@@ -110,6 +113,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                       labelText: 'Email address',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
                         ),
@@ -122,6 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                       labelText: 'Confirm Email address',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
                           color: Color(0xff8B4513),
                         ),
@@ -134,6 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
                             color: Color(0xff8B4513),
                           ),
@@ -158,6 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     decoration: InputDecoration(
                         labelText: 'Confirm Password',
                         border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
                             color: Color(0xff8B4513),
                           ),
@@ -203,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                           confirmPassword: confirmPasswordController.text,
                           city: cityController.text);
                       setState(() {
-                        isLoading = false;
+                        isLoading = false; //
                       });
                       if (output == "success") {
                         Navigator.pushReplacement(context,

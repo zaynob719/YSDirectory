@@ -2,7 +2,6 @@ import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/screens/pages/addReviewPage.dart';
 import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/pages/profile_page.dart';
-import 'package:coveredncurly/screens/pages/salon_page_body.dart';
 import 'package:coveredncurly/screens/result_screen.dart';
 import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
 import 'package:coveredncurly/screens/show_more.dart';
@@ -14,8 +13,8 @@ const double kAppBarHeight = 100;
 const Color backgroundColor = Color(0xffebecee);
 
 const List<String> categoryList = [
-  "Hijabi space",
-  "Kids space",
+  "Hijabi friendly",
+  "Kids friendly",
   "Afrocare",
   "Location",
   "Mobile",
@@ -53,14 +52,6 @@ const List<Widget> screens = [
   ProfilePage(),
 ];
 
-const List<String> newSalonAdd = [
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds003.png?alt=media&token=6b4ca5bd-99b4-441a-8bb9-998a1ace3e38",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds003.png?alt=media&token=6b4ca5bd-99b4-441a-8bb9-998a1ace3e38",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
-];
-
 const List<String> appOffersHomePage = [
   "images/add_reviews.png",
   "images/get_discounts.png",
@@ -77,14 +68,6 @@ const List<String> appOffersHomePageNames = [
   "Socials", //share to YSD insta
   "Share", // about YSD page on app
   "About us", // link to social media
-];
-
-const List<String> favouriteSalonShowcase = [
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds003.png?alt=media&token=6b4ca5bd-99b4-441a-8bb9-998a1ace3e38",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds003.png?alt=media&token=6b4ca5bd-99b4-441a-8bb9-998a1ace3e38",
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds002.png?alt=media&token=7b4dc2c1-b277-4652-bc2b-c7243070b379",
 ];
 
 List<String> keysOfRating = [
