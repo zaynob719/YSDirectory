@@ -1,7 +1,5 @@
 import 'package:coveredncurly/controllers/salons_options.dart/salon_options_controller.dart';
-import 'package:coveredncurly/screens/home/home_screen.dart';
 import 'package:coveredncurly/screens/introduction/introduction.dart';
-import 'package:coveredncurly/screens/pages/DP_home_salon_page.dart';
 import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/splash/splash_screen.dart';
 import 'package:coveredncurly/services/firebase_storage_service.dart';

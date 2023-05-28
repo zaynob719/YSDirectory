@@ -8,6 +8,6 @@ class InitialBindings implements Bindings {
   @override
   void dependencies() {
     Get.put(AuthController(), permanent: true);
-    Get.lazyPut(() => FireBaseStorageService());
+    //Get.lazyPut(() => FireBaseStorageService());
   }
 }

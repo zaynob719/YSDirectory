@@ -29,7 +29,12 @@ class AuthenticationMethods {
       try {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: emailAddress, password: confirmPassword);
-        UserDetailsModel user = UserDetailsModel(name: firstName, city: city);
+        UserDetailsModel user = UserDetailsModel(
+            name: firstName,
+            lastName: lastName,
+            emailAddress: emailAddress,
+            password: password,
+            city: city);
         await cloudFirestoreClass.uploadNameAndAddressToDatabase(user: user);
         output = "success";
       } on FirebaseAuthException catch (e) {
