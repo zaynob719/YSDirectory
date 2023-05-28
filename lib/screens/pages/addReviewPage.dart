@@ -1,3 +1,6 @@
+//import 'dart:ffi';
+
+import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +12,12 @@ class AddReviewPage extends StatefulWidget {
 }
 
 class _AddReviewPageState extends State<AddReviewPage> {
-  //String _selectedSalon = 'Salon 1';
+  TextEditingController salonController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController inputController = TextEditingController();
+
   DateTime _selectedDate = DateTime.now();
 
-  // Function to show the date picker dialog
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -23,6 +28,14 @@ class _AddReviewPageState extends State<AddReviewPage> {
       setState(() {
         _selectedDate = picked;
       });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    salonController.dispose();
+    dateController.dispose();
+    inputController.dispose();
   }
 
   @override
@@ -49,9 +62,34 @@ class _AddReviewPageState extends State<AddReviewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Which Salon did you attend?:',
+                  const Text(
+                    'Which Salon did you attend?',
                     style: TextStyle(fontSize: 16, fontFamily: 'GentiumPlus'),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                      controller: salonController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: brown),
+                        ),
+                        hintText: 'So many salons...',
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'When did you attend?',
+                    style: TextStyle(fontSize: 16, fontFamily: 'GentiumPlus'),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                      controller: dateController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'When did I go again?')),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
               ),

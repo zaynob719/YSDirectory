@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coveredncurly/widgets/loading_widget.dart';
 import 'package:coveredncurly/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/models/salon_model.dart';
 
 class ResultScreen extends StatelessWidget {
   final String query;
@@ -48,29 +49,29 @@ class ResultScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: ((context, index) {
-                  return ResultWidget(
-                      salonModel: SalonModel(
-                          url:
-                              "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-                          salonName: "MeYou hair",
-                          uid: "123",
-                          summary:
-                              "A private hijabi friendly salon that specialises in afro curly hair",
-                          rating: 4,
-                          noOfRating: 4,
-                          salonDistance: 1.3,
-                          noOfReview: 5,
-                          //review: 20
-                          location: "East Ham, E6 London, UK"));
-                })),
-          )
-        ],
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
+            .collection("salons")
+            .where("category", isEqualTo: query)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return LoadingWidget();
+          } else if (snapshot.hasData) {
+            final salons = snapshot.data!.docs.map((doc) {
+              return Salon.fromJson(doc.data());
+            }).toList();
+            return ResultWidget(salons: salons);
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return Center(
+              child: Text('No results found.'),
+            );
+          }
+        },
       ),
     );
   }
