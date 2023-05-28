@@ -1,12 +1,18 @@
 import 'package:coveredncurly/models/user_details_model.dart';
 import 'package:coveredncurly/provider/user_details_provider.dart';
+import 'package:coveredncurly/screens/pages/disclaimer.dart';
+import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
+import 'package:coveredncurly/screens/splash/splash_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:coveredncurly/widgets/custom_main_button.dart';
+import 'package:coveredncurly/screens/pages/about_ysd.dart';
 import 'package:coveredncurly/widgets/user_detail_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,10 +22,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  //String avatarUrl = "https://picsum.photos/200";
   Uint8List? image;
   String bigFontFamily = 'InknutAntiqua';
   String smallFontFamily = 'GentiumPlus';
+
+  void signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+      );
+    } catch (e) {
+      print('Error signing out: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,36 +75,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 UserDetailBar(
                   offset: 0,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Stack(
                   children: [
                     image == null
-                        ? Image.network(
-                            "https://picsum.photos/200",
-                            height: screenSize.height / 10,
+                        ? CircleAvatar(
+                            radius: 50,
+                            child: Image.network("https://picsum.photos/200",
+                                height: screenSize.height / 10,
+                                fit: BoxFit.cover),
                           )
-                        : Image.memory(
-                            image!,
-                            height: screenSize.height / 10,
+                        : CircleAvatar(
+                            radius: 50,
+                            child: Image.memory(
+                              image!,
+                              height: screenSize.height / 10,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                     IconButton(
-                        onPressed: () async {
-                          Uint8List? temp = await Utils().pickImage();
-                          if (temp != null) {
-                            setState(() {
-                              image = temp;
-                            });
-                          }
-                        },
-                        icon: Icon(
-                          Icons.file_upload,
-                          color: Colors.white,
-                        ))
+                      onPressed: () async {
+                        Uint8List? temp = await Utils().pickImage();
+                        if (temp != null) {
+                          setState(() {
+                            image = temp;
+                          });
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      ),
+                    )
                   ],
-                  // child: CircleAvatar(
-                  //   radius: 50,
-                  //   backgroundImage: NetworkImage(avatarUrl),
-                  // ),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -146,7 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      // handle YSDirectory button click, then on the page add a section 'looking for after care? check out covered and curly
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AboutYSD()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,
@@ -180,7 +201,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      // handle disclaimers button click
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Disclaimer()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,
@@ -203,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     color: backgroundColor,
                     isLoading: false,
-                    onPressed: () {}),
+                    onPressed: signOut),
                 const SizedBox(height: 20),
               ],
             ),

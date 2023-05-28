@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
@@ -5,19 +6,21 @@ import 'package:coveredncurly/utils/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:coveredncurly/utils/utils.dart';
+import 'package:coveredncurly/widgets/result_widget.dart';
 
 class BannerAddWidget extends StatefulWidget {
-  final SalonModel salonModel;
-  const BannerAddWidget({Key? key, required this.salonModel}) : super(key: key);
+  const BannerAddWidget({Key? key}) : super(key: key);
 
   @override
   _BannerAddWidgetState createState() => _BannerAddWidgetState();
 }
 
 class _BannerAddWidgetState extends State<BannerAddWidget> {
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+  List<Salon> salons = [];
   final _controller = PageController();
   double _currentPageValue = 0.0;
-  double homeScreenFeatureDimension = 120; //screenSize.width / 5;
+  double homeScreenFeatureDimension = 120;
 
   @override
   void initState() {
@@ -25,6 +28,18 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     _controller.addListener(() {
       setState(() {
         _currentPageValue = _controller.page!;
+      });
+    });
+
+    db
+        .collection('salons')
+        .limit(
+            5) // Fetch only the first 5 salons (change this to new added salons)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        salons =
+            snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
       });
     });
   }
@@ -39,81 +54,69 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
           height: 200,
           child: PageView(
             controller: _controller,
-            children: newSalonAdd
-                .map(
-                  (imageUrl) => GestureDetector(
-                    onTap: () {
-                      // Navigate to SalonDetail screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SalonDetailScreen(
-                            salonModel: SalonModel(
-                                url:
-                                    "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fysds004.png?alt=media&token=c8f27351-a1af-4fe6-83e7-cd64def476f7",
-                                uid: "123",
-                                salonName: "MeYou hair",
-                                summary:
-                                    "A private hijabi friendly salon that specialises in afro curly hair",
-                                rating: 4,
-                                noOfRating: 4,
-                                salonDistance: 1.3,
-                                noOfReview: 5,
-                                location: "East Ham, E6 London, UK"),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Stack(
-                      children: [
-                        FadeInImage.assetNetwork(
-                          placeholder: 'images/placeholder_image.png',
-                          image: widget.salonModel.url,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          left: 10,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.salonModel.salonName,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'InknutAntiqua'),
-                              ),
-                              SizedBox(height: 1),
-                              Text(
-                                widget.salonModel.location,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'GentiumPlus'),
-                              ),
-                              SizedBox(height: 1),
-                              Chip(
-                                label: Text(
-                                  'Hijaby space',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontFamily: 'GentiumPlus'),
-                                ),
-                                backgroundColor: tagColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+            children: salons.asMap().entries.map((entry) {
+              final index = entry.key;
+              final salon = entry.value;
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SalonDetailScreen(salon: salon),
                     ),
-                  ),
-                )
-                .toList(),
+                  );
+                },
+                child: Stack(
+                  children: [
+                    FadeInImage.assetNetwork(
+                      placeholder: 'images/placeholder_image.png',
+                      image: salons[index].url,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      left: 10,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            salons[index].salonName,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'InknutAntiqua'),
+                          ),
+                          SizedBox(height: 1),
+                          Text(
+                            salons[index].location,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'GentiumPlus',
+                                overflow: TextOverflow.ellipsis),
+                            maxLines: 1,
+                          ),
+                          SizedBox(height: 1),
+                          Chip(
+                            label: Text(
+                              salons[index].category,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: 'GentiumPlus'),
+                            ),
+                            backgroundColor: tagColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
         SizedBox(
@@ -121,7 +124,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
         ),
         //dots indicator under image slider
         DotsIndicator(
-          dotsCount: newSalonAdd.length,
+          dotsCount: 5,
           position: _currentPageValue,
           decorator: DotsDecorator(
             activeColor: AppColors.secondBrownColor,
@@ -153,7 +156,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -163,32 +166,37 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
         onTap: () {},
-        // each one needs to go to a spacific screen
+        // each one needs to go to a specific screen
         child: Container(
           height: height,
           width: height,
           decoration: ShapeDecoration(
-              color: Colors.white,
-              shadows: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 5,
-                    spreadRadius: 3),
-              ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              )),
+            color: Colors.white,
+            shadows: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                spreadRadius: 3,
+              ),
+            ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
           child: Center(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Image.asset(appOffersHomePage[index]),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                appOffersHomePageNames[index],
-                style: TextStyle(fontFamily: 'GentiumPlus'),
-              ),
-            ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(appOffersHomePage[index]),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  appOffersHomePageNames[index],
+                  style: TextStyle(fontFamily: 'GentiumPlus'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

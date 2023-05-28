@@ -1,3 +1,4 @@
+import 'package:coveredncurly/layout/screen_layout.dart';
 import 'package:coveredncurly/resources/authentication_methods.dart';
 import 'package:coveredncurly/screens/sign_in_screen/sign_up_screen.dart';
 import 'package:coveredncurly/utils/utils.dart';
@@ -75,7 +76,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Text(
                             'Sign In',
                             style: TextStyle(
-                              color: Color(0xff8B4513),
+                              color: Colors.brown,
                               fontSize: 20,
                               fontWeight: _selectedIndex == 0
                                   ? FontWeight.bold
@@ -97,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Text(
                             'Sign Up',
                             style: TextStyle(
-                              color: Color(0xff8B4513),
+                              color: Colors.brown,
                               fontSize: 20,
                               fontWeight: _selectedIndex == 1
                                   ? FontWeight.bold
@@ -134,20 +135,22 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration: InputDecoration(
                     labelText: 'Email address',
                     border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide(
-                        color: Color(0xff8B4513),
+                        color: brown,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 25),
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide(
-                          color: Color(0xff8B4513),
+                          color: brown,
                         ),
                       ),
                       suffixIcon: IconButton(
@@ -169,7 +172,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () {},
                   child: Text(
                     'Forgotten Password?',
-                    style: TextStyle(color: Color(0xff8B4513)),
+                    style: TextStyle(color: brown),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -178,7 +181,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       "Sign In",
                       style: TextStyle(fontSize: 19, letterSpacing: 0.6),
                     ),
-                    color: Color(0xff8B4513),
+                    color: brown,
                     isLoading: isLoading,
                     onPressed: () async {
                       setState(() {
@@ -191,7 +194,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         isLoading = false;
                       });
                       if (output == "success") {
-                        //main functions
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScreenLayout()),
+                        );
                       } else {
                         //error
                         Utils().showSnackBar(context: context, content: output);
