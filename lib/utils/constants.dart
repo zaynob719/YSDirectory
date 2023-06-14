@@ -1,12 +1,8 @@
-import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/screens/pages/addReviewPage.dart';
 import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/pages/profile_page.dart';
-import 'package:coveredncurly/screens/result_screen.dart';
-import 'package:coveredncurly/screens/salon/main_salon_detail.dart';
-import 'package:coveredncurly/screens/show_more.dart';
-import 'package:coveredncurly/widgets/PopularSalonsWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:coveredncurly/widgets/result_widget.dart';
 
 const double kAppBarHeight = 100;
 
@@ -46,7 +42,7 @@ const List<String> categoryLogos = [
 ];
 
 // app navigation bar pages
-const List<Widget> screens = [
+List<Widget> screens = [
   HomeScreen(),
   AddReviewPage(),
   ProfilePage(),
