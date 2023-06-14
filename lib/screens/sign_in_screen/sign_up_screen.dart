@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:coveredncurly/resources/authentication_methods.dart';
+import 'package:coveredncurly/firestore/authentication_methods.dart';
 import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:coveredncurly/utils/utils.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/widgets/custom_main_button.dart';
@@ -45,23 +46,20 @@ class _SignUpScreenState extends State<SignUpScreen>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 65),
+            SizedBox(height: 40),
             Text(
               "Register",
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                //fontFamily: InknutAntiqua-bold
-              ),
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GentiumPlus'),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             Text(
               "Let's Get Your Hair Did Sis!",
               style: TextStyle(
-                color: Color.fromARGB(255, 55, 24, 1),
-                fontSize: 16,
-              ),
+                  color: Colors.black, fontSize: 16, fontFamily: 'GentiumPlus'),
             ),
             SizedBox(height: 15),
             Padding(
@@ -75,9 +73,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                       labelText: 'First Name',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
-                          color: Color(0xff8B4513),
-                        ),
                       ),
                     ),
                   ),
@@ -88,9 +83,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                       labelText: 'Last Name',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
-                          color: Color(0xff8B4513),
-                        ),
                       ),
                     ),
                   ),
@@ -101,9 +93,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                       labelText: ' City',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
-                          color: Color(0xff8B4513),
-                        ),
                       ),
                     ),
                   ),
@@ -114,9 +103,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                       labelText: 'Email address',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
-                          color: Color(0xff8B4513),
-                        ),
                       ),
                     ),
                   ),
@@ -127,9 +113,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                       labelText: 'Confirm Email address',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
-                          color: Color(0xff8B4513),
-                        ),
                       ),
                     ),
                   ),
@@ -140,9 +123,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                         labelText: 'Password',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(
-                            color: Color(0xff8B4513),
-                          ),
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -165,9 +145,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                         labelText: 'Confirm Password',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(
-                            color: Color(0xff8B4513),
-                          ),
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -183,18 +160,42 @@ class _SignUpScreenState extends State<SignUpScreen>
                         )),
                     obscureText: _obscureText,
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 20),
                   Container(
-                    child: Text(
-                        "By selecting 'Sign Up!', you indicate that you have read and agree with our Terms and conditions and Privacy policy."),
+                    child: Text.rich(
+                        TextSpan(
+                          text:
+                              'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                              fontFamily: 'GentiumPlus',
+                              fontWeight: FontWeight.w400),
+                          children: [
+                            TextSpan(
+                              text: 'Terms and Conditions',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // Add your logic here for what happens when the user taps the button
+                                },
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center),
                   ),
                   SizedBox(height: 30),
                   CustomMainButton(
                     child: Text(
                       "Sign Up!",
-                      style: TextStyle(fontSize: 19, letterSpacing: 0.6),
+                      style: TextStyle(
+                          fontSize: 19,
+                          letterSpacing: 0.6,
+                          fontFamily: 'GentiumPlus'),
                     ),
-                    color: Color(0xff8B4513),
+                    color: brown,
                     isLoading: false,
                     onPressed: () async {
                       setState(() {
@@ -225,7 +226,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                   CustomMainButton(
                     child: Text(
                       "Back",
-                      style: TextStyle(fontSize: 19, letterSpacing: 0.6),
+                      style: TextStyle(
+                          fontSize: 19,
+                          letterSpacing: 0.6,
+                          fontFamily: 'GentiumPlus'),
                     ),
                     color: Color.fromARGB(255, 202, 199, 197),
                     isLoading: false,

@@ -153,7 +153,7 @@ class Salon {
   final int noOfRating;
   final int noOfReview;
   final double distance;
-  //final int rating;
+  final int rating;
   final String salonGeneralDescription;
   final Map services;
   final String id;
@@ -171,7 +171,7 @@ class Salon {
     required this.distance,
     required this.noOfRating,
     required this.noOfReview,
-    //required this.rating,
+    required this.rating,
     required this.website,
     required this.services,
   });
@@ -185,7 +185,7 @@ class Salon {
       url: json['url'] as String? ?? '',
       category: json['category'] as String? ?? '',
       noOfRating: json['noOfRating'] as int? ?? 0,
-      //rating: json['rating'],
+      rating: json['rating'] as int? ?? 0,
       distance: (json['distance'] as num?)?.toDouble() ?? 0.0,
       noOfReview: json['noOfReview'] as int? ?? 0,
       id: json['id'] as String? ?? '',

@@ -52,8 +52,9 @@ class ReviewWidget extends StatelessWidget {
               ],
             ),
           ),
+          Text(review.titleController),
           Text(
-            review.description,
+            review.reviewController,
             //maxLines: 3, should there be a mix line on the review?
             //overflow: TextOverflow.ellipsis,
             style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),

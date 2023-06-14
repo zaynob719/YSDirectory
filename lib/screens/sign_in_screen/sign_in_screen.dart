@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:coveredncurly/layout/screen_layout.dart';
-import 'package:coveredncurly/resources/authentication_methods.dart';
+import 'package:coveredncurly/firestore/authentication_methods.dart';
 import 'package:coveredncurly/screens/sign_in_screen/sign_up_screen.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:coveredncurly/widgets/custom_main_button.dart';
@@ -48,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ],
             ),
-            height: MediaQuery.of(context).size.height * 0.40,
+            height: MediaQuery.of(context).size.height * 0.50,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   height: 200,
                   width: 150,
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Stack(
                   children: [
                     Row(
@@ -76,6 +78,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Text(
                             'Sign In',
                             style: TextStyle(
+                              fontFamily: 'GentiumPlus',
                               color: Colors.brown,
                               fontSize: 20,
                               fontWeight: _selectedIndex == 0
@@ -98,6 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Text(
                             'Sign Up',
                             style: TextStyle(
+                              fontFamily: 'GentiumPlus',
                               color: Colors.brown,
                               fontSize: 20,
                               fontWeight: _selectedIndex == 1
@@ -122,9 +126,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           ),
-          SizedBox(height: 40),
-          //Expanded(
-          //child:
+          SizedBox(height: 20),
           Container(
             padding: EdgeInsets.all(20),
             child: Column(
@@ -171,15 +173,23 @@ class _SignInScreenState extends State<SignInScreen> {
                 TextButton(
                   onPressed: () {},
                   child: Text(
-                    'Forgotten Password?',
-                    style: TextStyle(color: brown),
+                    'Forgotten you password?',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.brown,
+                      fontFamily: 'GentiumPlus',
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
                 CustomMainButton(
                     child: Text(
                       "Sign In",
-                      style: TextStyle(fontSize: 19, letterSpacing: 0.6),
+                      style: TextStyle(
+                        fontSize: 19,
+                        letterSpacing: 0.6,
+                        fontFamily: 'GentiumPlus',
+                      ),
                     ),
                     color: brown,
                     isLoading: isLoading,
@@ -200,7 +210,6 @@ class _SignInScreenState extends State<SignInScreen> {
                               builder: (context) => ScreenLayout()),
                         );
                       } else {
-                        //error
                         Utils().showSnackBar(context: context, content: output);
                       }
                     })
