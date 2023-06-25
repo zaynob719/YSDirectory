@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/models/salon_model.dart';
 import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/screens/show_more.dart';
 import 'package:coveredncurly/utils/colors.dart';
@@ -7,9 +6,9 @@ import 'package:coveredncurly/widgets/PopularSalonsWidget.dart';
 import 'package:coveredncurly/widgets/banner_add_widget.dart';
 import 'package:coveredncurly/widgets/category_chip_widget.dart';
 import 'package:coveredncurly/widgets/result_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:coveredncurly/utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -83,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 15,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 16.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -195,7 +194,7 @@ class DataSearch extends SearchDelegate<String> {
       stream: db.collection('salons').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CupertinoActivityIndicator());
         }
 
         final List<DocumentSnapshot> suggestions = snapshot.data!.docs

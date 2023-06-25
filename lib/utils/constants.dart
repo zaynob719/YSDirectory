@@ -16,7 +16,6 @@ const List<String> categoryList = [
   "Mobile",
   "Ratings",
   "Curls",
-  "Last minute",
   "Essentials"
 ];
 
@@ -35,8 +34,6 @@ const List<String> categoryLogos = [
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Frating.png?alt=media&token=6f92532a-6aa6-47c3-9e6a-1c93679df86f",
   //curls
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fcurls.png?alt=media&token=d372e898-9a0c-48ff-bb1c-19471767a0dd",
-  //last minute
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Flast%20minute.png?alt=media&token=d802f984-6e5c-49ee-9951-c2dd2e2ac90c",
   //essential
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fessential.png?alt=media&token=71b2ba4c-799c-4126-9d45-c56e5e44efa7",
 ];
@@ -49,27 +46,19 @@ List<Widget> screens = [
 ];
 
 const List<String> appOffersHomePage = [
-  "images/add_reviews.png",
-  "images/get_discounts.png",
   "images/save_salons.png",
-  "images/socials.png",
   "images/send_to_friend.png",
+  "images/socials.png",
+  "images/get_discounts.png",
   "images/about_YSD.png",
 ];
 
 const List<String> appOffersHomePageNames = [
-  "Add reviews", // link to add review page. When add review is sent it should direct to the review page so they can read other reviews left there
-  "Discounts", // link to YSD discounts
   "Saved", //link to profile
-  "Socials", //share to YSD insta
   "Share", // about YSD page on app
+  "Socials", //share to YSD insta
+  "Discounts", // link to YSD discounts
   "About us", // link to social media
 ];
 
-List<String> keysOfRating = [
-  "Very bad",
-  "Poor",
-  "Average",
-  "Good",
-  "Excellent"
-];
+List<String> keysOfRating = ["Bad", "Poor", "Average", "Good", "Excellent"];

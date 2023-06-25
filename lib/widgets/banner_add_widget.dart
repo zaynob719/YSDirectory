@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coveredncurly/models/salon_model.dart';
+import 'package:coveredncurly/screens/pages/about_ysd.dart';
+import 'package:coveredncurly/screens/pages/addReviewPage.dart';
+import 'package:coveredncurly/screens/pages/discounts.dart';
+import 'package:coveredncurly/screens/pages/profile_page.dart';
 import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
+import 'package:coveredncurly/screens/pages/socials.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -34,7 +39,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     db
         .collection('salons')
         .limit(
-            5) // Fetch only the first 5 salons (change this to new added salons)
+            3) // Fetch only the first 5 salons (change this to new added salons)
         .get()
         .then((snapshot) {
       setState(() {
@@ -124,7 +129,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
         ),
         //dots indicator under image slider
         DotsIndicator(
-          dotsCount: 5,
+          dotsCount: 3,
           position: _currentPageValue,
           decorator: DotsDecorator(
             activeColor: AppColors.secondBrownColor,
@@ -152,7 +157,6 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                 appOffersHomePageFromIndex(2, 110),
                 appOffersHomePageFromIndex(3, 110),
                 appOffersHomePageFromIndex(4, 110),
-                appOffersHomePageFromIndex(5, 110),
               ],
             ),
           ),
@@ -162,11 +166,35 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
   }
 
   Widget appOffersHomePageFromIndex(int index, double height) {
+    void navigateToScreen() {
+      switch (index) {
+        case 0:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => discounts()));
+          break;
+        case 1:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+          break;
+        case 2:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => socials()));
+          break;
+        case 3:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+          break;
+        case 4:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AboutYSD()));
+          break;
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
-        onTap: () {},
-        // each one needs to go to a specific screen
+        onTap: navigateToScreen, //navigation list at the top
         child: Container(
           height: height,
           width: height,
@@ -175,8 +203,8 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             shadows: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
-                blurRadius: 5,
-                spreadRadius: 3,
+                blurRadius: 3,
+                spreadRadius: 1,
               ),
             ],
             shape: RoundedRectangleBorder(

@@ -1,5 +1,5 @@
 import 'package:coveredncurly/models/user_details_model.dart';
-import 'package:coveredncurly/resources/cloudfirestore_methods.dart';
+import 'package:coveredncurly/firestore/cloudfirestore_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 
@@ -10,9 +10,9 @@ class UserDetailsProvider with ChangeNotifier {
       : userDetails = UserDetailsModel(
             name: 'Loading...',
             city: 'Loading...',
-            lastName: 'loading',
-            emailAddress: 'loading',
-            password: 'loading');
+            lastName: 'Loading',
+            emailAddress: 'Loading',
+            password: 'Loading');
 
   Future getData() async {
     userDetails = await CloudFirestoreClass().getNameAndCity();

@@ -61,7 +61,16 @@ class ResultScreen extends StatelessWidget {
             final salons = snapshot.data!.docs.map((doc) {
               return Salon.fromJson(doc.data());
             }).toList();
-            return ResultWidget(salons: salons);
+            if (salons.isEmpty) {
+              return Center(
+                child: Text(
+                  'More salons coming soon!',
+                  style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 18),
+                ),
+              );
+            } else {
+              return ResultWidget(salons: salons);
+            }
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
