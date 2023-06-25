@@ -15,34 +15,54 @@ class RatingStarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = Utils().getScreenSize();
-    List<Widget> children = [];
+    IconData starIcon = Icons.star;
+    Color starColor = Colors.amber;
+    num ratingValue =
+        rating.clamp(0.0, 5.0); // Clamp the rating value between 0.0 and 5.0
 
-    for (int i = 0; i < 5; i++) {
-      children.add(i < rating
-          ? Icon(
-              Icons.star,
-              color: Colors.orange,
-              size: screenSize.height / 40,
-            )
-          : Icon(
-              Icons.star_border,
-              color: Colors.orange,
-              size: screenSize.height / 40,
-            ));
-    }
-
-    return isVertical
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: children,
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          );
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment:
+          isVertical ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: List.generate(
+        5,
+        (index) => Icon(
+          index < ratingValue.floor() ? starIcon : starIcon,
+          color: starColor,
+        ),
+      ),
+    );
   }
 }
+  //   Size screenSize = Utils().getScreenSize();
+  //   List<Widget> children = [];
+
+  //   for (int i = 0; i < 5; i++) {
+  //     children.add(i < rating
+  //         ? Icon(
+  //             Icons.star,
+  //             color: Colors.orange,
+  //             size: screenSize.height / 40,
+  //           )
+  //         : Icon(
+  //             Icons.star_border,
+  //             color: Colors.orange,
+  //             size: screenSize.height / 40,
+  //           ));
+  //   }
+
+  //   return isVertical
+  //       ? Column(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: children,
+  //         )
+  //       : Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: children,
+  //         );
+  // }
+
 
 
 

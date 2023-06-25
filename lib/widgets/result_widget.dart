@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/widgets/review_rating_location.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ResultWidget extends StatefulWidget {
@@ -13,27 +14,11 @@ class ResultWidget extends StatefulWidget {
 }
 
 class _ResultWidgetState extends State<ResultWidget> {
-  //final FirebaseFirestore db = FirebaseFirestore.instance;
-
-  // List<Salon> salons = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   db.collection('salons').get().then((snapshot) {
-  //     setState(() {
-  //       salons =
-  //           snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
-  //     });
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     if (widget.salons.isEmpty) {
       return Center(
-        child: CircularProgressIndicator(color: brown),
+        child: CupertinoActivityIndicator(color: brown),
       );
     } else {
       return ListView.builder(
@@ -159,6 +144,10 @@ class Salon {
   final String id;
   final String category;
   final String website;
+  final String instagram;
+  final String number;
+  final String email;
+  final Map openHours;
 
   Salon({
     required this.salonName,
@@ -174,6 +163,10 @@ class Salon {
     required this.rating,
     required this.website,
     required this.services,
+    required this.instagram,
+    required this.number,
+    required this.email,
+    required this.openHours,
   });
 
   factory Salon.fromJson(Map<String, dynamic> json) {
@@ -186,10 +179,16 @@ class Salon {
       category: json['category'] as String? ?? '',
       noOfRating: json['noOfRating'] as int? ?? 0,
       rating: json['rating'] as int? ?? 0,
-      distance: (json['distance'] as num?)?.toDouble() ?? 0.0,
+      distance: json['distance'] != null
+          ? double.parse(json['distance'].toString())
+          : 0.0,
       noOfReview: json['noOfReview'] as int? ?? 0,
       id: json['id'] as String? ?? '',
       website: json['website'] as String? ?? '',
+      instagram: json['instagram'] as String? ?? '',
+      number: json['number'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      openHours: json['openHours'] as Map<dynamic, dynamic>? ?? {},
       services: json['services'] as Map<dynamic, dynamic>? ?? {},
     );
   }

@@ -1,4 +1,5 @@
 import 'package:coveredncurly/models/review_model.dart';
+import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:coveredncurly/widgets/rating_star_widget.dart';
@@ -23,40 +24,26 @@ class ReviewWidget extends StatelessWidget {
             review.senderName,
             style: const TextStyle(
               fontFamily: 'GentiumPlus',
-              fontSize: 16,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: SizedBox(
-                    width: screenSize.width / 4,
-                    child: FittedBox(
-                      //can add this to be on the right side of the screen (figma)
-                      child: RatingStarWidget(
-                        rating: review.rating,
-                        isVertical: false,
-                      ),
-                    ),
-                  ),
-                ),
                 Text(
-                  keysOfRating[review.rating - 1],
+                  keysOfRating[keysOfRating.indexOf(review.rating)],
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontFamily: 'GentiumPlus'),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'GentiumPlus',
+                      color: Colors.brown),
                 ),
               ],
             ),
           ),
-          Text(review.titleController),
           Text(
             review.reviewController,
-            //maxLines: 3, should there be a mix line on the review?
-            //overflow: TextOverflow.ellipsis,
             style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
           ),
           SizedBox(
@@ -71,6 +58,9 @@ class ReviewWidget extends StatelessWidget {
                 fontFamily: 'GentiumPlus',
                 fontStyle: FontStyle.italic,
                 letterSpacing: 0.6),
+          ),
+          SizedBox(
+            height: 15,
           ),
         ],
       ),
