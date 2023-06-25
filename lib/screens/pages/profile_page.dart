@@ -1,8 +1,8 @@
 import 'package:coveredncurly/models/user_details_model.dart';
 import 'package:coveredncurly/provider/user_details_provider.dart';
 import 'package:coveredncurly/screens/pages/disclaimer.dart';
+import 'package:coveredncurly/screens/pages/profile_setting.dart';
 import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
-import 'package:coveredncurly/screens/splash/splash_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/utils/utils.dart';
 import 'package:coveredncurly/widgets/custom_main_button.dart';
@@ -57,11 +57,12 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             IconButton(
               icon: Icon(
-                Icons.add,
+                Icons.settings,
                 color: Colors.black,
               ),
               onPressed: () {
-                // handle edit button click
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfileSetting()));
               },
             ),
           ],
@@ -79,17 +80,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 Stack(
                   children: [
                     image == null
-                        ? CircleAvatar(
-                            radius: 50,
+                        ? ClipOval(
                             child: Image.network("https://picsum.photos/200",
-                                height: screenSize.height / 10,
+                                //height: screenSize.height / 10,
+                                //width: screenSize.width / 10,
+                                height: 100,
+                                width: 100,
                                 fit: BoxFit.cover),
                           )
-                        : CircleAvatar(
-                            radius: 50,
+                        : ClipOval(
                             child: Image.memory(
                               image!,
-                              height: screenSize.height / 10,
+                              // height: screenSize.height / 5,
+                              // width: screenSize.width / 5,
+                              height: 100,
+                              width: 100,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -110,13 +115,34 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
                 const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      userDetailsModel.name,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: smallFontFamily),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      userDetailsModel.lastName,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: smallFontFamily),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(
-                  "${userDetailsModel.name}",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: smallFontFamily),
-                  textAlign: TextAlign.center,
+                  userDetailsModel.emailAddress,
+                  style: TextStyle(fontFamily: smallFontFamily),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(

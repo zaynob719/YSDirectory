@@ -6,6 +6,7 @@ import 'package:coveredncurly/widgets/app_text.dart';
 import 'package:coveredncurly/widgets/category_widget.dart';
 import 'package:coveredncurly/widgets/result_widget.dart';
 import 'package:coveredncurly/widgets/search_bar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShowMore extends StatefulWidget {
@@ -108,7 +109,7 @@ class DataSearch extends SearchDelegate<String> {
       stream: db.collection('salons').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CupertinoActivityIndicator());
         }
 
         final List<DocumentSnapshot> suggestions = snapshot.data!.docs

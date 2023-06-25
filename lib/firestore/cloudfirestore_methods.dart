@@ -13,7 +13,7 @@ class CloudFirestoreClass {
     await firebaseFirestore
         .collection("users")
         .doc(firebaseAuth.currentUser!.uid)
-        .set(user.toJson());
+        .set(user.getJson());
   }
 
   Future<UserDetailsModel> getNameAndCity() async {
@@ -21,7 +21,6 @@ class CloudFirestoreClass {
         .collection("users")
         .doc(firebaseAuth.currentUser!.uid)
         .get();
-    print(snap.data());
 
     if (snap.exists && snap.data() != null) {
       UserDetailsModel userModel = UserDetailsModel.getModelFromJson(
@@ -38,10 +37,18 @@ class CloudFirestoreClass {
 
   Future<void> uploadReviewToDatabase(
       {required String id, required ReviewModel model}) async {
-    await FirebaseFirestore.instance
-        .collection("salons")
-        .doc(id)
-        .collection("reviews")
-        .add(model.toJson());
+    await _salons.doc(id).collection("reviews").doc().set(model.toJson());
   }
+
+  // final CollectionReference _salons =
+  //     FirebaseFirestore.instance.collection('salons');
+
+  // Future<void> uploadReviewToDatabase(
+  //     {required String id, required ReviewModel model}) async {
+  //   await FirebaseFirestore.instance
+  //       .collection("salons")
+  //       .doc(id)
+  //       .collection("reviews")
+  //       .add(model.toJson());
+  // }
 }

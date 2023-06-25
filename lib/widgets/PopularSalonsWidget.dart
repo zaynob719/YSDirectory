@@ -4,6 +4,7 @@ import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
 import 'package:coveredncurly/utils/colors.dart';
 import 'package:coveredncurly/widgets/result_widget.dart';
 import 'package:coveredncurly/widgets/review_rating_location.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PopularSalonswidget extends StatefulWidget {
@@ -33,7 +34,7 @@ class _PopularSalonswidgetState extends State<PopularSalonswidget> {
   Widget build(BuildContext context) {
     if (salons.isEmpty) {
       return Center(
-        child: CircularProgressIndicator(color: brown),
+        child: CupertinoActivityIndicator(),
       );
     } else {
       return ListView.builder(
@@ -77,9 +78,10 @@ class _PopularSalonswidgetState extends State<PopularSalonswidget> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: Colors.black.withOpacity(0.2),
                             spreadRadius: 1.0,
-                            offset: Offset(0, 2),
+                            blurRadius: 3,
+                            //offset: Offset(0, 2),
                           )
                         ],
                       ),
@@ -104,9 +106,10 @@ class _PopularSalonswidgetState extends State<PopularSalonswidget> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.black.withOpacity(0.2),
                               spreadRadius: 1.0,
-                              offset: Offset(0, 2),
+                              blurRadius: 3,
+                              //offset: Offset(0, 2),
                             )
                           ],
                         ),

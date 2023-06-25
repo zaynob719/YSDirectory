@@ -11,7 +11,7 @@ import 'package:rxdart/rxdart.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await Future.delayed(Duration(seconds: 1));
+  await Future.delayed(const Duration(seconds: 1));
   //InitialBindings().dependencies();
   runApp(const MyApp());
 }
@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
       providers: [ChangeNotifierProvider(create: (_) => UserDetailsProvider())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(brightness: Brightness.light),
         home: StreamBuilder<List<dynamic>>(
           stream: _combineStreams(),
           builder: (context, snapshot) {
