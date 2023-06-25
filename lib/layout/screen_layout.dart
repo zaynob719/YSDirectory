@@ -1,5 +1,5 @@
 import 'package:coveredncurly/provider/user_details_provider.dart';
-import 'package:coveredncurly/resources/cloudfirestore_methods.dart';
+import 'package:coveredncurly/firestore/cloudfirestore_methods.dart';
 import 'package:coveredncurly/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:coveredncurly/utils/colors.dart';
@@ -80,15 +80,6 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     size: currentPage == 1 ? 33 : 24,
                   ),
                 ),
-                // Tab(
-                //   child: Icon(
-                //     Icons.search,
-                //     color: currentPage == 2
-                //         ? AppColors.secondBrownColor
-                //         : Colors.black,
-                //     size: currentPage == 2 ? 33 : 24,
-                //   ),
-                // ),
                 Tab(
                   child: Icon(
                     Icons.person,

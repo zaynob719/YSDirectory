@@ -15,16 +15,13 @@ class UserDetailsModel {
       required this.password,
       required this.city});
 
-  toJson() {
-    return {
-      "name": name,
-      "lastName": lastName,
-      "emailAddress": emailAddress,
-      "password": password,
-      "city": city
-    };
-  }
-
+  Map<String, dynamic> getJson() => {
+        'name': name,
+        'lastName': lastName,
+        'emailAddress': emailAddress,
+        'password': password,
+        'city': city
+      };
   factory UserDetailsModel.getModelFromJson(Map<String, dynamic> json) {
     return UserDetailsModel(
         //id: document.id,
