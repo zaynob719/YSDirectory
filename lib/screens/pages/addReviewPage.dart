@@ -301,7 +301,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                               reviewController.text.isEmpty) {
                             _scaffoldKey.currentState?.showSnackBar(
                               SnackBar(
-                                  backgroundColor: Colors.brown,
+                                  backgroundColor: brown,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),

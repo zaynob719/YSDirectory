@@ -1,4 +1,3 @@
-import 'package:coveredncurly/controllers/salons_options.dart/salon_options_controller.dart';
 import 'package:coveredncurly/screens/introduction/introduction.dart';
 import 'package:coveredncurly/screens/pages/home_screen.dart';
 import 'package:coveredncurly/screens/splash/splash_screen.dart';

@@ -1,3 +1,4 @@
+import 'package:coveredncurly/utils/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +11,7 @@ class Utils {
   showSnackBar({required BuildContext context, required String content}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Colors.brown,
+        backgroundColor: brown,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),

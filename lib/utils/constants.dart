@@ -56,7 +56,7 @@ const List<String> appOffersHomePage = [
 const List<String> appOffersHomePageNames = [
   "Saved", //link to profile
   "Share", // about YSD page on app
-  "Socials", //share to YSD insta
+  "YSD Socials", //share to YSD insta
   "Discounts", // link to YSD discounts
   "About us", // link to social media
 ];
