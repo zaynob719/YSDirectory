@@ -1,4 +1,4 @@
-import 'package:coveredncurly/controllers/auth_controller.dart';
+import 'package:YSDirectory/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 

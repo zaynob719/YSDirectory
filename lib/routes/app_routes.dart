@@ -1,7 +1,7 @@
-import 'package:coveredncurly/screens/introduction/introduction.dart';
-import 'package:coveredncurly/screens/pages/home_screen.dart';
-import 'package:coveredncurly/screens/splash/splash_screen.dart';
-import 'package:coveredncurly/services/firebase_storage_service.dart';
+import 'package:YSDirectory/screens/introduction/introduction.dart';
+import 'package:YSDirectory/screens/pages/home_screen.dart';
+import 'package:YSDirectory/screens/splash/splash_screen.dart';
+import 'package:YSDirectory/services/firebase_storage_service.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
