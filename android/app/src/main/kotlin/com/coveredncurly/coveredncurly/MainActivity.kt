@@ -1,4 +1,4 @@
-package com.coveredncurly.coveredncurly
+package com.YSDirectory.YSDirectory
 
 import io.flutter.embedding.android.FlutterActivity
 

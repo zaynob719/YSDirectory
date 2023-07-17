@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.coveredncurly.coveredncurly">
+    package="com.YSDirectory.YSDirectory">
    <application
-        android:label="coveredncurly"
+        android:label="YSDirectory"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

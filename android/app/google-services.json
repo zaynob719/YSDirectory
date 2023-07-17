@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1003762681522:android:7fa632b981494a33432bab",
         "android_client_info": {
-          "package_name": "com.coveredncurly.coveredncurly"
+          "package_name": "com.YSDirectory.YSDirectory"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "1003762681522-b4p1n83s0v6156vff7mu5gn4pjrn524h.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.coveredncurly.coveredncurly"
+                "bundle_id": "com.YSDirectory.YSDirectory"
               }
             }
           ]
