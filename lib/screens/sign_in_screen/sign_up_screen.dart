@@ -1,10 +1,10 @@
-import 'package:coveredncurly/firestore/authentication_methods.dart';
-import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
-import 'package:coveredncurly/utils/utils.dart';
+import 'package:YSDirectory/firestore/authentication_methods.dart';
+import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
+import 'package:YSDirectory/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override

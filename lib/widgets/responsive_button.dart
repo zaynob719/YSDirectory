@@ -1,6 +1,6 @@
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/dimensions.dart';
-import 'package:coveredncurly/widgets/app_text.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/dimensions.dart';
+import 'package:YSDirectory/widgets/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';

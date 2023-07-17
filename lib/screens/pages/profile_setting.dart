@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/models/user_details_model.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/provider/user_details_provider.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
 
 class ProfileSetting extends StatefulWidget {
   const ProfileSetting({Key? key}) : super(key: key);

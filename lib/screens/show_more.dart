@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
-import 'package:coveredncurly/screens/result_screen.dart';
-import 'package:coveredncurly/utils/constants.dart';
-import 'package:coveredncurly/widgets/app_text.dart';
-import 'package:coveredncurly/widgets/category_widget.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
-import 'package:coveredncurly/widgets/search_bar_widget.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/result_screen.dart';
+import 'package:YSDirectory/utils/constants.dart';
+import 'package:YSDirectory/widgets/app_text.dart';
+import 'package:YSDirectory/widgets/category_widget.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:YSDirectory/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

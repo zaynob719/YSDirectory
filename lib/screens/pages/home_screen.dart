@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
-import 'package:coveredncurly/screens/show_more.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/widgets/PopularSalonsWidget.dart';
-import 'package:coveredncurly/widgets/banner_add_widget.dart';
-import 'package:coveredncurly/widgets/category_chip_widget.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/show_more.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/PopularSalonsWidget.dart';
+import 'package:YSDirectory/widgets/banner_add_widget.dart';
+import 'package:YSDirectory/widgets/category_chip_widget.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/constants.dart';
+import 'package:YSDirectory/utils/constants.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,11 +21,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
+  late Position _currentPosition;
 
   void resetSelectedCategory() {
     setState(() {
       selectedCategory = null;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState(); // Call the method to disable screenshots
   }
 
   @override
@@ -41,17 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: RichText(
-          text: TextSpan(
+          text: const TextSpan(
             style: TextStyle(
-              fontSize: 26.0,
+              fontSize: 20.0,
               fontWeight: FontWeight.bold,
               fontFamily: 'InknutAntiqua',
             ),
             children: <TextSpan>[
               TextSpan(
-                text: 'YS',
+                text: 'Your Salon ',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: brown,
                 ),
               ),
               TextSpan(
@@ -113,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: brown,
+                backgroundColor: orengy,
               ),
               child: Text(
                 'Show more',

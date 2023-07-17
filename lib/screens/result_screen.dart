@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/widgets/loading_widget.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
+import 'package:YSDirectory/widgets/loading_widget.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {

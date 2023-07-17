@@ -1,8 +1,8 @@
-import 'package:coveredncurly/provider/user_details_provider.dart';
-import 'package:coveredncurly/firestore/cloudfirestore_methods.dart';
-import 'package:coveredncurly/utils/constants.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
+import 'package:YSDirectory/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/colors.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class ScreenLayout extends StatefulWidget {

@@ -1,9 +1,9 @@
 //import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
-import 'package:coveredncurly/widgets/review_rating_location.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:YSDirectory/widgets/review_rating_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

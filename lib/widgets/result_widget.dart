@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/widgets/review_rating_location.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/review_rating_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ResultWidget extends StatefulWidget {
   final List<Salon> salons;
+
   const ResultWidget({Key? key, required this.salons}) : super(key: key);
 
   @override
@@ -30,8 +30,9 @@ class _ResultWidgetState extends State<ResultWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      SalonDetailScreen(salon: widget.salons[index]),
+                  builder: (context) => SalonDetailScreen(
+                    salon: widget.salons[index],
+                  ),
                 ),
               );
             },
@@ -45,8 +46,9 @@ class _ResultWidgetState extends State<ResultWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SalonDetailScreen(salon: widget.salons[index]),
+                          builder: (context) => SalonDetailScreen(
+                            salon: widget.salons[index],
+                          ),
                         ),
                       );
                     },
@@ -75,8 +77,9 @@ class _ResultWidgetState extends State<ResultWidget> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SalonDetailScreen(salon: widget.salons[index]),
+                            builder: (context) => SalonDetailScreen(
+                              salon: widget.salons[index],
+                            ),
                           ),
                         );
                       },
@@ -148,6 +151,7 @@ class Salon {
   final String number;
   final String email;
   final Map openHours;
+  //final int updatedNoOfReview;
 
   Salon({
     required this.salonName,
@@ -167,6 +171,7 @@ class Salon {
     required this.number,
     required this.email,
     required this.openHours,
+    //required this.updatedNoOfReview,
   });
 
   factory Salon.fromJson(Map<String, dynamic> json) {
@@ -183,6 +188,7 @@ class Salon {
           ? double.parse(json['distance'].toString())
           : 0.0,
       noOfReview: json['noOfReview'] as int? ?? 0,
+      //updatedNoOfReview: json['updatedNoOfReview'] as int? ?? 0,
       id: json['id'] as String? ?? '',
       website: json['website'] as String? ?? '',
       instagram: json['instagram'] as String? ?? '',
