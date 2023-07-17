@@ -1,4 +1,4 @@
-import 'package:coveredncurly/utils/utils.dart';
+import 'package:YSDirectory/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SalonInformationWidget extends StatelessWidget {

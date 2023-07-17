@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/constants.dart';
-import 'package:coveredncurly/utils/utils.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/constants.dart';
+import 'package:YSDirectory/utils/utils.dart';
 
 class SearchBarWidget extends StatefulWidget implements PreferredSizeWidget {
   final bool isReadOnly;

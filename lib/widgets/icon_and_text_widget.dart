@@ -1,5 +1,5 @@
-// import 'package:coveredncurly/utils/dimensions.dart';
-// import 'package:coveredncurly/widgets/small_text.dart';
+// import 'package:YSDirectory/utils/dimensions.dart';
+// import 'package:YSDirectory/widgets/small_text.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/container.dart';
 // import 'package:flutter/src/widgets/framework.dart';

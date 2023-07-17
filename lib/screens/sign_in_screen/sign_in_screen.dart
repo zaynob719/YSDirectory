@@ -1,12 +1,12 @@
 import 'dart:ui';
 
-import 'package:coveredncurly/layout/screen_layout.dart';
-import 'package:coveredncurly/firestore/authentication_methods.dart';
-import 'package:coveredncurly/screens/sign_in_screen/sign_up_screen.dart';
-import 'package:coveredncurly/utils/utils.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
+import 'package:YSDirectory/layout/screen_layout.dart';
+import 'package:YSDirectory/firestore/authentication_methods.dart';
+import 'package:YSDirectory/screens/sign_in_screen/sign_up_screen.dart';
+import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/colors.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:get/route_manager.dart';
 
 class SignInScreen extends StatefulWidget {

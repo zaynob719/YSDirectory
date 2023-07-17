@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/models/salon_model.dart';
-import 'package:coveredncurly/screens/pages/about_ysd.dart';
-import 'package:coveredncurly/screens/pages/addReviewPage.dart';
-import 'package:coveredncurly/screens/pages/discounts.dart';
-import 'package:coveredncurly/screens/pages/profile_page.dart';
-import 'package:coveredncurly/screens/pages/salon_detail_screen.dart';
-import 'package:coveredncurly/screens/pages/socials.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/constants.dart';
+import 'package:YSDirectory/models/salon_model.dart';
+import 'package:YSDirectory/screens/pages/about_ysd.dart';
+import 'package:YSDirectory/screens/pages/addReviewPage.dart';
+import 'package:YSDirectory/screens/pages/discounts.dart';
+import 'package:YSDirectory/screens/pages/profile_page.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/pages/ContactUs.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/utils.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
+import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 
 class BannerAddWidget extends StatefulWidget {
   const BannerAddWidget({Key? key}) : super(key: key);
@@ -73,11 +73,17 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                 },
                 child: Stack(
                   children: [
-                    FadeInImage.assetNetwork(
-                      placeholder: 'images/placeholder_image.png',
-                      image: salons[index].url,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
+                    Container(
+                      color: Colors.black,
+                      child: Opacity(
+                        opacity: 0.6,
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'images/placeholder_image.png',
+                          image: salons[index].url,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
                     ),
                     Positioned(
                       bottom: 5,
@@ -152,11 +158,10 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                appOffersHomePageFromIndex(0, 110),
-                appOffersHomePageFromIndex(1, 110),
-                appOffersHomePageFromIndex(2, 110),
-                appOffersHomePageFromIndex(3, 110),
-                appOffersHomePageFromIndex(4, 110),
+                appOffersHomePageFromIndex(0, 110), //saved
+                appOffersHomePageFromIndex(1, 110), //ysd socials
+                appOffersHomePageFromIndex(2, 110), //discounts
+                appOffersHomePageFromIndex(3, 110), //about ysd
               ],
             ),
           ),
@@ -169,24 +174,20 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     void navigateToScreen() {
       switch (index) {
         case 0:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => discounts()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()));
           break;
         case 1:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ContactUs()));
           break;
         case 2:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => socials()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const discounts()));
           break;
         case 3:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
-          break;
-        case 4:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AboutYSD()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AboutYSD()));
           break;
       }
     }
