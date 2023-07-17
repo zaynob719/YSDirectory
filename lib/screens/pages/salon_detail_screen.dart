@@ -1,19 +1,23 @@
 //import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coveredncurly/models/review_model.dart';
-import 'package:coveredncurly/screens/pages/addReviewPage.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/utils.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
-import 'package:coveredncurly/widgets/rating_star_widget.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
-import 'package:coveredncurly/widgets/review_widget.dart';
+import 'package:YSDirectory/models/review_model.dart';
+import 'package:YSDirectory/screens/pages/addReviewPage.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
+import 'package:YSDirectory/widgets/rating_star_widget.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:YSDirectory/widgets/review_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:YSDirectory/models/review_count_model.dart';
 
 class SalonDetailScreen extends StatefulWidget {
   final Salon salon;
 
-  const SalonDetailScreen({Key? key, required this.salon}) : super(key: key);
+  const SalonDetailScreen({
+    Key? key,
+    required this.salon,
+  }) : super(key: key);
 
   @override
   State<SalonDetailScreen> createState() => _SalonDetailScreenState();
@@ -35,8 +39,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
     db.collection('salons').doc(widget.salon.id).get().then((snapshot) {
       if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
-        final salon =
-            Salon.fromJson(data); // Convert the snapshot data to a Salon object
+        final salon = Salon.fromJson(data);
 
         setState(() {
           salons = [salon];
@@ -70,6 +73,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
               pinned: true,
               expandedHeight: 250.0,
               floating: true,
+              iconTheme: const IconThemeData(color: Colors.black),
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Chip(
@@ -108,6 +112,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                       _isBookmarked
                           ? Icons.bookmark
                           : Icons.bookmark_add_outlined,
+                      color: Colors.black,
                     ),
                   ),
                 ],
@@ -133,16 +138,16 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                   Tab(
                     child: Text(
                       "Reviews (${widget.salon.noOfReview})",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Tab(
+                  const Tab(
                     child: Text(
-                      "Socials",
+                      "Find Us",
                       style: TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
@@ -158,11 +163,10 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                 controller: _tabController,
                 children: [
                   SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         left: 20,
-                        top: 20,
                         right: 20,
                       ),
                       child: Column(
@@ -170,7 +174,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           Chip(
                             label: Text(
                               widget.salon.category,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'GentiumPlus',
                                 fontSize: 12,
@@ -180,12 +184,12 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           ),
                           Text(
                             widget.salon.summary,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 wordSpacing: 0.6,
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
@@ -226,7 +230,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                             children: widget.salon.services.entries
                                 .map((entry) => RichText(
                                       text: TextSpan(
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'GentiumPlus',
                                             wordSpacing: 0.6),
                                         children: [
@@ -248,6 +252,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                     ))
                                 .toList(),
                           ),
+                          SizedBox(height: 20)
                         ],
                       ),
                     ),
@@ -270,7 +275,6 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               MaterialPageRoute(
                                   builder: (context) => AddReviewPage(
                                         salonId: widget.salon.id,
-                                        selectedSalon: widget.salon.salonName,
                                       )));
                         }),
                       ),
@@ -283,6 +287,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 .collection("salons")
                                 .doc(widget.salon.id)
                                 .collection("reviews")
+                                .orderBy('attendanceDate', descending: true)
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
@@ -392,7 +397,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 color: Colors.black,
                               ),
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Contact Details: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -400,7 +405,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 ),
                                 TextSpan(
                                   text: widget.salon.number,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
                                   ),
@@ -410,16 +415,17 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 20, right: 10),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 20, right: 10),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Email: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,

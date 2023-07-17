@@ -1,5 +1,5 @@
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/utils.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class AboutYSD extends StatefulWidget {
@@ -21,6 +21,7 @@ class _AboutYSDState extends State<AboutYSD> {
             pinned: true,
             expandedHeight: 250.0,
             floating: true,
+            iconTheme: const IconThemeData(color: Colors.black),
             flexibleSpace: FlexibleSpaceBar(
               //centerTitle: true,
               // title: Text(
@@ -38,7 +39,7 @@ class _AboutYSDState extends State<AboutYSD> {
                   Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('images/logo_background.png'),
+                        image: AssetImage('images/logo_backgroundb.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -110,7 +111,7 @@ class _AboutYSDState extends State<AboutYSD> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
-                    "At Your Salon Directory, we aim to make the process of finding the ideal salon as stress-free as possible. So, let us help you find a salon that meets your unique needs and removes the burden of searching for the perfect salon.",
+                    "At YSDirectory, we aim to make the process of finding the ideal salon as stress-free as possible. So, let us help you find a salon that meets your unique needs and removes the burden of searching for the perfect salon.",
                     style: TextStyle(
                       fontFamily: 'GentiumPlus',
                       fontSize: 16,

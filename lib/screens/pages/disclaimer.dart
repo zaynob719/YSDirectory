@@ -1,5 +1,5 @@
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/utils.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class Disclaimer extends StatelessWidget {

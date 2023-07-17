@@ -1,4 +1,4 @@
-import 'package:coveredncurly/utils/colors.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

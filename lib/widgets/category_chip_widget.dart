@@ -1,7 +1,7 @@
-import 'package:coveredncurly/utils/colors.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/utils/constants.dart';
-import 'package:coveredncurly/screens/result_screen.dart';
+import 'package:YSDirectory/utils/constants.dart';
+import 'package:YSDirectory/screens/result_screen.dart';
 
 class CategoryChipWidget extends StatefulWidget {
   const CategoryChipWidget({Key? key}) : super(key: key);

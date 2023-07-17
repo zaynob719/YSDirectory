@@ -1,18 +1,22 @@
-import 'package:coveredncurly/models/user_details_model.dart';
-import 'package:coveredncurly/provider/user_details_provider.dart';
-import 'package:coveredncurly/screens/pages/disclaimer.dart';
-import 'package:coveredncurly/screens/pages/profile_setting.dart';
-import 'package:coveredncurly/screens/sign_in_screen/sign_in_screen.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/utils.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
-import 'package:coveredncurly/screens/pages/about_ysd.dart';
-import 'package:coveredncurly/widgets/user_detail_bar.dart';
+import 'dart:convert';
+
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:YSDirectory/screens/pages/disclaimer.dart';
+import 'package:YSDirectory/screens/pages/profile_setting.dart';
+import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
+import 'package:YSDirectory/screens/pages/about_ysd.dart';
+import 'package:YSDirectory/widgets/user_detail_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:YSDirectory/models/review_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -23,8 +27,27 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   Uint8List? image;
+  late SharedPreferences _preferences;
   String bigFontFamily = 'InknutAntiqua';
   String smallFontFamily = 'GentiumPlus';
+  String? userAvatar;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserAvatar(); // Load the user's avatar from SharedPreferences
+  }
+
+  void loadUserAvatar() async {
+    _preferences = await SharedPreferences.getInstance();
+    userAvatar = _preferences.getString('userAvatar');
+    setState(() {});
+  }
+
+  void saveUserAvatar(String? avatar) async {
+    _preferences = await SharedPreferences.getInstance();
+    await _preferences.setString('userAvatar', avatar ?? '');
+  }
 
   void signOut() async {
     try {
@@ -47,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           title: Text("Your Profile",
               style: TextStyle(
@@ -56,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
           centerTitle: false,
           actions: [
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.settings,
                 color: Colors.black,
               ),
@@ -73,43 +97,47 @@ class _ProfilePageState extends State<ProfilePage> {
             width: screenSize.width,
             child: Column(
               children: [
-                UserDetailBar(
+                const UserDetailBar(
                   offset: 0,
                 ),
                 const SizedBox(height: 20),
                 Stack(
                   children: [
-                    image == null
-                        ? ClipOval(
-                            child: Image.network("https://picsum.photos/200",
-                                //height: screenSize.height / 10,
-                                //width: screenSize.width / 10,
+                    if (userAvatar == null)
+                      ClipOval(
+                        child: Image.asset("images/profileb.png",
+                            height: 100, width: 100, fit: BoxFit.cover),
+                      )
+                    else
+                      ClipOval(
+                        child: image != null
+                            ? Image.memory(
+                                image!,
                                 height: 100,
                                 width: 100,
-                                fit: BoxFit.cover),
-                          )
-                        : ClipOval(
-                            child: Image.memory(
-                              image!,
-                              // height: screenSize.height / 5,
-                              // width: screenSize.width / 5,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                "images/profileb.png",
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     IconButton(
                       onPressed: () async {
                         Uint8List? temp = await Utils().pickImage();
                         if (temp != null) {
                           setState(() {
                             image = temp;
+                            userAvatar = base64Encode(temp);
+                            saveUserAvatar(userAvatar);
                           });
                         }
                       },
                       icon: const Icon(
                         Icons.camera_alt,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     )
                   ],
@@ -152,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       // random generation of a salon
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: darkerBrown,
+                      backgroundColor: orengy,
                     ),
                     child: Text(
                       "Direct me!",

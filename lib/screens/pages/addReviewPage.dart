@@ -1,10 +1,15 @@
-import 'package:coveredncurly/models/review_model.dart';
-import 'package:coveredncurly/provider/user_details_provider.dart';
-import 'package:coveredncurly/firestore/cloudfirestore_methods.dart';
-import 'package:coveredncurly/utils/colors.dart';
-import 'package:coveredncurly/utils/constants.dart';
-import 'package:coveredncurly/widgets/custom_main_button.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
+import 'dart:convert';
+
+import 'package:YSDirectory/models/review_model.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
+import 'package:YSDirectory/screens/pages/home_screen.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/utils/constants.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
@@ -16,7 +21,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AddReviewPage extends StatefulWidget {
   final String? selectedSalon;
   final String? salonId;
-  AddReviewPage({Key? key, this.selectedSalon, this.salonId}) : super(key: key);
+  final Uint8List? image;
+  AddReviewPage({
+    Key? key,
+    this.selectedSalon,
+    this.salonId,
+    this.image,
+  }) : super(key: key);
 
   @override
   State<AddReviewPage> createState() => _AddReviewPageState();
@@ -94,7 +105,8 @@ class _AddReviewPageState extends State<AddReviewPage> {
           centerTitle: false,
           elevation: 0,
           backgroundColor: Colors.white,
-          title: Text("Write a review",
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: const Text("Write a review",
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: 'InknutAntiqua',
@@ -103,11 +115,11 @@ class _AddReviewPageState extends State<AddReviewPage> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Choose a salon',
                   style: TextStyle(
                       fontFamily: 'GentiumPlus',
@@ -130,7 +142,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       value: value,
                       child: Text(
                         value,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'GentiumPlus',
                             fontSize: 16,
                             color: Colors.black),
@@ -138,12 +150,12 @@ class _AddReviewPageState extends State<AddReviewPage> {
                     );
                   }).toList(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Column(
                   children: [
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text('When was your appointment?',
                           style: TextStyle(
@@ -152,12 +164,12 @@ class _AddReviewPageState extends State<AddReviewPage> {
                               color: Colors.black,
                               fontWeight: FontWeight.w400)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     DateTimeField(
                       format: format,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 16,
                         color: Colors.black,
@@ -177,7 +189,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                           builder: (BuildContext context, Widget? child) {
                             return Theme(
                               data: ThemeData.light().copyWith(
-                                colorScheme: ColorScheme.light(
+                                colorScheme: const ColorScheme.light(
                                   primary: brown,
                                   onPrimary: lightBrown,
                                   error: Colors.red,
@@ -200,10 +212,10 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         return selectedDate;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'How would you rate it?',
@@ -214,7 +226,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                             fontWeight: FontWeight.w400),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Align(
@@ -229,12 +241,12 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         },
                         starBuilder: (index, color) {
                           if (index < value.toInt()) {
-                            return Icon(
+                            return const Icon(
                               Icons.star,
                               color: Colors.amber,
                             );
                           } else {
-                            return Icon(
+                            return const Icon(
                               Icons.star_outline_sharp,
                               color: Colors.amber,
                             );
@@ -250,15 +262,15 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         starSpacing: 2,
                         maxValueVisibility: true,
                         valueLabelVisibility: true,
-                        animationDuration: Duration(milliseconds: 1000),
+                        animationDuration: const Duration(milliseconds: 1000),
                         valueLabelPadding: const EdgeInsets.symmetric(
                             vertical: 1, horizontal: 8),
                         valueLabelMargin: const EdgeInsets.only(right: 8),
-                        starOffColor: Color(0xffe7e8ea),
+                        starOffColor: const Color(0xffe7e8ea),
                         starColor: Colors.amber,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     const SizedBox(height: 20),
                     const Text(
                       'Write your review', //spill the tea, what did you like, dislike,
@@ -279,51 +291,94 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         fontSize: 16,
                         color: Colors.black,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Spill the tea! What did you like? dislike?',
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     CustomMainButton(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                              fontFamily: 'GentiumPlus', fontSize: 16),
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontFamily: 'GentiumPlus',
+                          fontSize: 16,
                         ),
-                        color: brown,
-                        isLoading: false,
-                        onPressed: () async {
-                          if (selectedValue.isEmpty ||
-                              //attendanceDate == null ||
-                              selectedRatingKey.isEmpty ||
-                              reviewController.text.isEmpty) {
-                            _scaffoldKey.currentState?.showSnackBar(
-                              SnackBar(
-                                  backgroundColor: brown,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                  )),
-                                  content: Text('Please fill all fields')),
-                            );
-                            return;
-                          }
-                          CloudFirestoreClass().uploadReviewToDatabase(
-                              id: widget.salonId.toString(),
-                              model: ReviewModel(
-                                  senderName: Provider.of<UserDetailsProvider>(
-                                          context,
-                                          listen: false)
-                                      .userDetails
-                                      .name,
-                                  reviewController: reviewController.text,
-                                  rating: selectedRatingKey,
-                                  attendanceDate: format.format(_dateTime)));
-                          //titleController: titleController.text));
-                        })
+                      ),
+                      color: brown,
+                      isLoading: false,
+                      onPressed: () async {
+                        if (selectedValue.isEmpty ||
+                            selectedRatingKey.isEmpty ||
+                            reviewController.text.isEmpty) {
+                          _scaffoldKey.currentState?.showSnackBar(
+                            const SnackBar(
+                              backgroundColor: brown,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              content: Text('Please fill in all fields'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        String? userAvatar =
+                            base64Encode(widget.image ?? Uint8List(0));
+                        CloudFirestoreClass()
+                            .uploadReviewToDatabase(
+                          id: widget.salonId.toString(),
+                          model: ReviewModel(
+                            senderName: Provider.of<UserDetailsProvider>(
+                              context,
+                              listen: false,
+                            ).userDetails.name,
+                            reviewController: reviewController.text,
+                            rating: selectedRatingKey,
+                            attendanceDate: format.format(_dateTime),
+                            userAvatar: userAvatar ?? '',
+                          ),
+                        )
+                            .then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: brown,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              content: Text('Review uploaded successfully!'),
+                            ),
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        }).catchError((error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              content: Text(
+                                  'Failed to upload review. Please try again.'),
+                            ),
+                          );
+                        });
+                      },
+                    ),
                   ],
                 ),
               ],

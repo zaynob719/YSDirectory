@@ -3,14 +3,14 @@ class ReviewModel {
   final String reviewController;
   final String rating;
   final String attendanceDate;
-  //final String titleController;
+  final String userAvatar;
 
   const ReviewModel({
     required this.senderName,
     required this.reviewController,
     required this.rating,
     required this.attendanceDate,
-    //required this.titleController,
+    required this.userAvatar,
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
@@ -19,7 +19,7 @@ class ReviewModel {
       reviewController: json["reviewController"] as String? ?? '',
       rating: json["rating"] as String? ?? '',
       attendanceDate: json["attendanceDate"] as String? ?? '',
-      //titleController: json["titleController"] as String? ?? '',
+      userAvatar: json['userAvatar'] as String? ?? '',
     );
   }
 
@@ -29,7 +29,7 @@ class ReviewModel {
       'reviewController': reviewController,
       'rating': rating,
       'attendanceDate': attendanceDate,
-      //'titleController': titleController,
+      'userAvatar': userAvatar,
     };
   }
 }

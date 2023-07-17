@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1003762681522',
     projectId: 'your-salon-directory',
     storageBucket: 'your-salon-directory.appspot.com',
-    iosClientId: '1003762681522-b4p1n83s0v6156vff7mu5gn4pjrn524h.apps.googleusercontent.com',
-    iosBundleId: 'com.coveredncurly.coveredncurly',
+    iosClientId:
+        '1003762681522-b4p1n83s0v6156vff7mu5gn4pjrn524h.apps.googleusercontent.com',
+    iosBundleId: 'com.YSDirectory.YSDirectory',
   );
 }

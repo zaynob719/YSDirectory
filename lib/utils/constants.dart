@@ -1,8 +1,7 @@
-import 'package:coveredncurly/screens/pages/addReviewPage.dart';
-import 'package:coveredncurly/screens/pages/home_screen.dart';
-import 'package:coveredncurly/screens/pages/profile_page.dart';
+import 'package:YSDirectory/screens/pages/addReviewPage.dart';
+import 'package:YSDirectory/screens/pages/home_screen.dart';
+import 'package:YSDirectory/screens/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:coveredncurly/widgets/result_widget.dart';
 
 const double kAppBarHeight = 100;
 
@@ -12,7 +11,6 @@ const List<String> categoryList = [
   "Hijabi friendly",
   "Kids friendly",
   "Afrocare",
-  "Location",
   "Mobile",
   "Ratings",
   "Curls",
@@ -26,8 +24,6 @@ const List<String> categoryLogos = [
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fkid%20friendly.png?alt=media&token=15a5e8b6-3ce3-462b-a5af-6b5ce94734b5",
   //afro care
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fafro.png?alt=media&token=c2227ddf-0d9e-40ed-b270-4ff5306ff1a2",
-  //location
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Flocation.png?alt=media&token=66d8cbb2-3640-4337-8c3d-d5c1936b735a",
   //mobile
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fmobile.png?alt=media&token=ce9ece8b-2be4-4493-a648-49ce168ada7e",
   //ratings
@@ -40,23 +36,21 @@ const List<String> categoryLogos = [
 
 // app navigation bar pages
 List<Widget> screens = [
-  HomeScreen(),
+  const HomeScreen(),
   AddReviewPage(),
-  ProfilePage(),
+  const ProfilePage(),
 ];
 
 const List<String> appOffersHomePage = [
-  "images/save_salons.png",
-  "images/send_to_friend.png",
-  "images/socials.png",
-  "images/get_discounts.png",
-  "images/about_YSD.png",
+  "images/save.png",
+  "images/socials2.png",
+  "images/discounts.png",
+  "images/YSD.png",
 ];
 
 const List<String> appOffersHomePageNames = [
   "Saved", //link to profile
-  "Share", // about YSD page on app
-  "YSD Socials", //share to YSD insta
+  "Contact us", //share to YSD insta
   "Discounts", // link to YSD discounts
   "About us", // link to social media
 ];

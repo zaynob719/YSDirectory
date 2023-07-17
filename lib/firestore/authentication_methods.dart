@@ -1,5 +1,5 @@
-import 'package:coveredncurly/models/user_details_model.dart';
-import 'package:coveredncurly/firestore/cloudfirestore_methods.dart';
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationMethods {
