@@ -1,6 +1,6 @@
 {
-    "name": "coveredncurly",
-    "short_name": "coveredncurly",
+    "name": "YSDirectory",
+    "short_name": "YSDirectory",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

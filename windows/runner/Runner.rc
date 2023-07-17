@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.coveredncurly" "\0"
-            VALUE "FileDescription", "coveredncurly" "\0"
+            VALUE "CompanyName", "com.YSDirectory" "\0"
+            VALUE "FileDescription", "YSDirectory" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "coveredncurly" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.coveredncurly. All rights reserved." "\0"
-            VALUE "OriginalFilename", "coveredncurly.exe" "\0"
-            VALUE "ProductName", "coveredncurly" "\0"
+            VALUE "InternalName", "YSDirectory" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 com.YSDirectory. All rights reserved." "\0"
+            VALUE "OriginalFilename", "YSDirectory.exe" "\0"
+            VALUE "ProductName", "YSDirectory" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
