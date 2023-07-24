@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:YSDirectory/layout/screen_layout.dart';
 import 'package:YSDirectory/firestore/authentication_methods.dart';
+import 'package:YSDirectory/screens/sign_in_screen/resetPasswordScreen.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_up_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
@@ -39,14 +40,14 @@ class _SignInScreenState extends State<SignInScreen> {
           Container(
             decoration: BoxDecoration(
               color: AppColors.mainBrownColor,
-              borderRadius: BorderRadius.vertical(
+              borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(50),
               ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
                   blurRadius: 10,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
@@ -55,15 +56,15 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Image.asset(
-                  'images/logo.png',
+                  'images/logo_name.png',
                   height: 200,
                   width: 150,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Stack(
                   children: [
                     Row(
@@ -80,14 +81,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             style: TextStyle(
                               fontFamily: 'GentiumPlus',
                               color: Colors.brown,
-                              fontSize: 20,
+                              fontSize: 24,
                               fontWeight: _selectedIndex == 0
                                   ? FontWeight.bold
                                   : FontWeight.normal,
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(context,
@@ -103,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             style: TextStyle(
                               fontFamily: 'GentiumPlus',
                               color: Colors.brown,
-                              fontSize: 20,
+                              fontSize: 24,
                               fontWeight: _selectedIndex == 1
                                   ? FontWeight.bold
                                   : FontWeight.normal,
@@ -126,9 +127,9 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -138,20 +139,20 @@ class _SignInScreenState extends State<SignInScreen> {
                     labelText: 'Email address',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: brown,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: brown,
                         ),
                       ),
@@ -169,21 +170,28 @@ class _SignInScreenState extends State<SignInScreen> {
                       )),
                   obscureText: _obscureText,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgotten you password?',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResetPasswordScreen()),
+                    );
+                  },
+                  child: const Text(
+                    'Forgotten your password?',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.brown,
                       fontFamily: 'GentiumPlus',
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomMainButton(
-                    child: Text(
+                    child: const Text(
                       "Sign In",
                       style: TextStyle(
                         fontSize: 19,
@@ -191,7 +199,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         fontFamily: 'GentiumPlus',
                       ),
                     ),
-                    color: brown,
+                    color: orengy,
                     isLoading: isLoading,
                     onPressed: () async {
                       setState(() {
@@ -207,7 +215,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ScreenLayout()),
+                              builder: (context) => const ScreenLayout()),
                         );
                       } else {
                         Utils().showSnackBar(context: context, content: output);

@@ -1,4 +1,5 @@
 //import 'dart:html';
+import 'package:YSDirectory/widgets/app_icon.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/models/review_model.dart';
 import 'package:YSDirectory/screens/pages/addReviewPage.dart';
@@ -8,8 +9,10 @@ import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:YSDirectory/widgets/rating_star_widget.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/review_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/models/review_count_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SalonDetailScreen extends StatefulWidget {
   final Salon salon;
@@ -46,6 +49,33 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
         });
       }
     });
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _launchEmail(String email) async {
+    final Uri _emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    final String _emailLaunchString =
+        Uri.encodeFull(_emailLaunchUri.toString());
+    _launchURL(_emailLaunchString);
+  }
+
+  void _launchPhone(String phoneNumber) async {
+    final Uri _phoneLaunchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    final String _phoneLaunchString = _phoneLaunchUri.toString();
+    _launchURL(_phoneLaunchString);
   }
 
   @override
@@ -107,14 +137,16 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: _toggleBookmark,
-                    child: Icon(
-                      _isBookmarked
-                          ? Icons.bookmark
-                          : Icons.bookmark_add_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
+                      onTap: _toggleBookmark,
+                      child: AppIcon(
+                        icon: _isBookmarked
+                            ? Icons.bookmark
+                            : Icons.bookmark_add_outlined,
+                        backgroudColor: Colors.white70,
+                        iconColor: Colors.black,
+                        size: 40,
+                        iconSize: 20,
+                      )),
                 ],
               ),
             ),
@@ -125,7 +157,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                 unselectedLabelColor: Colors.grey,
                 indicator: CircleTabindicator(color: brown, radius: 5),
                 tabs: [
-                  Tab(
+                  const Tab(
                     child: Text(
                       "Guide",
                       style: TextStyle(
@@ -192,7 +224,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(
+                          const Text(
                             "General Description",
                             style: TextStyle(
                                 fontFamily: 'GentiumPlus',
@@ -200,20 +232,20 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
                             widget.salon.salonGeneralDescription,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'GentiumPlus',
                               wordSpacing: 0.6,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
+                          const Text(
                             "Services",
                             style: TextStyle(
                               fontFamily: 'GentiumPlus',
@@ -222,7 +254,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               fontSize: 18,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Column(
@@ -236,14 +268,14 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                         children: [
                                           TextSpan(
                                             text: entry.key,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
                                                 fontFamily: 'GentiumPlus'),
                                           ),
                                           TextSpan(
                                             text: ": ${entry.value}",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontFamily: 'GentiumPlus',
                                                 color: Colors.black),
                                           ),
@@ -252,7 +284,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                     ))
                                 .toList(),
                           ),
-                          SizedBox(height: 20)
+                          const SizedBox(height: 25)
                         ],
                       ),
                     ),
@@ -260,7 +292,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                   Column(
                     children: [
                       CustomMainButton(
-                        child: Text(
+                        child: const Text(
                           'Write a review',
                           style: TextStyle(
                             fontFamily: 'GentiumPlus',
@@ -275,12 +307,13 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               MaterialPageRoute(
                                   builder: (context) => AddReviewPage(
                                         salonId: widget.salon.id,
+                                        selectedSalon: widget.salon.salonName,
                                       )));
                         }),
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
+                          margin: const EdgeInsets.only(left: 20, right: 20),
                           child: StreamBuilder<
                               QuerySnapshot<Map<String, dynamic>>>(
                             stream: FirebaseFirestore.instance
@@ -312,7 +345,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                   child: Text('Error: ${snapshot.error}'),
                                 );
                               } else {
-                                return Center(
+                                return const Center(
                                   child: Text('No reviews found.'),
                                 );
                               }
@@ -323,21 +356,22 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                     ],
                   ),
                   SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 20, right: 10),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 20, right: 10),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Instagram: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -345,29 +379,35 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 ),
                                 TextSpan(
                                   text: widget.salon.instagram,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
+                                    decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _launchURL(widget.salon.instagram);
+                                    },
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 20, right: 10),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 20, right: 10),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Website: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -375,23 +415,29 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 ),
                                 TextSpan(
                                   text: widget.salon.website,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
+                                    decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _launchURL(widget.salon.website);
+                                    },
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 20, right: 10),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 20, right: 10),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 fontSize: 16,
                                 color: Colors.black,
@@ -408,7 +454,12 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
+                                    //decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _launchPhone(widget.salon.number);
+                                    },
                                 ),
                               ],
                             ),
@@ -433,20 +484,26 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 ),
                                 TextSpan(
                                   text: widget.salon.email,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
+                                    decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _launchEmail(widget.salon.email);
+                                    },
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 20, right: 10),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 20, right: 10),
                           child: const Text(
                             'Open Hours:',
                             style: TextStyle(
@@ -455,23 +512,23 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 fontFamily: 'GentiumPlus'),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Container(
-                          margin: EdgeInsets.only(left: 20, right: 10),
+                          margin: const EdgeInsets.only(left: 20, right: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children:
                                 widget.salon.openHours.entries.map((entry) {
                               return RichText(
                                 text: TextSpan(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'GentiumPlus',
                                     wordSpacing: 0.6,
                                   ),
                                   children: [
                                     TextSpan(
                                       text: '${entry.key}: ',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                         fontFamily: 'GentiumPlus',
@@ -479,7 +536,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                     ),
                                     TextSpan(
                                       text: entry.value,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'GentiumPlus',
                                         color: Colors.black,
                                       ),

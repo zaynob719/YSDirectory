@@ -8,11 +8,11 @@ class UserDetailsProvider with ChangeNotifier {
 
   UserDetailsProvider()
       : userDetails = UserDetailsModel(
-            name: 'Loading...',
-            city: 'Loading...',
-            lastName: 'Loading',
-            emailAddress: 'Loading',
-            password: 'Loading');
+          name: 'Loading...',
+          city: 'Loading...',
+          lastName: 'Loading',
+          emailAddress: 'Loading',
+        );
 
   Future getData() async {
     userDetails = await CloudFirestoreClass().getNameAndCity();

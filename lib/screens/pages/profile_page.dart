@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:YSDirectory/screens/pages/FAQPage.dart';
 import 'package:YSDirectory/screens/pages/disclaimer.dart';
 import 'package:YSDirectory/screens/pages/profile_setting.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
@@ -174,16 +175,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                  width: 150,
+                  width: 230,
                   child: ElevatedButton(
                     onPressed: () {
-                      // random generation of a salon
+                      // pop up text field to recommend salon
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: orengy,
                     ),
                     child: Text(
-                      "Direct me!",
+                      "Recommend a salon!",
                       style: TextStyle(
                         fontFamily: smallFontFamily,
                         fontSize: 20,
@@ -220,8 +221,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AboutYSD()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AboutYSD()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,
@@ -238,7 +241,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      // handle FAQs button click
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FAQPage()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,

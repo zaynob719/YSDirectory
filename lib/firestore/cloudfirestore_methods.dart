@@ -40,15 +40,20 @@ class CloudFirestoreClass {
     await _salons.doc(id).collection("reviews").doc().set(model.toJson());
   }
 
-  // final CollectionReference _salons =
-  //     FirebaseFirestore.instance.collection('salons');
+  final CollectionReference _feedbackCollection =
+      FirebaseFirestore.instance.collection('feedbacks');
 
-  // Future<void> uploadReviewToDatabase(
-  //     {required String id, required ReviewModel model}) async {
-  //   await FirebaseFirestore.instance
-  //       .collection("salons")
-  //       .doc(id)
-  //       .collection("reviews")
-  //       .add(model.toJson());
-  // }
+  Future<void> uploadFeedbackToDatabase({
+    required String subject,
+    required String emailAddress, //user email
+    required String message,
+    //required String timestamp,
+  }) async {
+    await _feedbackCollection.add({
+      "subject": subject,
+      "userEmail": emailAddress,
+      "message": message,
+      //"timestamp": timestamp,
+    });
+  }
 }

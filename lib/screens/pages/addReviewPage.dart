@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:YSDirectory/models/review_model.dart';
+import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:YSDirectory/screens/pages/home_screen.dart';

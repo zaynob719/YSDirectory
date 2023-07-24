@@ -3,6 +3,7 @@ import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 
@@ -16,16 +17,18 @@ class ProfileSetting extends StatefulWidget {
 class _ProfileSettingState extends State<ProfileSetting> {
   TextEditingController nameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  bool _obscureText = true;
+  List<bool> _values = [
+    true,
+    true,
+  ];
+  int count = 1;
 
   @override
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();
-    passwordController.dispose();
     emailAddressController.dispose();
     cityController.dispose();
     super.dispose();
@@ -37,8 +40,6 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
     String name = nameController.text.trim();
     String lastName = lastNameController.text.trim();
-    String password = passwordController.text.trim();
-    String emailAddress = emailAddressController.text.trim();
     String city = cityController.text.trim();
 
     if (name.isNotEmpty) {
@@ -46,12 +47,6 @@ class _ProfileSettingState extends State<ProfileSetting> {
     }
     if (lastName.isNotEmpty) {
       userDetails['lastName'] = lastName;
-    }
-    if (password.isNotEmpty) {
-      userDetails['password'] = password;
-    }
-    if (emailAddress.isNotEmpty) {
-      userDetails['emailAddress'] = emailAddress;
     }
     if (city.isNotEmpty) {
       userDetails['city'] = city;
@@ -65,7 +60,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           .then((_) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               backgroundColor: brown,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -101,7 +96,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -116,61 +111,27 @@ class _ProfileSettingState extends State<ProfileSetting> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Name",
                 style: TextStyle(fontFamily: 'GentiumPlus'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter new name',
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 "Last Name",
                 style: TextStyle(fontFamily: 'GentiumPlus'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: lastNameController,
-                decoration: InputDecoration(
-                  hintText: 'Enter last name',
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Password",
-                style: TextStyle(fontFamily: 'GentiumPlus'),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                    hintText: "Enter new password",
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                    )),
-                obscureText: _obscureText,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "Email",
-                style: TextStyle(fontFamily: 'GentiumPlus'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: emailAddressController,
                 decoration: const InputDecoration(
-                  hintText: "Enter new email address",
+                  hintText: 'Enter last name',
                 ),
               ),
               const SizedBox(height: 10),
@@ -185,10 +146,10 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   hintText: "Enter new location",
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Center(
                 child: CustomMainButton(
-                    child: Text(
+                    child: const Text(
                       'Save',
                       style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 18),
                     ),
@@ -197,7 +158,71 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     onPressed: () {
                       updateUserDetails();
                     }),
-              )
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                "Communication preferences",
+                style: TextStyle(
+                    fontFamily: 'GentiumPlus',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Manage your YSDirectory communication preferences below. By opting in, you'll receive YSDirectory communication when a new salon guide is added, to prompt you to add a review and/or when discounts are on offer via the channels you choose.",
+                style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 14),
+              ),
+              const SizedBox(height: 25),
+              Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(
+                      'Push notifications',
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            fontFamily: 'GentiumPlus',
+                          ),
+                    ),
+                    trailing: CupertinoSwitch(
+                      value: _values[0],
+                      onChanged: (bool value) {
+                        setState(() {
+                          _values[0] = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Via email',
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            fontFamily: 'GentiumPlus',
+                          ),
+                    ),
+                    trailing: CupertinoSwitch(
+                      value: _values[1],
+                      onChanged: (bool value) {
+                        setState(() {
+                          _values[1] = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const Text(
+                "You can revoke your consent for each communication channel above by clicking the rrelevant button. If you withdraw your consent, you'll no longet receive Your Salon Direcory communication. ",
+                style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 14),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

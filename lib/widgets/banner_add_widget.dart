@@ -1,3 +1,4 @@
+import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/models/salon_model.dart';
 import 'package:YSDirectory/screens/pages/about_ysd.dart';
@@ -14,7 +15,8 @@ import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
 
 class BannerAddWidget extends StatefulWidget {
-  const BannerAddWidget({Key? key}) : super(key: key);
+  final UserDetailsModel? user;
+  const BannerAddWidget({Key? key, this.user}) : super(key: key);
 
   @override
   _BannerAddWidgetState createState() => _BannerAddWidgetState();
@@ -178,8 +180,10 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
               MaterialPageRoute(builder: (context) => const ProfilePage()));
           break;
         case 1:
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ContactUs()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ContactUs(user: widget.user)));
           break;
         case 2:
           Navigator.push(context,

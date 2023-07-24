@@ -45,7 +45,7 @@ const List<String> appOffersHomePage = [
   "images/save.png",
   "images/socials2.png",
   "images/discounts.png",
-  "images/YSD.png",
+  "images/new_logoc.png",
 ];
 
 const List<String> appOffersHomePageNames = [

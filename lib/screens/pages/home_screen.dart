@@ -1,3 +1,4 @@
+import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/show_more.dart';
@@ -13,7 +14,9 @@ import 'package:YSDirectory/utils/constants.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             children: <TextSpan>[
               TextSpan(
-                text: 'Your Salon ',
+                text: 'YS',
                 style: TextStyle(
                   color: brown,
                 ),
@@ -64,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TextSpan(
                 text: 'Directory',
                 style: TextStyle(
-                  color: brown,
+                  color: Colors.black,
                 ),
               ),
             ],
