@@ -1,12 +1,20 @@
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
+import 'package:YSDirectory/screens/pages/addReviewPage.dart';
+import 'package:YSDirectory/screens/pages/home_screen.dart';
+import 'package:YSDirectory/screens/pages/profile_page.dart';
 import 'package:YSDirectory/utils/constants.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class ScreenLayout extends StatefulWidget {
-  const ScreenLayout({Key? key}) : super(key: key);
+  //final Salon salon;
+  const ScreenLayout({
+    Key? key,
+    //required this.salon,
+  }) : super(key: key);
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();
@@ -15,6 +23,8 @@ class ScreenLayout extends StatefulWidget {
 class _ScreenLayoutState extends State<ScreenLayout> {
   PageController pageController = PageController();
   int currentPage = 0;
+  Salon? selectedSalon;
+  List<Salon> salons = [];
 
   @override
   void dispose() {
@@ -22,11 +32,31 @@ class _ScreenLayoutState extends State<ScreenLayout> {
     pageController.dispose();
   }
 
+  // changePage(int page) {
+  //   pageController.jumpToPage(page);
+  //   setState(() {
+  //     currentPage = page;
+  //   });
+  // }
+
   changePage(int page) {
-    pageController.jumpToPage(page);
-    setState(() {
-      currentPage = page;
-    });
+    if (page == 1) {
+      // Navigate to AddReviewPage with the selected salon information
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddReviewPage(
+              // salonId: widget.salon.id,
+              // selectedSalon: widget.salon.salonName,
+              ),
+        ),
+      );
+    } else {
+      pageController.jumpToPage(page);
+      setState(() {
+        currentPage = page;
+      });
+    }
   }
 
   @override
@@ -47,10 +77,10 @@ class _ScreenLayoutState extends State<ScreenLayout> {
         ),
         bottomNavigationBar: Container(
           height: 65,
-          decoration: BoxDecoration(
-              color: AppColors.tagColor,
-              border: Border(
-                  top: BorderSide(color: AppColors.tagColor, width: 0.5))),
+          decoration: const BoxDecoration(
+              color: Colors.white10,
+              border:
+                  Border(top: BorderSide(color: Colors.white10, width: 0.5))),
           child: TabBar(
               indicator: BoxDecoration(
                   border: Border(
@@ -86,7 +116,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     color: currentPage == 2
                         ? AppColors.secondBrownColor
                         : Colors.black,
-                    size: currentPage == 3 ? 33 : 24,
+                    size: currentPage == 2 ? 33 : 24,
                   ),
                 ),
               ]),

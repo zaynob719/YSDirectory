@@ -1,6 +1,5 @@
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:YSDirectory/models/salon_model.dart';
 import 'package:YSDirectory/screens/pages/about_ysd.dart';
 import 'package:YSDirectory/screens/pages/addReviewPage.dart';
 import 'package:YSDirectory/screens/pages/discounts.dart';
@@ -51,6 +50,10 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     });
   }
 
+  void onNoOfReviewUpdated(int noOfReviews) {
+    // You can leave this function empty if you don't need to do anything specific when the number of reviews is updated.
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = Utils().getScreenSize();
@@ -69,7 +72,10 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SalonDetailScreen(salon: salon),
+                      builder: (context) => SalonDetailScreen(
+                        salon: salon,
+                        onNoOfReviewUpdated: onNoOfReviewUpdated,
+                      ),
                     ),
                   );
                 },
@@ -199,7 +205,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
-        onTap: navigateToScreen, //navigation list at the top
+        onTap: navigateToScreen,
         child: Container(
           height: height,
           width: height,
@@ -208,12 +214,12 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             shadows: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
-                blurRadius: 3,
+                //blurRadius: 1,
                 spreadRadius: 1,
               ),
             ],
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
           child: Center(

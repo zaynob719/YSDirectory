@@ -11,6 +11,9 @@ class ResultScreen extends StatelessWidget {
     required this.query,
   }) : super(key: key);
 
+  void updateNoOfReview(int noOfReview) {}
+
+  void onNoOfReviewUpdated(int noOfReviews) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +43,7 @@ class ResultScreen extends StatelessWidget {
           ]),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -56,27 +59,30 @@ class ResultScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingWidget();
+            return const LoadingWidget();
           } else if (snapshot.hasData) {
             final salons = snapshot.data!.docs.map((doc) {
               return Salon.fromJson(doc.data());
             }).toList();
             if (salons.isEmpty) {
-              return Center(
+              return const Center(
                 child: Text(
                   'More salons coming soon!',
                   style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 18),
                 ),
               );
             } else {
-              return ResultWidget(salons: salons);
+              return ResultWidget(
+                salons: salons,
+                onNoOfReviewUpdated: updateNoOfReview,
+              );
             }
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Center(
+            return const Center(
               child: Text('No results found.'),
             );
           }

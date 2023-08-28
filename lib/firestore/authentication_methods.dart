@@ -35,7 +35,6 @@ class AuthenticationMethods {
             name: firstName,
             lastName: lastName,
             emailAddress: emailAddress,
-            //password: password,
             city: city);
         await cloudFirestoreClass.uploadNameAndCityToDatabase(user: user);
         output = "success";

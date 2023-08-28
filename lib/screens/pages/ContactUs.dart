@@ -205,7 +205,7 @@ class ContactUs extends StatelessWidget {
                     await launch(_emailLaunchString);
                   },
                   child: const Text(
-                    'Yoursalondirectory@gmail.com',
+                    'yoursalondirectory@gmail.com',
                     style: TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 16,
@@ -221,8 +221,7 @@ class ContactUs extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-                'Feedback, questions, recommendations, partnership opportunities...',
+            child: Text('Feedback, questions, partnership opportunities...',
                 style: TextStyle(fontFamily: 'GentiumPlus')),
           ),
           Container(

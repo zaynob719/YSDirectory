@@ -1,4 +1,3 @@
-import 'package:YSDirectory/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,15 +19,19 @@ class AppIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size / 2), color: backgroudColor),
-      child: Icon(
-        icon,
-        color: iconColor,
-        size: iconSize,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(size / 2),
+            color: backgroudColor),
+        child: Icon(
+          icon,
+          color: iconColor,
+          size: iconSize,
+        ),
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/show_more.dart';
@@ -10,7 +9,6 @@ import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:YSDirectory/utils/constants.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,9 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onNoOfReviewUpdated(int noOfReviews) {}
   @override
   void initState() {
-    super.initState(); // Call the method to disable screenshots
+    super.initState();
   }
 
   @override
@@ -53,15 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
         title: RichText(
           text: const TextSpan(
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.bold,
               fontFamily: 'InknutAntiqua',
             ),
             children: <TextSpan>[
               TextSpan(
-                text: 'YS',
+                text: 'Your Salon ',
                 style: TextStyle(
-                  color: brown,
+                  color: Colors.black,
                 ),
               ),
               TextSpan(
@@ -76,9 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: DataSearch());
+                showSearch(
+                    context: context,
+                    delegate: DataSearch(
+                      onNoOfReviewUpdated: onNoOfReviewUpdated,
+                    ));
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.search,
                 color: Colors.black,
               ))
@@ -88,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             const CategoryChipWidget(),
-            BannerAddWidget(),
+            const BannerAddWidget(),
             const SizedBox(
               height: 15,
             ),
@@ -112,25 +115,26 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: const NeverScrollableScrollPhysics(),
               child: Container(
                 height: 430,
-                child: PopularSalonswidget(),
+                child: PopularSalonswidget(
+                    onNoOfReviewUpdated: onNoOfReviewUpdated),
               ),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ShowMore()),
+                  MaterialPageRoute(builder: (context) => const ShowMore()),
                 );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: orengy,
               ),
-              child: Text(
+              child: const Text(
                 'Show more',
                 style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
@@ -139,14 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   TextSpan(
                     text:
                         'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.grey,
                         fontFamily: 'GentiumPlus'),
                     children: [
                       TextSpan(
                         text: 'Terms and Conditions',
-                        style: TextStyle(
+                        style: const TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.blue),
                         recognizer: TapGestureRecognizer()
@@ -167,6 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class DataSearch extends SearchDelegate<String> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final Function(int) onNoOfReviewUpdated;
+
+  DataSearch({required this.onNoOfReviewUpdated});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -175,14 +182,14 @@ class DataSearch extends SearchDelegate<String> {
           onPressed: () {
             query = "";
           },
-          icon: Icon(Icons.clear))
+          icon: const Icon(Icons.clear))
     ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios),
+      icon: const Icon(Icons.arrow_back_ios),
       onPressed: () {
         close(context, '');
       },
@@ -204,7 +211,7 @@ class DataSearch extends SearchDelegate<String> {
       stream: db.collection('salons').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CupertinoActivityIndicator());
+          return const Center(child: CupertinoActivityIndicator());
         }
 
         final List<DocumentSnapshot> suggestions = snapshot.data!.docs
@@ -220,16 +227,19 @@ class DataSearch extends SearchDelegate<String> {
             final salon = Salon.fromJson(
                 suggestions[index].data() as Map<String, dynamic>);
             return ListTile(
-              leading: Icon(Icons.search),
+              leading: const Icon(Icons.search),
               title: Text(
                 salon.salonName,
-                style: TextStyle(fontFamily: 'GentiumPlus'),
+                style: const TextStyle(fontFamily: 'GentiumPlus'),
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SalonDetailScreen(salon: salon),
+                    builder: (context) => SalonDetailScreen(
+                      salon: salon,
+                      onNoOfReviewUpdated: onNoOfReviewUpdated,
+                    ),
                   ),
                 );
               },

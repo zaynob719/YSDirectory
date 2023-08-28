@@ -22,14 +22,14 @@ class _CategoryChipWidgetState extends State<CategoryChipWidget> {
         child: Row(
           children: categoryList.map((category) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
               child: ChoiceChip(
                 label: Text(category),
                 selected: selectedCategory == category,
                 selectedColor: brown,
                 backgroundColor: lightBrown,
                 labelStyle: TextStyle(fontFamily: 'GentiumPlus'),
-                elevation: 2,
+                //elevation: 2,
                 onSelected: (isSelected) {
                   setState(() {
                     selectedCategory = isSelected ? category : '';

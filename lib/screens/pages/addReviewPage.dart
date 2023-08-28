@@ -17,7 +17,6 @@ import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AddReviewPage extends StatefulWidget {
   final String? selectedSalon;
@@ -35,6 +34,7 @@ class AddReviewPage extends StatefulWidget {
 }
 
 class _AddReviewPageState extends State<AddReviewPage> {
+  Salon? selectedSalon;
   late String selectedValue;
   List<String> listItem = [];
   double value = 0.0;
@@ -274,7 +274,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                     const SizedBox(height: 30),
                     const SizedBox(height: 20),
                     const Text(
-                      'Write your review', //spill the tea, what did you like, dislike,
+                      'Write your review',
                       style: TextStyle(
                           fontFamily: 'GentiumPlus',
                           fontSize: 18,
@@ -293,7 +293,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         color: Colors.black,
                       ),
                       decoration: const InputDecoration(
-                        hintText: 'Spill the tea! What did you like? dislike?',
+                        hintText: 'Spill the tea! What did you like? Dislike?',
                       ),
                     ),
                     const SizedBox(

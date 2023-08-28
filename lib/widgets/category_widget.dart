@@ -20,14 +20,12 @@ class CategoryWidget extends StatelessWidget {
         );
       },
       child: Container(
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(7),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 3,
-                  spreadRadius: 1)
+              BoxShadow(color: Colors.grey.withOpacity(0.3), spreadRadius: 1)
             ]),
         child: Center(
             child: Column(

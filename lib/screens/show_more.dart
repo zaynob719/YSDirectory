@@ -16,14 +16,17 @@ class ShowMore extends StatefulWidget {
   State<ShowMore> createState() => _ShowMoreState();
 }
 
+void onNoOfReviewUpdated(int noOfReviews) {}
+
 class _ShowMoreState extends State<ShowMore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'All Categories',
           style: TextStyle(
               color: Colors.black,
@@ -32,7 +35,7 @@ class _ShowMoreState extends State<ShowMore> {
               fontSize: 24),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -45,7 +48,7 @@ class _ShowMoreState extends State<ShowMore> {
               onPressed: () {
                 showSearch(context: context, delegate: DataSearch());
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.search,
                 color: Colors.black,
               ))
@@ -54,11 +57,11 @@ class _ShowMoreState extends State<ShowMore> {
       body: GestureDetector(
         onTap: (() {}),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(20.0),
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 2.2 / 3.5,
+                crossAxisCount: 2,
+                childAspectRatio: 2.2 / 2.4,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10),
             itemCount: categoryList.length,
@@ -80,14 +83,14 @@ class DataSearch extends SearchDelegate<String> {
           onPressed: () {
             query = "";
           },
-          icon: Icon(Icons.clear))
+          icon: const Icon(Icons.clear))
     ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios),
+      icon: const Icon(Icons.arrow_back_ios),
       onPressed: () {
         close(context, '');
       },
@@ -109,7 +112,7 @@ class DataSearch extends SearchDelegate<String> {
       stream: db.collection('salons').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CupertinoActivityIndicator());
+          return const Center(child: CupertinoActivityIndicator());
         }
 
         final List<DocumentSnapshot> suggestions = snapshot.data!.docs
@@ -125,16 +128,19 @@ class DataSearch extends SearchDelegate<String> {
             final salon = Salon.fromJson(
                 suggestions[index].data() as Map<String, dynamic>);
             return ListTile(
-              leading: Icon(Icons.search),
+              leading: const Icon(Icons.search),
               title: Text(
                 salon.salonName,
-                style: TextStyle(fontFamily: 'GentiumPlus'),
+                style: const TextStyle(fontFamily: 'GentiumPlus'),
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SalonDetailScreen(salon: salon),
+                    builder: (context) => SalonDetailScreen(
+                      salon: salon,
+                      onNoOfReviewUpdated: onNoOfReviewUpdated,
+                    ),
                   ),
                 );
               },

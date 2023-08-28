@@ -12,12 +12,12 @@ class Disclaimer extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: false,
         title: const Text(
           'Disclaimers',
           style: TextStyle(
               fontFamily: 'GentiumPlus',
-              color: Colors.brown,
-              fontSize: 24,
+              color: Colors.black,
               fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.black),

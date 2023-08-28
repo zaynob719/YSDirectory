@@ -14,7 +14,7 @@ class FAQPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          'FAQ',
+          'FAQs',
           style: TextStyle(
               color: Colors.black,
               fontFamily: 'GentiumPlus',

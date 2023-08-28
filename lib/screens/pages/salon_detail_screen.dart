@@ -1,4 +1,5 @@
-//import 'dart:html';
+import 'dart:async';
+
 import 'package:YSDirectory/widgets/app_icon.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/models/review_model.dart';
@@ -11,15 +12,16 @@ import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/review_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:YSDirectory/models/review_count_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SalonDetailScreen extends StatefulWidget {
+  final Function(int) onNoOfReviewUpdated;
   final Salon salon;
 
   const SalonDetailScreen({
     Key? key,
     required this.salon,
+    required this.onNoOfReviewUpdated,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,9 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   late TabController _tabController;
   bool _isBookmarked = false;
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>>
+      _reviewsSubscription;
+  int _noOfReview = 0;
 
   List<Salon> salons = [];
 
@@ -38,6 +43,31 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    _updateReviewCount();
+
+    _reviewsSubscription = FirebaseFirestore.instance
+        .collection("salons")
+        .doc(widget.salon.id)
+        .collection("reviews")
+        .snapshots()
+        .listen((snapshot) {
+      _updateReviewCount();
+    });
+  }
+
+  void _updateReviewCount() {
+    FirebaseFirestore.instance
+        .collection("salons")
+        .doc(widget.salon.id)
+        .collection("reviews")
+        .get()
+        .then((querySnapshot) {
+      setState(() {
+        _noOfReview = querySnapshot.docs.length;
+      });
+      widget.onNoOfReviewUpdated(_noOfReview);
+    });
 
     db.collection('salons').doc(widget.salon.id).get().then((snapshot) {
       if (snapshot.exists) {
@@ -81,6 +111,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    _reviewsSubscription.cancel();
     super.dispose();
   }
 
@@ -88,6 +119,15 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
     setState(() {
       _isBookmarked = !_isBookmarked;
     });
+  }
+
+  String mapToString(Map<dynamic, dynamic> map) {
+    final buffer = StringBuffer();
+    map.forEach((key, value) {
+      buffer.write('$key: $value, ');
+    });
+    final result = buffer.toString();
+    return result.isNotEmpty ? result.substring(0, result.length - 2) : '{}';
   }
 
   @override
@@ -103,6 +143,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
               pinned: true,
               expandedHeight: 250.0,
               floating: true,
+              automaticallyImplyLeading: false,
               iconTheme: const IconThemeData(color: Colors.black),
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
@@ -134,15 +175,27 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                 ),
               ),
               title: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: AppIcon(
+                      icon: Icons.arrow_back_ios,
+                      backgroudColor: tagColor,
+                      iconColor: Colors.black,
+                      size: 40,
+                      iconSize: 20,
+                    ),
+                  ),
                   GestureDetector(
                       onTap: _toggleBookmark,
                       child: AppIcon(
                         icon: _isBookmarked
                             ? Icons.bookmark
                             : Icons.bookmark_add_outlined,
-                        backgroudColor: Colors.white70,
+                        backgroudColor: tagColor,
                         iconColor: Colors.black,
                         size: 40,
                         iconSize: 20,
@@ -169,7 +222,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                   ),
                   Tab(
                     child: Text(
-                      "Reviews (${widget.salon.noOfReview})",
+                      "Reviews ($_noOfReview)",
                       style: const TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
@@ -216,6 +269,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           ),
                           Text(
                             widget.salon.summary,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 wordSpacing: 0.6,
@@ -237,6 +291,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           ),
                           Text(
                             widget.salon.salonGeneralDescription,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                               fontFamily: 'GentiumPlus',
                               wordSpacing: 0.6,
@@ -257,32 +312,44 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           const SizedBox(
                             height: 10,
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: widget.salon.services.entries
-                                .map((entry) => RichText(
-                                      text: TextSpan(
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:
+                                  widget.salon.services.entries.map((entry) {
+                                final valueText = entry.value is Map
+                                    ? mapToString(entry.value)
+                                    : entry.value.toString();
+                                return RichText(
+                                  textAlign: TextAlign.start,
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                      fontFamily: 'GentiumPlus',
+                                      wordSpacing: 0.6,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: entry.key,
                                         style: const TextStyle(
-                                            fontFamily: 'GentiumPlus',
-                                            wordSpacing: 0.6),
-                                        children: [
-                                          TextSpan(
-                                            text: entry.key,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontFamily: 'GentiumPlus'),
-                                          ),
-                                          TextSpan(
-                                            text: ": ${entry.value}",
-                                            style: const TextStyle(
-                                                fontFamily: 'GentiumPlus',
-                                                color: Colors.black),
-                                          ),
-                                        ],
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontFamily: 'GentiumPlus',
+                                        ),
                                       ),
-                                    ))
-                                .toList(),
+                                      TextSpan(
+                                        text: ": $valueText",
+                                        style: const TextStyle(
+                                          fontFamily: 'GentiumPlus',
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                           const SizedBox(height: 25)
                         ],
@@ -454,7 +521,6 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'GentiumPlus',
-                                    //decoration: TextDecoration.underline,
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {

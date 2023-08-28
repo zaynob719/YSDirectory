@@ -98,8 +98,9 @@ class _ProfilePageState extends State<ProfilePage> {
             width: screenSize.width,
             child: Column(
               children: [
-                const UserDetailBar(
+                UserDetailBar(
                   offset: 0,
+                  //address: address,
                 ),
                 const SizedBox(height: 20),
                 Stack(

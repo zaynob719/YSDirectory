@@ -9,29 +9,40 @@ const Color backgroundColor = Color(0xffebecee);
 
 const List<String> categoryList = [
   "Hijabi friendly",
-  "Kids friendly",
-  "Afrocare",
+  "Children friendly",
+  "Afro + Curly",
   "Mobile",
-  "Ratings",
-  "Curls",
-  "Essentials"
+  "All hair types",
+  "Colour specialist",
+  "Trichologist",
+  "CURLDiD verified",
+  "Male friendly",
+  "Bridal services"
+  //near me,
+  //all salons - sentence at the buttom of the screen
 ];
 
 const List<String> categoryLogos = [
   //hijabi
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fhijabi.png?alt=media&token=3f4c8172-d060-465f-b1ad-252089fa4e6b",
-  //kids space
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fkid%20friendly.png?alt=media&token=15a5e8b6-3ce3-462b-a5af-6b5ce94734b5",
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fhijabi-new.png?alt=media&token=69442e68-c7c5-44c8-879b-670d9790eb37",
+  //Children space
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fkids-new.png?alt=media&token=793ba22e-4c48-4a2b-b945-6ddba6b2f6ff",
   //afro care
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fafro.png?alt=media&token=c2227ddf-0d9e-40ed-b270-4ff5306ff1a2",
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fafro-new.png?alt=media&token=a71c3d5d-4b58-4a18-bb09-ef79f068e1ef",
   //mobile
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fmobile.png?alt=media&token=ce9ece8b-2be4-4493-a648-49ce168ada7e",
-  //ratings
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Frating.png?alt=media&token=6f92532a-6aa6-47c3-9e6a-1c93679df86f",
-  //curls
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fcurls.png?alt=media&token=d372e898-9a0c-48ff-bb1c-19471767a0dd",
-  //essential
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fessential.png?alt=media&token=71b2ba4c-799c-4126-9d45-c56e5e44efa7",
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fmobile-new.png?alt=media&token=6f97ced8-e3e4-4877-9a01-24768b02f913",
+  //all hair
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fall_hair.png?alt=media&token=a14beb23-8cbe-4c0b-8578-1fefb088da92",
+  //color
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fcolour.png?alt=media&token=811c9445-7328-49f7-bbfd-70a7bd7164e6",
+  //trichologist
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Ftrichologist.png?alt=media&token=0c9d6853-c879-465e-b430-f653e47df18c",
+  //curlid
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fcurlid.png?alt=media&token=f17b59dd-9592-4809-bc6e-32e6bd18309a",
+  //male
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fmale.png?alt=media&token=c4e9f95d-f3f5-4760-a0e2-79dcddc3fdfb",
+  //brindal
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fbridal.png?alt=media&token=557ba21d-9493-4966-ba91-665424e173b8",
 ];
 
 // app navigation bar pages
@@ -42,8 +53,8 @@ List<Widget> screens = [
 ];
 
 const List<String> appOffersHomePage = [
-  "images/save.png",
-  "images/socials2.png",
+  "images/save_salons.png",
+  "images/socials.png",
   "images/discounts.png",
   "images/new_logoc.png",
 ];
