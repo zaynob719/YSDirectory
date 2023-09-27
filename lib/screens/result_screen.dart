@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/widgets/loading_widget.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {
   final String query;
+  final Salon? salon;
 
   const ResultScreen({
     Key? key,
+    this.salon,
     required this.query,
   }) : super(key: key);
 
@@ -59,7 +62,7 @@ class ResultScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingWidget();
+            return const CupertinoActivityIndicator();
           } else if (snapshot.hasData) {
             final salons = snapshot.data!.docs.map((doc) {
               return Salon.fromJson(doc.data());
@@ -73,8 +76,9 @@ class ResultScreen extends StatelessWidget {
               );
             } else {
               return ResultWidget(
-                salons: salons,
+                salon: salon,
                 onNoOfReviewUpdated: updateNoOfReview,
+                query: query,
               );
             }
           } else if (snapshot.hasError) {

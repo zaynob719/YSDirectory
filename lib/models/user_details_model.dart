@@ -5,25 +5,46 @@ class UserDetailsModel {
   final String name;
   final String lastName;
   final String emailAddress;
-  final String city;
+  String city;
+  double? userLat;
+  double? userLng;
   UserDetailsModel(
       {this.id,
       required this.name,
       required this.lastName,
       required this.emailAddress,
-      required this.city});
+      required this.city,
+      this.userLat,
+      this.userLng});
+
+  void updateCity(String newCity) {
+    city = newCity;
+  }
+
+  void updateUserLat(double newUserLat) {
+    userLat = newUserLat;
+  }
+
+  void updateUserLng(double newUserLng) {
+    userLng = newUserLng;
+  }
 
   Map<String, dynamic> getJson() => {
         'name': name,
         'lastName': lastName,
         'emailAddress': emailAddress,
-        'city': city
+        'city': city,
+        'userLat': userLat,
+        'userLng': userLng,
       };
   factory UserDetailsModel.getModelFromJson(Map<String, dynamic> json) {
     return UserDetailsModel(
-        name: json["name"],
-        lastName: json["lastName"],
-        emailAddress: json["emailAddress"],
-        city: json["city"]);
+      name: json["name"],
+      lastName: json["lastName"],
+      emailAddress: json["emailAddress"],
+      city: json["city"],
+      userLat: json["userLat"],
+      userLng: json["userLng"],
+    );
   }
 }

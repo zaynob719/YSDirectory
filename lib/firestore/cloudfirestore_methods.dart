@@ -7,7 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 class CloudFirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  var db = FirebaseFirestore.instance;
+  var db = FirebaseFirestore
+      .instance; //could remove this code in the future, its the same as line 8
 
   Future uploadNameAndCityToDatabase({required UserDetailsModel user}) async {
     await firebaseFirestore

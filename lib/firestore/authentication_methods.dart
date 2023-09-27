@@ -5,14 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthenticationMethods {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   CloudFirestoreClass cloudFirestoreClass = CloudFirestoreClass();
-  Future<String> signUpUser(
-      {required String firstName,
-      required String lastName,
-      required String emailAddress,
-      required String confirmEmailAddress,
-      required String password,
-      required String confirmPassword,
-      required String city}) async {
+  Future<String> signUpUser({
+    required String firstName,
+    required String lastName,
+    required String emailAddress,
+    required String confirmEmailAddress,
+    required String password,
+    required String confirmPassword,
+    required String city,
+    double? userLat,
+    double? userLng,
+  }) async {
     firstName.trim();
     lastName.trim();
     emailAddress.trim();
@@ -32,10 +35,13 @@ class AuthenticationMethods {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: emailAddress, password: confirmPassword);
         UserDetailsModel user = UserDetailsModel(
-            name: firstName,
-            lastName: lastName,
-            emailAddress: emailAddress,
-            city: city);
+          name: firstName,
+          lastName: lastName,
+          emailAddress: emailAddress,
+          city: city,
+          userLat: userLat,
+          userLng: userLng,
+        );
         await cloudFirestoreClass.uploadNameAndCityToDatabase(user: user);
         output = "success";
       } on FirebaseAuthException catch (e) {
@@ -63,7 +69,7 @@ class AuthenticationMethods {
         output = e.message.toString();
       }
     } else {
-      output = "Please fill up all the fields";
+      output = "Please fill in all the fields";
     }
     return output;
   }

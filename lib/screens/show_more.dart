@@ -1,3 +1,5 @@
+import 'package:YSDirectory/screens/view_all_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/result_screen.dart';
@@ -27,7 +29,7 @@ class _ShowMoreState extends State<ShowMore> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          'All Categories',
+          'All categories',
           style: TextStyle(
               color: Colors.black,
               fontFamily: 'GentiumPlus',
@@ -54,20 +56,49 @@ class _ShowMoreState extends State<ShowMore> {
               ))
         ],
       ),
-      body: GestureDetector(
-        onTap: (() {}),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 2.2 / 2.4,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10),
-            itemCount: categoryList.length,
-            itemBuilder: (context, index) => CategoryWidget(index: index),
+      body: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: (() {}),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 2.1 / 2.2,
+                      mainAxisSpacing: 9,
+                      crossAxisSpacing: 9),
+                  itemCount: categoryList.length,
+                  itemBuilder: (context, index) => CategoryWidget(index: index),
+                ),
+              ),
+            ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const viewAllScreen(
+                            onNoOfReviewUpdated: onNoOfReviewUpdated)),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: orengy,
+                ),
+                child: const Text(
+                  'View all salons',
+                  style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

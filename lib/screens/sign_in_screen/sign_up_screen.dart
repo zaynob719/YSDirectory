@@ -1,18 +1,27 @@
+import 'package:YSDirectory/calculateDistance.dart';
 import 'package:YSDirectory/firestore/authentication_methods.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
+  //final Salon? salon;
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen>
     with SingleTickerProviderStateMixin {
+  //final Salon? salon;
   int _selectedIndex = 0;
   bool _obscureText = true;
   AuthenticationMethods authenticationMethods = AuthenticationMethods();
@@ -23,28 +32,97 @@ class _SignUpScreenState extends State<SignUpScreen>
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController cityController = TextEditingController();
+  TextEditingController userLatController = TextEditingController();
+  // TextEditingController userLngController = TextEditingController();
   bool isLoading = false;
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-
-  // }
+//TO-DO - dispose of the controller when no longer used
+// @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
 
   @override
   void initState() {
     super.initState();
+    _determinePosition();
+  }
+
+  Position? position;
+  String userLocation = '';
+  late final Salon? salon;
+
+  Future<void> _determinePosition() async {
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      }
+
+      Position newPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        position = newPosition;
+      });
+      _updateUserDetails(position);
+    } catch (error) {
+      print('Error determining position: $error');
+    }
+  }
+
+  Future<void> _updateUserDetails(Position? position) async {
+    if (position != null) {
+      List<Placemark> placemark = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      Placemark place = placemark[0];
+      cityController.text = '${place.street}, ${place.locality}';
+      double userLat = position.latitude;
+      double userLng = position.longitude;
+
+      // Update user details using Provider
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserCity('${place.street}, ${place.locality}');
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserLat(userLat);
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserLng(userLng);
+      print(userLng);
+      print(userLat);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetails =
+        Provider.of<UserDetailsProvider>(context).userDetails;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 40),
-            Text(
+            const SizedBox(height: 40),
+            const Text(
               "Register",
               style: TextStyle(
                   color: Colors.black,
@@ -52,13 +130,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                   fontWeight: FontWeight.bold,
                   fontFamily: 'GentiumPlus'),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               "Let's Get Your Hair Did Sis!",
               style: TextStyle(
                   color: Colors.black, fontSize: 16, fontFamily: 'GentiumPlus'),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -73,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: lastNameController,
                     decoration: InputDecoration(
@@ -83,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: cityController,
                     decoration: InputDecoration(
@@ -93,7 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: emailAddressController,
                     decoration: InputDecoration(
@@ -103,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: confirmEmailAddressController,
                     decoration: InputDecoration(
@@ -113,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: passwordController,
                     decoration: InputDecoration(
@@ -135,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                         )),
                     obscureText: _obscureText,
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: confirmPasswordController,
                     decoration: InputDecoration(
@@ -157,42 +235,40 @@ class _SignUpScreenState extends State<SignUpScreen>
                         )),
                     obscureText: _obscureText,
                   ),
-                  SizedBox(height: 20),
-                  Container(
-                    child: Text.rich(
-                        TextSpan(
-                          text:
-                              'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
-                          style: TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                              fontFamily: 'GentiumPlus',
-                              fontWeight: FontWeight.w400),
-                          children: [
-                            TextSpan(
-                              text: 'Terms and Conditions',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // Add your logic here for what happens when the user taps the button
-                                },
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center),
-                  ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 20),
+                  Text.rich(
+                      TextSpan(
+                        text:
+                            'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                            fontFamily: 'GentiumPlus',
+                            fontWeight: FontWeight.w400),
+                        children: [
+                          TextSpan(
+                            text: 'Terms and Conditions',
+                            style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Add your logic here for what happens when the user taps the button
+                              },
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center),
+                  const SizedBox(height: 30),
                   CustomMainButton(
-                    child: Text(
+                    child: const Text(
                       "Sign Up!",
                       style: TextStyle(
                           fontSize: 19,
                           letterSpacing: 0.6,
                           fontFamily: 'GentiumPlus'),
                     ),
-                    color: brown,
+                    color: orengy,
                     isLoading: false,
                     onPressed: () async {
                       setState(() {
@@ -206,9 +282,11 @@ class _SignUpScreenState extends State<SignUpScreen>
                               confirmEmailAddressController.text,
                           password: passwordController.text,
                           confirmPassword: confirmPasswordController.text,
-                          city: cityController.text);
+                          city: cityController.text,
+                          userLat: userDetails.userLat,
+                          userLng: userDetails.userLng);
                       setState(() {
-                        isLoading = false; //
+                        isLoading = false;
                       });
                       if (output == "success") {
                         Navigator.pushReplacement(context,
@@ -219,16 +297,16 @@ class _SignUpScreenState extends State<SignUpScreen>
                       }
                     },
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomMainButton(
-                    child: Text(
+                    child: const Text(
                       "Back",
                       style: TextStyle(
                           fontSize: 19,
                           letterSpacing: 0.6,
                           fontFamily: 'GentiumPlus'),
                     ),
-                    color: Color.fromARGB(255, 202, 199, 197),
+                    color: const Color.fromARGB(255, 202, 199, 197),
                     isLoading: false,
                     onPressed: () {
                       Navigator.pushReplacement(context,
@@ -237,7 +315,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       }));
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

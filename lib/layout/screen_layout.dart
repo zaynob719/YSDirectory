@@ -32,31 +32,11 @@ class _ScreenLayoutState extends State<ScreenLayout> {
     pageController.dispose();
   }
 
-  // changePage(int page) {
-  //   pageController.jumpToPage(page);
-  //   setState(() {
-  //     currentPage = page;
-  //   });
-  // }
-
   changePage(int page) {
-    if (page == 1) {
-      // Navigate to AddReviewPage with the selected salon information
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddReviewPage(
-              // salonId: widget.salon.id,
-              // selectedSalon: widget.salon.salonName,
-              ),
-        ),
-      );
-    } else {
-      pageController.jumpToPage(page);
-      setState(() {
-        currentPage = page;
-      });
-    }
+    pageController.jumpToPage(page);
+    setState(() {
+      currentPage = page;
+    });
   }
 
   @override
@@ -82,11 +62,11 @@ class _ScreenLayoutState extends State<ScreenLayout> {
               border:
                   Border(top: BorderSide(color: Colors.white10, width: 0.5))),
           child: TabBar(
-              indicator: BoxDecoration(
+              indicator: const BoxDecoration(
                   border: Border(
                 top: BorderSide(
-                  color: AppColors.secondBrownColor,
-                  width: 3,
+                  color: Colors.black,
+                  width: 2,
                 ),
               )),
               onTap: changePage,
@@ -95,27 +75,21 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                 Tab(
                   child: Icon(
                     Icons.home_filled,
-                    color: currentPage == 0
-                        ? AppColors.secondBrownColor
-                        : Colors.black,
+                    color: currentPage == 0 ? Colors.black : Colors.grey,
                     size: currentPage == 0 ? 33 : 24,
                   ),
                 ),
                 Tab(
                   child: Icon(
                     Icons.edit,
-                    color: currentPage == 1
-                        ? AppColors.secondBrownColor
-                        : Colors.black,
+                    color: currentPage == 1 ? Colors.black : Colors.grey,
                     size: currentPage == 1 ? 33 : 24,
                   ),
                 ),
                 Tab(
                   child: Icon(
                     Icons.person,
-                    color: currentPage == 2
-                        ? AppColors.secondBrownColor
-                        : Colors.black,
+                    color: currentPage == 2 ? Colors.black : Colors.grey,
                     size: currentPage == 2 ? 33 : 24,
                   ),
                 ),

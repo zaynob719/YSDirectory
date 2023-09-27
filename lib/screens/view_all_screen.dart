@@ -1,34 +1,30 @@
 import 'package:YSDirectory/calculateDistance.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/review_rating_location.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ResultWidget extends StatefulWidget {
+class viewAllScreen extends StatefulWidget {
   final Salon? salon;
-  //final List<Salon> salons;
   final Function(int) onNoOfReviewUpdated;
-  final String? query;
-
-  const ResultWidget({
+  const viewAllScreen({
     Key? key,
     this.salon,
-    this.query,
     required this.onNoOfReviewUpdated,
   }) : super(key: key);
 
   @override
-  State<ResultWidget> createState() => _ResultWidgetState();
+  State<viewAllScreen> createState() => _viewAllScreenState();
 }
 
-class _ResultWidgetState extends State<ResultWidget> {
+class _viewAllScreenState extends State<viewAllScreen> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-
   List<Salon> salons = [];
   late UserDetailsModel userDetails;
   Map<String, double> salonDistances = {};
@@ -44,11 +40,7 @@ class _ResultWidgetState extends State<ResultWidget> {
   }
 
   void _fetchSalons() {
-    db
-        .collection('salons')
-        .where("category", isEqualTo: widget.query) // Add the category filter
-        .get()
-        .then((snapshot) {
+    db.collection('salons').get().then((snapshot) {
       setState(() {
         salons =
             snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
@@ -67,26 +59,6 @@ class _ResultWidgetState extends State<ResultWidget> {
     });
   }
 
-  // void _fetchSalons() {
-  //   db.collection('salons').get().then((snapshot) {
-  //     setState(() {
-  //       salons =
-  //           snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
-  //       for (var salon in salons) {
-  //         final calculatedDistance = calculateDistance(
-  //           userDetails.userLat!,
-  //           userDetails.userLng!,
-  //           salon.latitude,
-  //           salon.longitude,
-  //         );
-  //         salonDistances[salon.id] = calculatedDistance;
-  //       }
-  //       salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
-  //           .compareTo(salonDistances[b.id] ?? double.infinity));
-  //     });
-  //   });
-  // }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -100,30 +72,57 @@ class _ResultWidgetState extends State<ResultWidget> {
     }
   }
 
+  Stream<int> _getReviewCountStream(String salonId) {
+    return db
+        .collection('salons')
+        .doc(salonId)
+        .collection('reviews')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.length);
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (salons.isEmpty) {
-      return const Center(
-        child: CupertinoActivityIndicator(),
-      );
-    } else {
-      return ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: salons.length,
-        itemBuilder: (context, index) {
-          final salon = salons[index];
-          return StreamBuilder<int>(
-            stream: salons[index].noOfReviewStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                int noOfReview = snapshot.data!;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text(
+          'View all salons',
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'GentiumPlus',
+              fontWeight: FontWeight.w500,
+              fontSize: 24),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: ListView.builder(
+          itemCount: salons.length,
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(8.0),
+          itemBuilder: (context, index) {
+            final salon = salons[index];
+            return StreamBuilder<int>(
+              stream: _getReviewCountStream(salon.id),
+              builder: (context, snapshot) {
+                final noOfReview = snapshot.data ?? 0;
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => SalonDetailScreen(
-                          salon: salons[index],
+                          salon: salon,
                           onNoOfReviewUpdated: widget.onNoOfReviewUpdated,
                         ),
                       ),
@@ -161,7 +160,7 @@ class _ResultWidgetState extends State<ResultWidget> {
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.3),
                                   spreadRadius: 1.0,
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -173,10 +172,9 @@ class _ResultWidgetState extends State<ResultWidget> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SalonDetailScreen(
-                                    salon: salons[index],
-                                    onNoOfReviewUpdated:
-                                        widget.onNoOfReviewUpdated,
-                                  ),
+                                      salon: salons[index],
+                                      onNoOfReviewUpdated:
+                                          widget.onNoOfReviewUpdated),
                                 ),
                               );
                             },
@@ -190,7 +188,7 @@ class _ResultWidgetState extends State<ResultWidget> {
                                   BoxShadow(
                                     color: lightBrown,
                                     spreadRadius: 1.0,
-                                  ),
+                                  )
                                 ],
                               ),
                               child: Column(
@@ -201,9 +199,8 @@ class _ResultWidgetState extends State<ResultWidget> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      fontFamily: 'GentiumPlus',
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        fontFamily: 'GentiumPlus',
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     salons[index].summary,
@@ -212,11 +209,31 @@ class _ResultWidgetState extends State<ResultWidget> {
                                     style: const TextStyle(
                                         fontFamily: 'GentiumPlus'),
                                   ),
-                                  ReviewRatingLocation(
-                                    noOfRating: salons[index].noOfRating,
-                                    salonDistance:
-                                        salonDistances[salons[index].id],
-                                    noOfReview: noOfReview,
+                                  StreamBuilder<
+                                      QuerySnapshot<Map<String, dynamic>>>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("salons")
+                                        .doc(salons[index].id)
+                                        .collection("reviews")
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CupertinoActivityIndicator();
+                                      }
+                                      if (!snapshot.hasData) {
+                                        return const Text(
+                                            'No details available');
+                                      }
+                                      final data = snapshot.data!;
+                                      int noOfReview = data.docs.length;
+                                      return ReviewRatingLocation(
+                                        noOfRating: salons[index].noOfRating,
+                                        salonDistance:
+                                            salonDistances[salons[index].id],
+                                        noOfReview: noOfReview,
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -227,90 +244,9 @@ class _ResultWidgetState extends State<ResultWidget> {
                     ),
                   ),
                 );
-              } else {
-                return Container();
-              }
-            },
-          );
-        },
-      );
-    }
-  }
-}
-
-class Salon {
-  final String url;
-  final String salonName;
-  final String location;
-  final double latitude;
-  final double longitude;
-  final String summary;
-  final int noOfRating;
-  //double? distance;
-  final int rating;
-  final String salonGeneralDescription;
-  final Map services;
-  final String id;
-  final String category;
-  final String website;
-  final String instagram;
-  final String number;
-  final String email;
-  final Map openHours;
-  Stream<int> get noOfReviewStream => FirebaseFirestore.instance
-      .collection('salons')
-      .doc(id)
-      .collection('reviews')
-      .snapshots()
-      .map((snapshot) => snapshot.docs.length);
-
-  Salon({
-    required this.salonName,
-    required this.location,
-    required this.latitude,
-    required this.longitude,
-    required this.summary,
-    required this.salonGeneralDescription,
-    required this.id,
-    required this.url,
-    required this.category,
-    //required this.distance,
-    required this.noOfRating,
-    required this.rating,
-    required this.website,
-    required this.services,
-    required this.instagram,
-    required this.number,
-    required this.email,
-    required this.openHours,
-  });
-
-  factory Salon.fromJson(Map<String, dynamic> json) {
-    return Salon(
-      salonName: json['salonName'] as String? ?? '',
-      location: json['location'] as String? ?? '',
-      latitude: json['latitude'] != null
-          ? double.parse(json['latitude'].toString())
-          : 0.0,
-      longitude: json['longitude'] != null
-          ? double.parse(json['longitude'].toString())
-          : 0.0,
-      summary: json['summary'] as String? ?? '',
-      salonGeneralDescription: json['salonGeneralDescription'] as String? ?? '',
-      url: json['url'] as String? ?? '',
-      category: json['category'] as String? ?? '',
-      noOfRating: json['noOfRating'] as int? ?? 0,
-      rating: json['rating'] as int? ?? 0,
-      // distance: json['distance'] != null
-      //     ? double.parse(json['distance'].toString())
-      //     : 0.0,
-      id: json['id'] as String? ?? '',
-      website: json['website'] as String? ?? '',
-      instagram: json['instagram'] as String? ?? '',
-      number: json['number'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      openHours: json['openHours'] as Map<dynamic, dynamic>? ?? {},
-      services: json['services'] as Map<dynamic, dynamic>? ?? {},
+              },
+            );
+          }),
     );
   }
 }

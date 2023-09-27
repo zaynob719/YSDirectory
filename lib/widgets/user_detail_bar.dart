@@ -1,5 +1,4 @@
 import 'package:YSDirectory/models/user_details_model.dart';
-import 'package:YSDirectory/provider/location_provider.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/utils/constants.dart';
@@ -12,11 +11,9 @@ import 'package:YSDirectory/main.dart';
 
 class UserDetailBar extends StatelessWidget {
   final double offset;
-  //final String? address;
   UserDetailBar({
     Key? key,
     required this.offset,
-    //this.address,
   }) : super(key: key);
 
   @override
@@ -24,8 +21,6 @@ class UserDetailBar extends StatelessWidget {
     Size screenSize = Utils().getScreenSize();
     UserDetailsModel userDetails =
         Provider.of<UserDetailsProvider>(context).userDetails;
-    String address = Provider.of<LocationProvider>(context).address;
-
     return Container(
       height: kAppBarHeight / 2,
       decoration: const BoxDecoration(
@@ -52,8 +47,7 @@ class UserDetailBar extends StatelessWidget {
             SizedBox(
               width: screenSize.width * 0.7,
               child: Text(
-                //currentAddress,
-                'Location: $address',
+                'Location: ${userDetails.city}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(

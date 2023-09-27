@@ -23,6 +23,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
   late Position _currentPosition;
+  //String userLocation = '';
+  double userLat = 0.0;
+  double userLng = 0.0;
 
   void resetSelectedCategory() {
     setState(() {
@@ -49,27 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.white,
-        title: RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'InknutAntiqua',
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Your Salon ',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              TextSpan(
-                text: 'Directory',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ],
+        title: Text(
+          "Your Salon Directory",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'InknutAntiqua',
+            color: Colors.black,
+            wordSpacing: 0.10,
           ),
         ),
         actions: [
@@ -100,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Trending Salons ",
+                  "Salons near you ",
                   style: TextStyle(
                       fontFamily: 'GentiumPlus',
                       fontSize: 24,
@@ -113,10 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
-              child: Container(
+              child: SizedBox(
                 height: 430,
                 child: PopularSalonswidget(
-                    onNoOfReviewUpdated: onNoOfReviewUpdated),
+                  onNoOfReviewUpdated: onNoOfReviewUpdated,
+                ),
               ),
             ),
             ElevatedButton(

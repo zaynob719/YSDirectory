@@ -3,18 +3,22 @@ import 'package:flutter/material.dart';
 
 class ReviewRatingLocation extends StatelessWidget {
   final int noOfRating;
-  final double salonDistance;
+  final double? salonDistance;
   final int noOfReview;
   const ReviewRatingLocation(
       {Key? key,
       required this.noOfRating,
-      required this.salonDistance,
+      this.salonDistance,
       required this.noOfReview})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = Utils().getScreenSize();
+    String distanceText = salonDistance != null
+        ? "${salonDistance?.toStringAsFixed(2)} mi"
+        : "Location disabled"; // Display "N/A" if salonDistance is null
+
     return SizedBox(
       width: screenSize.width / 2,
       child: Padding(
@@ -24,42 +28,45 @@ class ReviewRatingLocation extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.comment,
                   color: Colors.black,
                   size: 17,
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 Text(
                   noOfReview.toString(),
-                  style: TextStyle(fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                  style: const TextStyle(
+                      fontSize: 12.0, fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.star,
                   color: Colors.black,
                   size: 17,
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 Text(
                   noOfRating.toString(),
-                  style: TextStyle(fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                  style: const TextStyle(
+                      fontSize: 12.0, fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on,
                   size: 17,
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 Text(
-                  "${salonDistance.toString()} mi",
-                  style: TextStyle(fontSize: 13.0, fontFamily: 'GentiumPlus'),
+                  distanceText,
+                  style: const TextStyle(
+                      fontSize: 13.0, fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),

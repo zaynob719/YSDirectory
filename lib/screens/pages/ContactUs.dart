@@ -12,6 +12,12 @@ class ContactUs extends StatelessWidget {
   ContactUs({Key? key, this.user}) : super(key: key);
 
   TextEditingController body = TextEditingController();
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
 
   void showSnackBar(BuildContext context, String text) {
     final snackBar = SnackBar(
@@ -101,7 +107,7 @@ class ContactUs extends StatelessWidget {
                     }
                   },
                   child: Image.asset(
-                    'images/instagram.png',
+                    'images/instagramb.png',
                     width: 24,
                     height: 24,
                   ),
@@ -181,24 +187,24 @@ class ContactUs extends StatelessWidget {
                   onTap: () async {
                     final Uri _emailLaunchUri = Uri(
                       scheme: 'mailto',
-                      path: 'Yoursalondirectory@gmail.com',
+                      path: 'yoursalondirectory@gmail.com',
                     );
                     final String _emailLaunchString =
                         Uri.encodeFull(_emailLaunchUri.toString());
                     await launch(_emailLaunchString);
                   },
-                  child: Image.asset(
-                    'images/emailb.png',
-                    width: 24,
-                    height: 24,
-                  ),
+                  child: Icon(Icons.markunread_rounded),
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
                   onTap: () async {
                     final Uri _emailLaunchUri = Uri(
                       scheme: 'mailto',
-                      path: 'Yoursalondirectory@gmail.com',
+                      path: 'yoursalondirectory@gmail.com',
+                      query: encodeQueryParameters(<String, String>{
+                        'subject': 'Bookings',
+                        'body': 'I\'ll like to book an appointiment'
+                      }),
                     );
                     final String _emailLaunchString =
                         Uri.encodeFull(_emailLaunchUri.toString());
@@ -268,7 +274,7 @@ class ContactUs extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'GentiumPlus',
                   fontSize: 18,
-                  decoration: TextDecoration.underline,
+                  color: Color.fromARGB(255, 7, 93, 163),
                   fontWeight: FontWeight.bold,
                 ),
               ),
