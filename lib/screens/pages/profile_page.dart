@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:YSDirectory/firestore/add_data_firestore.dart';
+import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/pages/FAQPage.dart';
@@ -12,12 +14,11 @@ import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:YSDirectory/screens/pages/about_ysd.dart';
 import 'package:YSDirectory/widgets/user_detail_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:YSDirectory/models/review_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -27,27 +28,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Uint8List? image;
-  late SharedPreferences _preferences;
+  Uint8List? _image;
   String bigFontFamily = 'InknutAntiqua';
   String smallFontFamily = 'GentiumPlus';
-  String? userAvatar;
 
   @override
   void initState() {
     super.initState();
-    loadUserAvatar(); // Load the user's avatar from SharedPreferences
-  }
-
-  void loadUserAvatar() async {
-    _preferences = await SharedPreferences.getInstance();
-    userAvatar = _preferences.getString('userAvatar');
-    setState(() {});
-  }
-
-  void saveUserAvatar(String? avatar) async {
-    _preferences = await SharedPreferences.getInstance();
-    await _preferences.setString('userAvatar', avatar ?? '');
   }
 
   void signOut() async {
@@ -62,8 +49,62 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  // void selectImage() async {
+  //   List<int>? imgData = await pickImage(ImageSource.gallery);
+  //   Uint8List? img;
+
+  //   if (imgData != null) {
+  //     img = Uint8List.fromList(imgData);
+  //     String imageUrl = await StoreData().saveData(file: img);
+  //     UserDetailsProvider userDetailsProvider =
+  //         Provider.of<UserDetailsProvider>(context, listen: false);
+  //     userDetailsProvider.updateProfilePictureUrl(imageUrl);
+  //     userDetailsProvider.userDetails.profilePicture = imageUrl;
+  //   }
+
+  //   setState(() {
+  //     _image = img;
+  //   });
+  // }
+  void selectImage() async {
+    List<int>? imgData = await pickImage(ImageSource.gallery);
+    Uint8List? img;
+
+    if (imgData != null) {
+      img = Uint8List.fromList(imgData);
+      String imageUrl = await StoreData().saveData(file: img);
+
+      // Get the current user's UID
+      String currentUid = FirebaseAuth.instance.currentUser!.uid;
+
+      UserDetailsProvider userDetailsProvider =
+          Provider.of<UserDetailsProvider>(context, listen: false);
+
+      // Check if the current user's UID matches the UID in userDetailsModel
+      if (userDetailsProvider.userDetails.uid == currentUid) {
+        // Update the profile picture only if it's the current user
+        userDetailsProvider.updateProfilePictureUrl(imageUrl);
+        userDetailsProvider.userDetails.profilePicture = imageUrl;
+      }
+    }
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void saveProfile() async {
+    String response = await StoreData().saveData(file: _image!);
+
+    if (response == 'success') {
+      // Handle success, e.g., show a success message
+    } else {
+      // Handle the case where there was an error, e.g., show an error message
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     UserDetailsModel userDetailsModel =
         Provider.of<UserDetailsProvider>(context).userDetails;
     Size screenSize = Utils().getScreenSize();
@@ -86,8 +127,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileSetting()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileSetting()));
               },
             ),
           ],
@@ -100,48 +143,43 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 UserDetailBar(
                   offset: 0,
-                  //address: address,
                 ),
                 const SizedBox(height: 20),
                 Stack(
                   children: [
-                    if (userAvatar == null)
-                      ClipOval(
-                        child: Image.asset("images/profileb.png",
-                            height: 100, width: 100, fit: BoxFit.cover),
-                      )
-                    else
-                      ClipOval(
-                        child: image != null
-                            ? Image.memory(
-                                image!,
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                "images/profileb.png",
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              ),
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 50,
+                            backgroundColor: lightBrown,
+                            backgroundImage: MemoryImage(_image!),
+                          )
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundColor: lightBrown,
+                            backgroundImage: NetworkImage(userDetailsModel
+                                    .profilePicture ??
+                                "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA.."),
+                          ),
+                    Positioned(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: selectImage,
+                          icon: const Icon(
+                            Icons.add_a_photo,
+                          ),
+                        ),
                       ),
-                    IconButton(
-                      onPressed: () async {
-                        Uint8List? temp = await Utils().pickImage();
-                        if (temp != null) {
-                          setState(() {
-                            image = temp;
-                            userAvatar = base64Encode(temp);
-                            saveUserAvatar(userAvatar);
-                          });
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.black,
-                      ),
-                    )
+                      bottom: -10,
+                      right: -10,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -242,8 +280,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => FAQPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FAQPage()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,
@@ -263,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Disclaimer()));
+                              builder: (context) => const Disclaimer()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: brown,

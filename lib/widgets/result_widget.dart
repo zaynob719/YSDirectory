@@ -67,26 +67,6 @@ class _ResultWidgetState extends State<ResultWidget> {
     });
   }
 
-  // void _fetchSalons() {
-  //   db.collection('salons').get().then((snapshot) {
-  //     setState(() {
-  //       salons =
-  //           snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
-  //       for (var salon in salons) {
-  //         final calculatedDistance = calculateDistance(
-  //           userDetails.userLat!,
-  //           userDetails.userLng!,
-  //           salon.latitude,
-  //           salon.longitude,
-  //         );
-  //         salonDistances[salon.id] = calculatedDistance;
-  //       }
-  //       salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
-  //           .compareTo(salonDistances[b.id] ?? double.infinity));
-  //     });
-  //   });
-  // }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -246,7 +226,6 @@ class Salon {
   final double longitude;
   final String summary;
   final int noOfRating;
-  //double? distance;
   final int rating;
   final String salonGeneralDescription;
   final Map services;
@@ -257,6 +236,7 @@ class Salon {
   final String number;
   final String email;
   final Map openHours;
+  final Timestamp timestamp;
   Stream<int> get noOfReviewStream => FirebaseFirestore.instance
       .collection('salons')
       .doc(id)
@@ -274,7 +254,6 @@ class Salon {
     required this.id,
     required this.url,
     required this.category,
-    //required this.distance,
     required this.noOfRating,
     required this.rating,
     required this.website,
@@ -283,6 +262,7 @@ class Salon {
     required this.number,
     required this.email,
     required this.openHours,
+    required this.timestamp,
   });
 
   factory Salon.fromJson(Map<String, dynamic> json) {
@@ -301,9 +281,6 @@ class Salon {
       category: json['category'] as String? ?? '',
       noOfRating: json['noOfRating'] as int? ?? 0,
       rating: json['rating'] as int? ?? 0,
-      // distance: json['distance'] != null
-      //     ? double.parse(json['distance'].toString())
-      //     : 0.0,
       id: json['id'] as String? ?? '',
       website: json['website'] as String? ?? '',
       instagram: json['instagram'] as String? ?? '',
@@ -311,6 +288,7 @@ class Salon {
       email: json['email'] as String? ?? '',
       openHours: json['openHours'] as Map<dynamic, dynamic>? ?? {},
       services: json['services'] as Map<dynamic, dynamic>? ?? {},
+      timestamp: json['timestamp'] as Timestamp,
     );
   }
 }

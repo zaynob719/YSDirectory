@@ -90,16 +90,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Salons near you ",
+                  "Nearest to you ",
                   style: TextStyle(
                       fontFamily: 'GentiumPlus',
-                      fontSize: 24,
+                      fontSize: 21,
                       fontWeight: FontWeight.bold),
                 ),
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
@@ -128,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
+            //maybe add more widgets here
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text.rich(

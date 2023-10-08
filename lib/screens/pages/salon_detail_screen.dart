@@ -43,7 +43,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-
+//review count feature
     _updateReviewCount();
 
     _reviewsSubscription = FirebaseFirestore.instance
@@ -81,6 +81,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
     });
   }
 
+//link in Find us sub-page feature
   void _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -382,7 +383,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                     children: [
                       CustomMainButton(
                         child: const Text(
-                          'Write a review',
+                          'Leave a review',
                           style: TextStyle(
                             fontFamily: 'GentiumPlus',
                             fontSize: 16,
@@ -394,10 +395,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AddReviewPage(
-                                        salonId: widget.salon.id,
-                                        selectedSalon: widget.salon.salonName,
-                                      )));
+                                  builder: (context) => const AddReviewPage()));
                         }),
                       ),
                       Expanded(
@@ -409,7 +407,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 .collection("salons")
                                 .doc(widget.salon.id)
                                 .collection("reviews")
-                                .orderBy('attendanceDate', descending: true)
+                                .orderBy('timestamp', descending: true)
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==

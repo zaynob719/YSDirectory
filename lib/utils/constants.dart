@@ -48,7 +48,7 @@ const List<String> categoryLogos = [
 // app navigation bar pages
 List<Widget> screens = [
   const HomeScreen(),
-  AddReviewPage(),
+  const AddReviewPage(),
   const ProfilePage(),
 ];
 

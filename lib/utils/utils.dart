@@ -21,10 +21,21 @@ class Utils {
       ),
     );
   }
+}
 
-  Future<Uint8List?> pickImage() async {
-    ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: ImageSource.gallery);
-    return file!.readAsBytes();
+Future<List<int>?> pickImage(ImageSource source) async {
+  final ImagePicker _imagePicker = ImagePicker();
+  try {
+    final XFile? _file = await _imagePicker.pickImage(source: source);
+    if (_file != null) {
+      return await _file.readAsBytes();
+    } else {
+      // No image selected
+      return null;
+    }
+  } catch (e) {
+    // Handle any errors that occurred during image selection
+    //print('Error selecting image: $e');
+    return null;
   }
 }

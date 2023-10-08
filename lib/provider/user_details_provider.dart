@@ -9,10 +9,13 @@ class UserDetailsProvider with ChangeNotifier {
 
   UserDetailsProvider()
       : userDetails = UserDetailsModel(
-          name: 'Loading...',
-          city: 'Loading...',
-          lastName: 'Loading...',
-          emailAddress: 'Loading...',
+          uid: 'no user',
+          name: 'no user',
+          city: 'no user',
+          lastName: 'no user',
+          emailAddress: 'no user',
+          profilePicture:
+              "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..",
           userLat: 0.0,
           userLng: 0.0,
         );
@@ -36,26 +39,32 @@ class UserDetailsProvider with ChangeNotifier {
     userDetails.userLng = newUserLng;
     notifyListeners();
   }
+
+  // void updateUid(String newUid) {
+  //   userDetails.uid = newUid;
+  //   notifyListeners();
+  // }
+
+  Future<void> updateProfilePictureUrl(String newUrl) async {
+    if (userDetails != null) {
+      userDetails!.updateProfilePictureUrl(newUrl);
+      notifyListeners();
+      try {
+        await CloudFirestoreClass().updateProfilePictureUrl(newUrl);
+      } catch (e) {
+        // Handle any errors
+        print('Error updating profile picture URL: $e');
+      }
+    }
+  }
+  // Future<void> updateProfilePictureUrl(String newUrl) async {
+  //   userDetails.updateProfilePictureUrl(newUrl);
+  //   notifyListeners();
+  //   try {
+  //     await CloudFirestoreClass().updateProfilePictureUrl(newUrl);
+  //   } catch (e) {
+  //     // Handle any errors
+  //     print('Error updating profile picture URL: $e');
+  //   }
+  // }
 }
-
-
-
-  // Future<void> updateUserLat(double newUserLat) async {
-  //   userDetails.userLat = newUserLat;
-  //   notifyListeners();
-  //   // Update userLat in Firebase Firestore
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userDetails.id)
-  //       .update({'userLat': newUserLat});
-  // }
-
-  // Future<void> updateUserLng(double newUserLng) async {
-  //   userDetails.userLng = newUserLng;
-  //   notifyListeners();
-  //   // Update userLng in Firebase Firestore
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userDetails.id)
-  //       .update({'userLng': newUserLng});
-  // }

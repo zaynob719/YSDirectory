@@ -15,6 +15,8 @@ class AuthenticationMethods {
     required String city,
     double? userLat,
     double? userLng,
+    String? profilePicture,
+    required String uid,
   }) async {
     firstName.trim();
     lastName.trim();
@@ -35,13 +37,14 @@ class AuthenticationMethods {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: emailAddress, password: confirmPassword);
         UserDetailsModel user = UserDetailsModel(
-          name: firstName,
-          lastName: lastName,
-          emailAddress: emailAddress,
-          city: city,
-          userLat: userLat,
-          userLng: userLng,
-        );
+            uid: uid,
+            name: firstName,
+            lastName: lastName,
+            emailAddress: emailAddress,
+            city: city,
+            userLat: userLat,
+            userLng: userLng,
+            profilePicture: profilePicture);
         await cloudFirestoreClass.uploadNameAndCityToDatabase(user: user);
         output = "success";
       } on FirebaseAuthException catch (e) {

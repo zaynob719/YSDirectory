@@ -1,19 +1,12 @@
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
-import 'package:YSDirectory/screens/pages/addReviewPage.dart';
-import 'package:YSDirectory/screens/pages/home_screen.dart';
-import 'package:YSDirectory/screens/pages/profile_page.dart';
 import 'package:YSDirectory/utils/constants.dart';
-import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:YSDirectory/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class ScreenLayout extends StatefulWidget {
-  //final Salon salon;
   const ScreenLayout({
     Key? key,
-    //required this.salon,
   }) : super(key: key);
 
   @override
@@ -23,8 +16,6 @@ class ScreenLayout extends StatefulWidget {
 class _ScreenLayoutState extends State<ScreenLayout> {
   PageController pageController = PageController();
   int currentPage = 0;
-  Salon? selectedSalon;
-  List<Salon> salons = [];
 
   @override
   void dispose() {

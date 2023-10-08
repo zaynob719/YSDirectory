@@ -1,9 +1,11 @@
 import 'package:YSDirectory/calculateDistance.dart';
+//import 'package:YSDirectory/fie/authentication_methods.dart';
 import 'package:YSDirectory/firestore/authentication_methods.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/utils/colors.dart';
@@ -14,14 +16,12 @@ import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
-  //final Salon? salon;
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen>
     with SingleTickerProviderStateMixin {
-  //final Salon? salon;
   int _selectedIndex = 0;
   bool _obscureText = true;
   AuthenticationMethods authenticationMethods = AuthenticationMethods();
@@ -32,8 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen>
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  TextEditingController userLatController = TextEditingController();
-  // TextEditingController userLngController = TextEditingController();
   bool isLoading = false;
 
 //TO-DO - dispose of the controller when no longer used
@@ -43,15 +41,47 @@ class _SignUpScreenState extends State<SignUpScreen>
 //     super.dispose();
 //   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _determinePosition();
+  //   _getCurrentUserUID();
+  // }
   @override
   void initState() {
     super.initState();
-    _determinePosition();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _determinePosition();
+    await _getCurrentUserUID();
   }
 
   Position? position;
   String userLocation = '';
   late final Salon? salon;
+
+  Future<String?> getCurrentUserUID() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        return user.uid;
+      }
+    } catch (e) {
+      print('Error getting current user UID: $e');
+    }
+    return null;
+  }
+
+  Future<void> _getCurrentUserUID() async {
+    String? uid = await getCurrentUserUID();
+    if (uid != null) {
+      Provider.of<UserDetailsProvider>(context, listen: false).userDetails.uid =
+          uid;
+      print('Current User UID: $uid');
+    }
+  }
 
   Future<void> _determinePosition() async {
     try {
@@ -107,8 +137,6 @@ class _SignUpScreenState extends State<SignUpScreen>
           .updateUserLat(userLat);
       Provider.of<UserDetailsProvider>(context, listen: false)
           .updateUserLng(userLng);
-      print(userLng);
-      print(userLat);
     }
   }
 
@@ -272,19 +300,23 @@ class _SignUpScreenState extends State<SignUpScreen>
                     isLoading: false,
                     onPressed: () async {
                       setState(() {
-                        isLoading = isLoading;
+                        //isLoading = isLoading;
+                        isLoading = true;
                       });
                       String output = await authenticationMethods.signUpUser(
-                          firstName: firstNameController.text,
-                          lastName: lastNameController.text,
-                          emailAddress: emailAddressController.text,
-                          confirmEmailAddress:
-                              confirmEmailAddressController.text,
-                          password: passwordController.text,
-                          confirmPassword: confirmPasswordController.text,
-                          city: cityController.text,
-                          userLat: userDetails.userLat,
-                          userLng: userDetails.userLng);
+                        uid: userDetails.uid,
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        emailAddress: emailAddressController.text,
+                        confirmEmailAddress: confirmEmailAddressController.text,
+                        password: passwordController.text,
+                        confirmPassword: confirmPasswordController.text,
+                        city: cityController.text,
+                        userLat: userDetails.userLat,
+                        userLng: userDetails.userLng,
+                        profilePicture:
+                            "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..",
+                      );
                       setState(() {
                         isLoading = false;
                       });

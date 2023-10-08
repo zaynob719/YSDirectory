@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:YSDirectory/models/review_model.dart';
-import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
-import 'package:YSDirectory/screens/pages/home_screen.dart';
-import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/show_more.dart';
+import 'package:YSDirectory/screens/view_all_screen.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/utils/constants.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
@@ -22,9 +21,11 @@ class AddReviewPage extends StatefulWidget {
   final String? selectedSalon;
   final String? salonId;
   final Uint8List? image;
-  AddReviewPage({
+  final Salon? salon;
+  const AddReviewPage({
     Key? key,
     this.selectedSalon,
+    this.salon,
     this.salonId,
     this.image,
   }) : super(key: key);
@@ -34,6 +35,7 @@ class AddReviewPage extends StatefulWidget {
 }
 
 class _AddReviewPageState extends State<AddReviewPage> {
+  Map<String, String> salonIdMap = {};
   Salon? selectedSalon;
   late String selectedValue;
   List<String> listItem = [];
@@ -70,7 +72,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
     });
   }
 
-  final format = DateFormat("dd-MMMM-yyyy");
+  final format = DateFormat("dd-MM-yyyy");
   final TextEditingController reviewController = TextEditingController();
 
   @override
@@ -83,10 +85,16 @@ class _AddReviewPageState extends State<AddReviewPage> {
     final QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('salons').get();
 
-    final List<String> salonNames = snapshot.docs
-        .map((doc) =>
-            Salon.fromJson(doc.data() as Map<String, dynamic>).salonName)
-        .toList();
+    final List<String> salonNames = [];
+
+    snapshot.docs.forEach((doc) {
+      final salonData = doc.data() as Map<String, dynamic>;
+      final salonName = Salon.fromJson(salonData).salonName;
+      final salonId = doc.id;
+
+      salonNames.add(salonName);
+      salonIdMap[salonName] = salonId; // Populate the map
+    });
 
     setState(() {
       listItem = salonNames.map((value) => value.trim()).toList();
@@ -107,7 +115,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
           elevation: 0,
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
-          title: const Text("Write a review",
+          title: const Text("Leave a review",
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: 'InknutAntiqua',
@@ -136,6 +144,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedValue = newValue ?? '';
+                      salonId = salonIdMap[selectedValue] ?? '';
                     });
                   },
                   items: listItem.map((String value) {
@@ -219,7 +228,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'How would you rate it?',
+                        'How would you rate your experience?',
                         style: TextStyle(
                             fontFamily: 'GentiumPlus',
                             fontSize: 18,
@@ -271,8 +280,9 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         starColor: Colors.amber,
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    const SizedBox(height: 20),
+                    const SizedBox(
+                      height: 50,
+                    ),
                     const Text(
                       'Write your review',
                       style: TextStyle(
@@ -313,7 +323,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         if (selectedValue.isEmpty ||
                             selectedRatingKey.isEmpty ||
                             reviewController.text.isEmpty) {
-                          _scaffoldKey.currentState?.showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: brown,
                               shape: RoundedRectangleBorder(
@@ -327,42 +337,46 @@ class _AddReviewPageState extends State<AddReviewPage> {
                           );
                           return;
                         }
+                        final userDetails = Provider.of<UserDetailsProvider>(
+                                context,
+                                listen: false)
+                            .userDetails;
+                        final defaultProfilePictureUrl =
+                            "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..";
 
-                        String? userAvatar =
-                            base64Encode(widget.image ?? Uint8List(0));
-                        CloudFirestoreClass()
+                        await CloudFirestoreClass()
                             .uploadReviewToDatabase(
-                          id: widget.salonId.toString(),
+                          id: salonId,
                           model: ReviewModel(
                             senderName: Provider.of<UserDetailsProvider>(
                               context,
                               listen: false,
                             ).userDetails.name,
+                            profilePicture: userDetails.profilePicture ??
+                                defaultProfilePictureUrl,
                             reviewController: reviewController.text,
                             rating: selectedRatingKey,
                             attendanceDate: format.format(_dateTime),
-                            userAvatar: userAvatar ?? '',
+                            timestamp: Timestamp.now(),
                           ),
                         )
                             .then((_) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               backgroundColor: brown,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(20),
                                   topRight: Radius.circular(20),
                                 ),
                               ),
-                              content: Text('Review uploaded successfully!'),
+                              content: Text(
+                                  'Review uploaded successfully to $selectedValue!'),
                             ),
                           );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ),
-                          );
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context);
+                          } else {}
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

@@ -37,10 +37,11 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
       });
     });
 
+    //this fetches 3 of the latest salons added.
     db
         .collection('salons')
-        .limit(
-            3) // Fetch only the first 5 salons (change this to new added salons)
+        .orderBy('timestamp', descending: true)
+        .limit(3)
         .get()
         .then((snapshot) {
       setState(() {
@@ -50,9 +51,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
     });
   }
 
-  void onNoOfReviewUpdated(int noOfReviews) {
-    // You can leave this function empty if you don't need to do anything specific when the number of reviews is updated.
-  }
+  void onNoOfReviewUpdated(int noOfReviews) {}
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +100,16 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                         children: [
                           Text(
                             salons[index].salonName,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'InknutAntiqua'),
                           ),
-                          SizedBox(height: 1),
+                          const SizedBox(height: 1),
                           Text(
                             salons[index].location,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -118,11 +117,11 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
                                 overflow: TextOverflow.ellipsis),
                             maxLines: 1,
                           ),
-                          SizedBox(height: 1),
+                          const SizedBox(height: 1),
                           Chip(
                             label: Text(
                               salons[index].category,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontFamily: 'GentiumPlus'),
@@ -138,7 +137,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             }).toList(),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         //dots indicator under image slider
@@ -154,7 +153,7 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Container(
@@ -227,12 +226,12 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(appOffersHomePage[index]),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   appOffersHomePageNames[index],
-                  style: TextStyle(fontFamily: 'GentiumPlus'),
+                  style: const TextStyle(fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),
