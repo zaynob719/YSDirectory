@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:YSDirectory/models/review_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
-import 'package:YSDirectory/screens/show_more.dart';
-import 'package:YSDirectory/screens/view_all_screen.dart';
 import 'package:YSDirectory/utils/colors.dart';
-import 'package:YSDirectory/utils/constants.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -39,9 +34,9 @@ class _AddReviewPageState extends State<AddReviewPage> {
   Salon? selectedSalon;
   late String selectedValue;
   List<String> listItem = [];
-  double value = 0.0;
+  double reviewRating = 0.0;
   late String salonId;
-  int? rating;
+  //int? rating;
   late DateTime attendanceDate;
   late String selectedRatingKey = '';
 
@@ -101,6 +96,17 @@ class _AddReviewPageState extends State<AddReviewPage> {
     });
   }
 
+  Future<void> submitReview(String salonId) async {
+    try {
+      final salon = await CloudFirestoreClass().getSalonDetailsById(salonId);
+      if (salon != null) {
+        await salon.calculateTotalRating();
+      }
+    } catch (e) {
+      // Handle any errors that may occur during the process.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String hint = selectedValue.isNotEmpty ? 'Select a salon' : 'humm...';
@@ -111,15 +117,16 @@ class _AddReviewPageState extends State<AddReviewPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          centerTitle: false,
+          centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
           title: const Text("Leave a review",
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: 'InknutAntiqua',
-                fontSize: 20,
+                fontFamily: 'GentiumPlus',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.7,
               )),
         ),
         body: SingleChildScrollView(
@@ -228,7 +235,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'How would you rate your experience?',
+                        'Rate your experience and/or service?',
                         style: TextStyle(
                             fontFamily: 'GentiumPlus',
                             fontSize: 18,
@@ -237,23 +244,23 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 12,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: RatingStars(
-                        value: value,
+                        value: reviewRating,
                         onValueChanged: (v) {
                           setState(() {
-                            value = v;
-                            selectedRatingKey = keysOfRating[value.toInt() - 1];
+                            reviewRating = v;
                           });
                         },
                         starBuilder: (index, color) {
-                          if (index < value.toInt()) {
+                          if (index < reviewRating.toInt()) {
                             return const Icon(
                               Icons.star,
                               color: Colors.amber,
+                              size: 29,
                             );
                           } else {
                             return const Icon(
@@ -263,10 +270,12 @@ class _AddReviewPageState extends State<AddReviewPage> {
                           }
                         },
                         starCount: 5,
-                        starSize: 25,
+                        starSize: 30,
                         valueLabelColor: const Color(0xff9b9b9b),
                         valueLabelTextStyle: const TextStyle(
-                            color: Colors.white, fontFamily: 'GentiumPlus'),
+                            color: Colors.white,
+                            fontFamily: 'GentiumPlus',
+                            fontSize: 16),
                         valueLabelRadius: 10,
                         maxValue: 5,
                         starSpacing: 2,
@@ -283,13 +292,16 @@ class _AddReviewPageState extends State<AddReviewPage> {
                     const SizedBox(
                       height: 50,
                     ),
-                    const Text(
-                      'Write your review',
-                      style: TextStyle(
-                          fontFamily: 'GentiumPlus',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Write your review',
+                        style: TextStyle(
+                            fontFamily: 'GentiumPlus',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black),
+                      ),
                     ),
                     const SizedBox(
                       height: 5,
@@ -303,25 +315,19 @@ class _AddReviewPageState extends State<AddReviewPage> {
                         color: Colors.black,
                       ),
                       decoration: const InputDecoration(
-                        hintText: 'Spill the tea! What did you like? Dislike?',
+                        hintText:
+                            'What did you like? Dislike? Or would improve?',
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     CustomMainButton(
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(
-                          fontFamily: 'GentiumPlus',
-                          fontSize: 16,
-                        ),
-                      ),
                       color: orengy,
                       isLoading: false,
                       onPressed: () async {
                         if (selectedValue.isEmpty ||
-                            selectedRatingKey.isEmpty ||
+                            reviewRating == 0.0 ||
                             reviewController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -335,13 +341,14 @@ class _AddReviewPageState extends State<AddReviewPage> {
                               content: Text('Please fill in all fields'),
                             ),
                           );
+                          FocusScope.of(context).unfocus();
                           return;
                         }
                         final userDetails = Provider.of<UserDetailsProvider>(
                                 context,
                                 listen: false)
                             .userDetails;
-                        final defaultProfilePictureUrl =
+                        const defaultProfilePictureUrl =
                             "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..";
 
                         await CloudFirestoreClass()
@@ -354,8 +361,12 @@ class _AddReviewPageState extends State<AddReviewPage> {
                             ).userDetails.name,
                             profilePicture: userDetails.profilePicture ??
                                 defaultProfilePictureUrl,
+                            uid: Provider.of<UserDetailsProvider>(
+                              context,
+                              listen: false,
+                            ).userDetails.uid,
                             reviewController: reviewController.text,
-                            rating: selectedRatingKey,
+                            reviewRating: reviewRating,
                             attendanceDate: format.format(_dateTime),
                             timestamp: Timestamp.now(),
                           ),
@@ -370,10 +381,32 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                   topRight: Radius.circular(20),
                                 ),
                               ),
-                              content: Text(
-                                  'Review uploaded successfully to $selectedValue!'),
+                              content: RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text:
+                                            'Review uploaded successfully to: ',
+                                        style: TextStyle(
+                                          fontFamily: 'GentiumPlus',
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        )),
+                                    TextSpan(
+                                      text: selectedValue,
+                                      style: const TextStyle(
+                                          fontFamily: 'GentiumPlus',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           );
+                          FocusScope.of(context).unfocus();
+
+                          submitReview(salonId);
                           if (Navigator.canPop(context)) {
                             Navigator.pop(context);
                           } else {}
@@ -393,7 +426,24 @@ class _AddReviewPageState extends State<AddReviewPage> {
                           );
                         });
                       },
+                      child: const Text(
+                        'Submit review',
+                        style: TextStyle(
+                            fontFamily: 'GentiumPlus',
+                            fontSize: 16,
+                            letterSpacing: 0.7),
+                      ),
                     ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Please note that your reviews should be honest, respectful, and relevant to your salon experience.\nInappropriate or misleading content will not be tolerated. Let's keep our salon community safe and informative for everyone. \nThank you!",
+                      style: TextStyle(
+                          fontFamily: 'GentiumPlus',
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    )
                   ],
                 ),
               ],

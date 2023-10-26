@@ -1,22 +1,44 @@
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/utils/colors.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
 
 class ContactUs extends StatelessWidget {
   final UserDetailsModel? user;
   ContactUs({Key? key, this.user}) : super(key: key);
 
   TextEditingController body = TextEditingController();
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   String? encodeQueryParameters(Map<String, String> params) {
     return params.entries
         .map((MapEntry<String, String> e) =>
             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
         .join('&');
+  }
+
+  void _launchEmail(String email) async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Feedback',
+        'body': body.text,
+      }),
+    );
+    launchUrl(emailLaunchUri);
+    // final String emailLaunchString = Uri.encodeFull(emailLaunchUri.toString());
+    // _launchURL(emailLaunchString);
   }
 
   void showSnackBar(BuildContext context, String text) {
@@ -28,37 +50,6 @@ class ContactUs extends StatelessWidget {
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(snackBar);
-  }
-
-  void onSubmitFeedback(BuildContext context) async {
-    if (user == null) {
-      print("no user found");
-      // Handle the case when user is null
-      // Show an error message or handle the situation appropriately
-      return;
-    }
-    String subject = 'User Feedback'; // Get the subject from the form input
-    String userEmail =
-        user!.emailAddress; // Get the user's email from the UserDetailsModel
-    String message = body.text; // Get the feedback message from the form input
-    //DateTime timestamp = DateTime.now(); // Get the current timestamp
-
-    try {
-      await CloudFirestoreClass().uploadFeedbackToDatabase(
-        subject: subject,
-        emailAddress: userEmail,
-        message: message,
-        //timestamp: timestamp,
-      );
-
-      // Feedback uploaded successfully, show a success message or navigate to another screen
-      showSnackBar(context, 'Feedback submitted successfully!');
-    } catch (e) {
-      // Handle any errors that occur during the upload process
-      print("Error uploading feedback: $e");
-      // Show an error message to the user or handle the error appropriately
-      showSnackBar(context, 'Error submitting feedback. Please try again.');
-    }
   }
 
   @override
@@ -75,7 +66,8 @@ class ContactUs extends StatelessWidget {
           style: TextStyle(
               color: Colors.black,
               fontFamily: 'GentiumPlus',
-              fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.7),
         ),
       ),
       body: SingleChildScrollView(
@@ -193,7 +185,7 @@ class ContactUs extends StatelessWidget {
                         Uri.encodeFull(_emailLaunchUri.toString());
                     await launch(_emailLaunchString);
                   },
-                  child: Icon(Icons.markunread_rounded),
+                  child: const Icon(Icons.markunread_rounded),
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
@@ -201,10 +193,6 @@ class ContactUs extends StatelessWidget {
                     final Uri _emailLaunchUri = Uri(
                       scheme: 'mailto',
                       path: 'yoursalondirectory@gmail.com',
-                      query: encodeQueryParameters(<String, String>{
-                        'subject': 'Bookings',
-                        'body': 'I\'ll like to book an appointiment'
-                      }),
                     );
                     final String _emailLaunchString =
                         Uri.encodeFull(_emailLaunchUri.toString());
@@ -227,7 +215,8 @@ class ContactUs extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text('Feedback, questions, partnership opportunities...',
+            child: const Text(
+                'Feedback, questions, partnership opportunities...',
                 style: TextStyle(fontFamily: 'GentiumPlus')),
           ),
           Container(
@@ -235,26 +224,28 @@ class ContactUs extends StatelessWidget {
             child: CupertinoTextField(
               controller: body,
               placeholder: 'Enter text',
-              padding: EdgeInsets.all(20),
-              style: TextStyle(fontFamily: 'GentiumPlus'),
-              cursorColor: orengy,
+              padding: const EdgeInsets.all(20),
+              style: const TextStyle(fontFamily: 'GentiumPlus'),
+              //cursorColor: orengy,
               expands: true,
               maxLines: null,
             ),
           ),
           Container(
-            child: ElevatedButton(
-                onPressed: () {
-                  onSubmitFeedback(
-                    context,
-                  );
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: orengy),
-                child: Text(
-                  "Send to YSDirectory",
-                  style: TextStyle(fontFamily: 'GentiumPlus'),
-                )),
-          ),
+              child: CustomMainButton(
+            color: orengy,
+            isLoading: false,
+            onPressed: () {
+              _launchEmail("yoursalondirectory@gmail.com");
+            },
+            child: const Text(
+              "Send feedback",
+              style: TextStyle(
+                  fontFamily: 'GentiumPlus',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700),
+            ),
+          )),
           const SizedBox(
             height: 20,
           ),
@@ -272,11 +263,12 @@ class ContactUs extends StatelessWidget {
               child: const Text(
                 "Looking for some hair after care? Check out Coverd'N'Curly's website.",
                 style: TextStyle(
-                  fontFamily: 'GentiumPlus',
-                  fontSize: 18,
-                  color: Color.fromARGB(255, 7, 93, 163),
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontFamily: 'GentiumPlus',
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 0.7),
               ),
             ),
           ),

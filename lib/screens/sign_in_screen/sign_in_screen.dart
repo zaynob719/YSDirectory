@@ -1,21 +1,219 @@
-import 'dart:ui';
-
+import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:YSDirectory/layout/screen_layout.dart';
 import 'package:YSDirectory/firestore/authentication_methods.dart';
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/sign_in_screen/resetPasswordScreen.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_up_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/utils/colors.dart';
-import 'package:get/route_manager.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  CloudFirestoreClass cloudFirestoreClass = CloudFirestoreClass();
+  TextEditingController cityController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _determinePosition();
+  }
+
+  Position? position;
+  String userLocation = '';
+
+  Future<void> _determinePosition() async {
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      }
+
+      Position newPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        position = newPosition;
+      });
+      _updateUserDetails(position);
+    } catch (error) {
+      //print('Error determining position: $error');
+    }
+  }
+
+  Future<void> _updateUserDetails(Position? position) async {
+    if (position != null) {
+      List<Placemark> placemark = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      Placemark place = placemark[0];
+      String city = '${place.street}, ${place.locality}';
+      double userLat = position.latitude;
+      double userLng = position.longitude;
+
+      // Update user details using Provider
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserCity('${place.street}, ${place.locality}');
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserLat(userLat);
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .updateUserLng(userLng);
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        final UserCredential authResult =
+            await firebaseAuth.signInWithCredential(credential);
+        final User? user = authResult.user;
+        if (user != null) {
+          final String uid = user.uid;
+          final String displayName = user.displayName ?? "";
+          final String email = user.email ?? "";
+          final String photoURL = user.photoURL ?? "";
+          await _determinePosition();
+
+          UserDetailsModel userDetailsModel = UserDetailsModel(
+            uid: uid,
+            name: displayName,
+            emailAddress: email,
+            profilePicture: photoURL,
+            userLat: position?.latitude ?? 0.0,
+            userLng: position?.longitude ?? 0.0,
+            city: cityController.text,
+          );
+
+          Provider.of<UserDetailsProvider>(context, listen: false)
+              .updateUserDetails(
+            uid: uid,
+            name: displayName,
+            email: email,
+            profilePicture: photoURL,
+            userLat: position?.latitude ?? 0.0,
+            userLng: position?.longitude ?? 0.0,
+            city: cityController.text,
+          );
+
+          await cloudFirestoreClass.uploadNameAndCityToDatabase(
+              user: userDetailsModel);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ScreenLayout()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: brown,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              content: Text(
+                'Google sign-in failed. Please try again.',
+              ),
+            ),
+          );
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: brown,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            content: Text(
+              'The account already exists with a different credential',
+            ),
+          ),
+        );
+      } else if (e.code == 'invalid-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: brown,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            content: Text(
+              'Error occurred while accessing credentials. Try again.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle other sign-in errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: brown,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          content: Text('Error occurred using Google Sign In. Try again.'),
+        ),
+      );
+    }
+  }
+
   @override
   int _selectedIndex = 0;
   bool _obscureText = true;
@@ -93,7 +291,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) {
-                              return SignUpScreen();
+                              return const SignUpScreen();
                             }));
                             setState(() {
                               _selectedIndex = 1;
@@ -170,7 +368,44 @@ class _SignInScreenState extends State<SignInScreen> {
                       )),
                   obscureText: _obscureText,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: _signInWithGoogle,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.white),
+                          child: Image.asset(
+                            "images/google-logo-9822.png",
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.white),
+                          child: Image.asset(
+                            "images/png-apple-logo-9713.png",
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                      )
+                    ]),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -189,16 +424,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(
+                  height: 15,
+                ),
                 CustomMainButton(
-                    child: const Text(
-                      "Sign In",
-                      style: TextStyle(
-                        fontSize: 19,
-                        letterSpacing: 0.6,
-                        fontFamily: 'GentiumPlus',
-                      ),
-                    ),
                     color: orengy,
                     isLoading: isLoading,
                     onPressed: () async {
@@ -220,11 +449,18 @@ class _SignInScreenState extends State<SignInScreen> {
                       } else {
                         Utils().showSnackBar(context: context, content: output);
                       }
-                    })
+                    },
+                    child: const Text(
+                      "Sign In",
+                      style: TextStyle(
+                        fontSize: 19,
+                        letterSpacing: 0.6,
+                        fontFamily: 'GentiumPlus',
+                      ),
+                    )),
               ],
             ),
           ),
-          //),
         ],
       ),
     );

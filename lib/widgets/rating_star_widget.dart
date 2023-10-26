@@ -1,40 +1,40 @@
-import 'package:YSDirectory/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// import 'package:YSDirectory/utils/utils.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/src/widgets/container.dart';
+// import 'package:flutter/src/widgets/framework.dart';
 
-class RatingStarWidget extends StatelessWidget {
-  final int rating;
-  final bool isVertical;
+// class RatingStarWidget extends StatelessWidget {
+//   final int rating;
+//   final bool isVertical;
 
-  const RatingStarWidget({
-    Key? key,
-    required this.rating,
-    this.isVertical = true,
-  }) : super(key: key);
+//   const RatingStarWidget({
+//     Key? key,
+//     required this.rating,
+//     this.isVertical = true,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    IconData starIcon = Icons.star;
-    Color starColor = Colors.amber;
-    num ratingValue =
-        rating.clamp(0.0, 5.0); // Clamp the rating value between 0.0 and 5.0
+//   @override
+//   Widget build(BuildContext context) {
+//     IconData starIcon = Icons.star;
+//     Color starColor = Colors.amber;
+//     num ratingValue =
+//         rating.clamp(0.0, 5.0); // Clamp the rating value between 0.0 and 5.0
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment:
-          isVertical ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: List.generate(
-        5,
-        (index) => Icon(
-          index < ratingValue.floor() ? starIcon : starIcon,
-          color: starColor,
-        ),
-      ),
-    );
-  }
-}
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       crossAxisAlignment:
+//           isVertical ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+//       children: List.generate(
+//         5,
+//         (index) => Icon(
+//           index < ratingValue.floor() ? starIcon : starIcon,
+//           color: starColor,
+//         ),
+//       ),
+//     );
+//   }
+// }
   //   Size screenSize = Utils().getScreenSize();
   //   List<Widget> children = [];
 

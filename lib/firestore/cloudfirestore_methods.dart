@@ -4,13 +4,11 @@ import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 
 class CloudFirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
-  var db = FirebaseFirestore
-      .instance; //could remove this code in the future, its the same as line 8
 
   Future uploadNameAndCityToDatabase({required UserDetailsModel user}) async {
     await firebaseFirestore
@@ -59,12 +57,11 @@ class CloudFirestoreClass {
   }
 
   Future<void> updateProfilePictureUrl(String newUrl) async {
-    final String userId = firebaseAuth.currentUser!.uid;
     final CollectionReference usersCollection =
         FirebaseFirestore.instance.collection('users');
 
     try {
-      await usersCollection.doc(userId).update({
+      await usersCollection.doc(firebaseAuth.currentUser!.uid).update({
         'profilePicture': newUrl,
       });
     } catch (e) {
@@ -73,20 +70,63 @@ class CloudFirestoreClass {
     }
   }
 
-  final CollectionReference _feedbackCollection =
-      FirebaseFirestore.instance.collection('feedbacks');
+  Future<Salon?> getSalonDetailsById(String salonId) async {
+    try {
+      final salonDocument = await FirebaseFirestore.instance
+          .collection('salons')
+          .doc(salonId)
+          .get();
 
-  Future<void> uploadFeedbackToDatabase({
-    required String subject,
-    required String emailAddress,
-    required String message,
-    //required String timestamp,
-  }) async {
-    await _feedbackCollection.add({
-      "subject": subject,
-      "userEmail": emailAddress,
-      "message": message,
-      //"timestamp": timestamp,
-    });
+      if (salonDocument.exists) {
+        final salonData = salonDocument.data() as Map<String, dynamic>;
+        return Salon.fromJson(salonData);
+      } else {
+        // Salon with the provided ID does not exist
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> addBookmarkToUser(String userId, String salonId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .update({
+        'bookmarkedSalonIds': FieldValue.arrayUnion([salonId]),
+      });
+    } catch (e) {
+      print('Error adding bookmark to user: $e');
+      // Handle the error as needed
+    }
+  }
+
+  Future<void> removeBookmarkFromUser(String userId, String salonId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .update({
+        'bookmarkedSalonIds': FieldValue.arrayRemove([salonId]),
+      });
+    } catch (e) {
+      print('Error removing bookmark from user: $e');
+      // Handle the error as needed
+    }
+  }
+
+  Future<List> getBookmarkedSalonIds(String userId) async {
+    final userDocument =
+        await firebaseFirestore.collection('users').doc(userId).get();
+    if (userDocument.exists) {
+      final data = userDocument.data() as Map<String, dynamic>;
+      final bookmarkedSalonIds = (data['bookmarkedSalonIds'] as List)
+          .map((dynamic item) => item.toString())
+          .toList();
+      return bookmarkedSalonIds ?? [];
+    }
+    return [];
   }
 }

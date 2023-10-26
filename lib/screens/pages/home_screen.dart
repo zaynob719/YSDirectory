@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
-  late Position _currentPosition;
   //String userLocation = '';
   double userLat = 0.0;
   double userLng = 0.0;

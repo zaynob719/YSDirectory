@@ -1,27 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReviewModel {
+  final String uid;
   final String senderName;
   final String reviewController;
-  final String rating;
+  double reviewRating;
   final String attendanceDate;
   final String profilePicture;
   final Timestamp timestamp;
 
-  const ReviewModel({
+  ReviewModel({
+    required this.uid,
     required this.senderName,
     required this.reviewController,
-    required this.rating,
+    required this.reviewRating, //used to calculate totalRating in salonModel (result_widget)
     required this.attendanceDate,
     required this.profilePicture,
     required this.timestamp,
   });
 
+  void updateReviewRating(double newReviewRating) {
+    reviewRating = newReviewRating;
+  }
+
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
+      uid: json["uid"] as String? ?? '',
       senderName: json["senderName"] as String? ?? '',
       reviewController: json["reviewController"] as String? ?? '',
-      rating: json["rating"] as String? ?? '',
+      reviewRating: json["reviewRating"] as double? ?? 0.0,
       attendanceDate: json["attendanceDate"] as String? ?? '',
       profilePicture: json["profilePicture"],
       timestamp: json['timestamp'] as Timestamp,
@@ -30,9 +37,10 @@ class ReviewModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'uid': uid,
       'senderName': senderName,
       'reviewController': reviewController,
-      'rating': rating,
+      'reviewRating': reviewRating,
       'attendanceDate': attendanceDate,
       'profilePicture': profilePicture,
       'timestamp': timestamp,

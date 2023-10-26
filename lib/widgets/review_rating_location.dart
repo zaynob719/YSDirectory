@@ -1,13 +1,16 @@
 import 'package:YSDirectory/utils/utils.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReviewRatingLocation extends StatelessWidget {
-  final int noOfRating;
+  final Salon? salon;
+  final double totalRating;
   final double? salonDistance;
   final int noOfReview;
   const ReviewRatingLocation(
       {Key? key,
-      required this.noOfRating,
+      required this.totalRating,
+      this.salon,
       this.salonDistance,
       required this.noOfReview})
       : super(key: key);
@@ -37,7 +40,7 @@ class ReviewRatingLocation extends StatelessWidget {
                 Text(
                   noOfReview.toString(),
                   style: const TextStyle(
-                      fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                      fontSize: 13.0, fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),
@@ -50,9 +53,9 @@ class ReviewRatingLocation extends StatelessWidget {
                 ),
                 const SizedBox(width: 5.0),
                 Text(
-                  noOfRating.toString(),
+                  salon!.totalRating.toStringAsFixed(1),
                   style: const TextStyle(
-                      fontSize: 12.0, fontFamily: 'GentiumPlus'),
+                      fontSize: 13.0, fontFamily: 'GentiumPlus'),
                 ),
               ],
             ),

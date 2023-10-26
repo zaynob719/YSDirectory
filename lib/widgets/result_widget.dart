@@ -1,4 +1,5 @@
 import 'package:YSDirectory/calculateDistance.dart';
+import 'package:YSDirectory/models/review_model.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
@@ -11,7 +12,6 @@ import 'package:provider/provider.dart';
 
 class ResultWidget extends StatefulWidget {
   final Salon? salon;
-  //final List<Salon> salons;
   final Function(int) onNoOfReviewUpdated;
   final String? query;
 
@@ -46,24 +46,35 @@ class _ResultWidgetState extends State<ResultWidget> {
   void _fetchSalons() {
     db
         .collection('salons')
-        .where("category", isEqualTo: widget.query) // Add the category filter
+        .where("category", isEqualTo: widget.query)
         .get()
         .then((snapshot) {
       setState(() {
         salons =
             snapshot.docs.map((doc) => Salon.fromJson(doc.data())).toList();
-        for (var salon in salons) {
-          final calculatedDistance = calculateDistance(
-            userDetails.userLat!,
-            userDetails.userLng!,
-            salon.latitude,
-            salon.longitude,
-          );
-          salonDistances[salon.id] = calculatedDistance;
-        }
-        salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
-            .compareTo(salonDistances[b.id] ?? double.infinity));
       });
+
+      for (var salon in salons) {
+        final calculatedDistance = calculateDistance(
+          userDetails.userLat!,
+          userDetails.userLng!,
+          salon.latitude,
+          salon.longitude,
+        );
+        salonDistances[salon.id] = calculatedDistance;
+      }
+      // Iterate through the salons to calculate totalRating
+      for (var salon in salons) {
+        salon.calculateTotalRating().then((_) {
+          // Notify the widget that the totalRating has been updated
+          setState(() {});
+        }).catchError((error) {
+          // Handle any errors that may occur during the calculation
+          print("Error calculating totalRating: $error");
+        });
+      }
+      salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
+          .compareTo(salonDistances[b.id] ?? double.infinity));
     });
   }
 
@@ -193,7 +204,9 @@ class _ResultWidgetState extends State<ResultWidget> {
                                         fontFamily: 'GentiumPlus'),
                                   ),
                                   ReviewRatingLocation(
-                                    noOfRating: salons[index].noOfRating,
+                                    totalRating:
+                                        salon.totalRating, //average rating
+                                    salon: salon,
                                     salonDistance:
                                         salonDistances[salons[index].id],
                                     noOfReview: noOfReview,
@@ -226,23 +239,70 @@ class Salon {
   final double longitude;
   final String summary;
   final int noOfRating;
-  final int rating;
+  double totalRating; // shows avarage calculation of all rating
   final String salonGeneralDescription;
   final Map services;
   final String id;
-  final String category;
+  final String category; //CHANGE THIS TO MAP
   final String website;
   final String instagram;
   final String number;
   final String email;
   final Map openHours;
+  final int noOfReview;
   final Timestamp timestamp;
+  //Map<int, int>
+  //ratingDistribution; // shows how many users left rating with x amout of stars
+
   Stream<int> get noOfReviewStream => FirebaseFirestore.instance
       .collection('salons')
       .doc(id)
       .collection('reviews')
       .snapshots()
       .map((snapshot) => snapshot.docs.length);
+
+  // Method to update the noOfReview field in Firestore
+  Future<void> updateNoOfReview(int newReviewCount) async {
+    await FirebaseFirestore.instance.collection('salons').doc(id).update({
+      'noOfReview': newReviewCount,
+    });
+  }
+
+  Future<void> calculateTotalRating() async {
+    final reviewsSnapshot = await FirebaseFirestore.instance
+        .collection('salons')
+        .doc(id)
+        .collection('reviews')
+        .get();
+
+    double totalRating = 0.0;
+    //Map<int, int> ratingDistribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+
+    for (final reviewDocument in reviewsSnapshot.docs) {
+      final reviewData = reviewDocument.data();
+      final reviewRating = reviewData['reviewRating'] as double?;
+      if (reviewRating != null) {
+        totalRating += reviewRating;
+
+        // int rating = reviewRating.round();
+        // if (rating >= 1 && rating <= 5) {
+        //   ratingDistribution[rating];
+        // }
+      }
+    }
+
+    if (reviewsSnapshot.docs.isNotEmpty) {
+      totalRating /= reviewsSnapshot.docs.length;
+    }
+
+    this.totalRating = totalRating;
+    //this.ratingDistribution = ratingDistribution;
+
+    await FirebaseFirestore.instance.collection('salons').doc(id).update({
+      'totalRating': totalRating,
+      //'ratingDistribution': ratingDistribution,
+    });
+  }
 
   Salon({
     required this.salonName,
@@ -255,7 +315,9 @@ class Salon {
     required this.url,
     required this.category,
     required this.noOfRating,
-    required this.rating,
+    required this.noOfReview, //counts total reviews (salon detail page)
+    required this.totalRating, //avarage rating (salon list view)
+    //required this.ratingDistribution, // how many per 1 to 5 stars left
     required this.website,
     required this.services,
     required this.instagram,
@@ -266,6 +328,11 @@ class Salon {
   });
 
   factory Salon.fromJson(Map<String, dynamic> json) {
+    // final Map<int, dynamic> jsonRatingDistribution =
+    //     json['ratingDistribution'] as Map<int, dynamic>? ?? {};
+    // final Map<int, int> ratingDistribution =
+    //     Map<int, int>.from(jsonRatingDistribution);
+
     return Salon(
       salonName: json['salonName'] as String? ?? '',
       location: json['location'] as String? ?? '',
@@ -280,7 +347,7 @@ class Salon {
       url: json['url'] as String? ?? '',
       category: json['category'] as String? ?? '',
       noOfRating: json['noOfRating'] as int? ?? 0,
-      rating: json['rating'] as int? ?? 0,
+      totalRating: json['totalRating'] as double? ?? 0.0,
       id: json['id'] as String? ?? '',
       website: json['website'] as String? ?? '',
       instagram: json['instagram'] as String? ?? '',
@@ -289,6 +356,8 @@ class Salon {
       openHours: json['openHours'] as Map<dynamic, dynamic>? ?? {},
       services: json['services'] as Map<dynamic, dynamic>? ?? {},
       timestamp: json['timestamp'] as Timestamp,
+      noOfReview: json['noOfReview'] as int? ?? 0,
+      //ratingDistribution: ratingDistribution,
     );
   }
 }

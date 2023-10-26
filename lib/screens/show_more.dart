@@ -75,29 +75,29 @@ class _ShowMoreState extends State<ShowMore> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const viewAllScreen(
-                            onNoOfReviewUpdated: onNoOfReviewUpdated)),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: orengy,
-                ),
-                child: const Text(
-                  'View all salons',
-                  style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
-                ),
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(4.0),
+          //     child: ElevatedButton(
+          //       onPressed: () {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (context) => const viewAllScreen(
+          //                   onNoOfReviewUpdated: onNoOfReviewUpdated)),
+          //         );
+          //       },
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: orengy,
+          //       ),
+          //       child: const Text(
+          //         'View all salons',
+          //         style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

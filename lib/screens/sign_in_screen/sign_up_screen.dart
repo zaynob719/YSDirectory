@@ -5,6 +5,7 @@ import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,14 @@ import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen>
     with SingleTickerProviderStateMixin {
-  int _selectedIndex = 0;
   bool _obscureText = true;
   AuthenticationMethods authenticationMethods = AuthenticationMethods();
   TextEditingController firstNameController = TextEditingController();
@@ -41,12 +43,6 @@ class _SignUpScreenState extends State<SignUpScreen>
 //     super.dispose();
 //   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _determinePosition();
-  //   _getCurrentUserUID();
-  // }
   @override
   void initState() {
     super.initState();
@@ -55,33 +51,11 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   Future<void> _initializeData() async {
     await _determinePosition();
-    await _getCurrentUserUID();
   }
 
   Position? position;
   String userLocation = '';
   late final Salon? salon;
-
-  Future<String?> getCurrentUserUID() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        return user.uid;
-      }
-    } catch (e) {
-      print('Error getting current user UID: $e');
-    }
-    return null;
-  }
-
-  Future<void> _getCurrentUserUID() async {
-    String? uid = await getCurrentUserUID();
-    if (uid != null) {
-      Provider.of<UserDetailsProvider>(context, listen: false).userDetails.uid =
-          uid;
-      print('Current User UID: $uid');
-    }
-  }
 
   Future<void> _determinePosition() async {
     try {
@@ -114,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen>
       });
       _updateUserDetails(position);
     } catch (error) {
-      print('Error determining position: $error');
+      //print('Error determining position: $error');
     }
   }
 
@@ -188,6 +162,11 @@ class _SignUpScreenState extends State<SignUpScreen>
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
+                    validator: (String? value) {
+                      return (value != null && value.contains('@'))
+                          ? 'Do not use the @ char.'
+                          : null;
+                    },
                   ),
                   const SizedBox(height: 25),
                   TextFormField(
@@ -289,22 +268,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       textAlign: TextAlign.center),
                   const SizedBox(height: 30),
                   CustomMainButton(
-                    child: const Text(
-                      "Sign Up!",
-                      style: TextStyle(
-                          fontSize: 19,
-                          letterSpacing: 0.6,
-                          fontFamily: 'GentiumPlus'),
-                    ),
                     color: orengy,
                     isLoading: false,
                     onPressed: () async {
                       setState(() {
-                        //isLoading = isLoading;
                         isLoading = true;
                       });
                       String output = await authenticationMethods.signUpUser(
-                        uid: userDetails.uid,
                         firstName: firstNameController.text,
                         lastName: lastNameController.text,
                         emailAddress: emailAddressController.text,
@@ -317,9 +287,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                         profilePicture:
                             "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..",
                       );
-                      setState(() {
-                        isLoading = false;
-                      });
                       if (output == "success") {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) => SignInScreen()));
@@ -327,10 +294,28 @@ class _SignUpScreenState extends State<SignUpScreen>
                         //error message
                         Utils().showSnackBar(context: context, content: output);
                       }
+                      setState(() {
+                        isLoading = false;
+                      });
                     },
+                    child: const Text(
+                      "Sign Up!",
+                      style: TextStyle(
+                          fontSize: 19,
+                          letterSpacing: 0.6,
+                          fontFamily: 'GentiumPlus'),
+                    ),
                   ),
                   const SizedBox(height: 15),
                   CustomMainButton(
+                    color: const Color.fromARGB(255, 202, 199, 197),
+                    isLoading: false,
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const SignInScreen();
+                      }));
+                    },
                     child: const Text(
                       "Back",
                       style: TextStyle(
@@ -338,14 +323,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                           letterSpacing: 0.6,
                           fontFamily: 'GentiumPlus'),
                     ),
-                    color: const Color.fromARGB(255, 202, 199, 197),
-                    isLoading: false,
-                    onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return SignInScreen();
-                      }));
-                    },
                   ),
                   const SizedBox(height: 20),
                 ],

@@ -210,10 +210,9 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
           width: height,
           decoration: ShapeDecoration(
             color: Colors.white,
-            shadows: [
+            shadows: const [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                //blurRadius: 1,
+                color: tagColor,
                 spreadRadius: 1,
               ),
             ],

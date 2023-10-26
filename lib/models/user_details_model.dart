@@ -1,29 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class UserDetailsModel {
-  String uid;
+  final String uid;
   final String name;
-  final String lastName;
+  String? lastName;
   final String emailAddress;
   String? profilePicture;
-  String city;
+  String? city;
   double? userLat;
   double? userLng;
+  List<String> bookmarkedSalonIds;
 
   UserDetailsModel({
     required this.uid,
     required this.name,
-    required this.lastName,
+    this.lastName,
     required this.emailAddress,
-    required this.city,
+    this.city,
     this.userLat,
     this.userLng,
     this.profilePicture,
-  });
-
-  // void updateUid(String newUid) {
-  //   uid = newUid;
-  // }
+    List<String>? bookmarkedSalonIds,
+  }) : bookmarkedSalonIds = bookmarkedSalonIds ?? [];
 
   void updateCity(String newCity) {
     city = newCity;
@@ -41,6 +37,16 @@ class UserDetailsModel {
     profilePicture = newUrl;
   }
 
+  void addBookmark(String salonId) {
+    if (!bookmarkedSalonIds.contains(salonId)) {
+      bookmarkedSalonIds.add(salonId);
+    }
+  }
+
+  void removeBookmark(String salonId) {
+    bookmarkedSalonIds.remove(salonId);
+  }
+
   Map<String, dynamic> getJson() => {
         'uid': uid,
         'name': name,
@@ -50,6 +56,7 @@ class UserDetailsModel {
         'userLat': userLat,
         'userLng': userLng,
         'profilePicture': profilePicture,
+        'bookmarkedSalonIds': bookmarkedSalonIds,
       };
   factory UserDetailsModel.getModelFromJson(Map<String, dynamic> json) {
     return UserDetailsModel(
@@ -61,6 +68,9 @@ class UserDetailsModel {
       userLat: json["userLat"],
       userLng: json["userLng"],
       profilePicture: json["profilePicture"],
+      bookmarkedSalonIds: json["bookmarkedSalonIds"] != null
+          ? List<String>.from(json["bookmarkedSalonIds"])
+          : [],
     );
   }
 }

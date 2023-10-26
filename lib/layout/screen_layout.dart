@@ -40,7 +40,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   Widget build(BuildContext context) {
     Provider.of<UserDetailsProvider>(context).getData();
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         body: PageView(
           controller: pageController,
@@ -79,9 +79,16 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                 ),
                 Tab(
                   child: Icon(
-                    Icons.person,
+                    Icons.format_list_bulleted_rounded,
                     color: currentPage == 2 ? Colors.black : Colors.grey,
                     size: currentPage == 2 ? 33 : 24,
+                  ),
+                ),
+                Tab(
+                  child: Icon(
+                    Icons.person,
+                    color: currentPage == 3 ? Colors.black : Colors.grey,
+                    size: currentPage == 3 ? 33 : 24,
                   ),
                 ),
               ]),

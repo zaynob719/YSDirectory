@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:YSDirectory/models/user_details_model.dart';
+import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/widgets/app_icon.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/models/review_model.dart';
@@ -7,11 +8,12 @@ import 'package:YSDirectory/screens/pages/addReviewPage.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
-import 'package:YSDirectory/widgets/rating_star_widget.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/review_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SalonDetailScreen extends StatefulWidget {
@@ -38,6 +40,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   int _noOfReview = 0;
 
   List<Salon> salons = [];
+  //double selectedStarRating = 0.0;
 
   @override
   void initState() {
@@ -81,7 +84,6 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
     });
   }
 
-//link in Find us sub-page feature
   void _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -103,7 +105,6 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
       path: email,
       query: encodeQueryParameters(<String, String>{
         'subject': 'Bookings',
-        'body': 'I\'ll like to book an appointiment'
       }),
     );
     final String emailLaunchString = Uri.encodeFull(emailLaunchUri.toString());
@@ -139,8 +140,20 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
   }
 
   void _toggleBookmark() {
+    final UserDetailsModel userDetails =
+        Provider.of<UserDetailsProvider>(context, listen: false).userDetails;
+    final String salonId = widget.salon.id;
+    final bool isBookmarked = userDetails.bookmarkedSalonIds.contains(salonId);
+
+    if (isBookmarked) {
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .removeBookmark(salonId);
+    } else {
+      Provider.of<UserDetailsProvider>(context, listen: false)
+          .addBookmark(salonId);
+    }
     setState(() {
-      _isBookmarked = !_isBookmarked;
+      _isBookmarked = !isBookmarked;
     });
   }
 
@@ -152,6 +165,16 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
     final result = buffer.toString();
     return result.isNotEmpty ? result.substring(0, result.length - 2) : '{}';
   }
+
+  List<String> daysOfTheWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +263,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 0.7,
                       ),
                     ),
                   ),
@@ -250,16 +274,18 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 0.7,
                       ),
                     ),
                   ),
                   const Tab(
                     child: Text(
-                      "Find Us",
+                      "Details",
                       style: TextStyle(
                         fontFamily: 'GentiumPlus',
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 0.7,
                       ),
                     ),
                   ),
@@ -296,7 +322,9 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                             style: const TextStyle(
                                 fontFamily: 'GentiumPlus',
                                 wordSpacing: 0.6,
-                                fontWeight: FontWeight.w600),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                letterSpacing: 0.7),
                           ),
                           const SizedBox(
                             height: 10,
@@ -316,9 +344,10 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                             widget.salon.salonGeneralDescription,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
-                              fontFamily: 'GentiumPlus',
-                              wordSpacing: 0.6,
-                            ),
+                                fontFamily: 'GentiumPlus',
+                                wordSpacing: 0.6,
+                                fontSize: 15,
+                                letterSpacing: 0.7),
                           ),
                           const SizedBox(
                             height: 10,
@@ -351,6 +380,8 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                     style: const TextStyle(
                                       fontFamily: 'GentiumPlus',
                                       wordSpacing: 0.6,
+                                      letterSpacing: 0.7,
+                                      fontSize: 15,
                                     ),
                                     children: [
                                       TextSpan(
@@ -374,32 +405,67 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               }).toList(),
                             ),
                           ),
-                          const SizedBox(height: 25)
+                          const SizedBox(height: 30)
                         ],
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      CustomMainButton(
-                        child: const Text(
-                          'Leave a review',
-                          style: TextStyle(
-                            fontFamily: 'GentiumPlus',
-                            fontSize: 16,
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        CustomMainButton(
+                          color: brown,
+                          isLoading: false,
+                          onPressed: (() {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AddReviewPage()));
+                          }),
+                          child: const Text(
+                            'Leave a review',
+                            style: TextStyle(
+                              fontFamily: 'GentiumPlus',
+                              fontSize: 16,
+                            ),
                           ),
                         ),
-                        color: brown,
-                        isLoading: false,
-                        onPressed: (() {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AddReviewPage()));
-                        }),
-                      ),
-                      Expanded(
-                        child: Container(
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Customer reviews",
+                          style: TextStyle(
+                              fontFamily: 'GentiumPlus',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.7,
+                              wordSpacing: 0.6,
+                              fontSize: 16),
+                        ),
+                        Text(
+                          "${widget.salon.totalRating.toStringAsFixed(1)} out of 5",
+                          style: const TextStyle(
+                            fontFamily: 'GentiumPlus',
+                            fontWeight: FontWeight.w500,
+                            wordSpacing: 0.6,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                        RatingBar.builder(
+                          initialRating: widget.salon.totalRating,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemSize: 20,
+                          ignoreGestures: true,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        ),
+                        Container(
                           margin: const EdgeInsets.only(left: 20, right: 20),
                           child: StreamBuilder<
                               QuerySnapshot<Map<String, dynamic>>>(
@@ -416,6 +482,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               } else if (snapshot.hasData) {
                                 final data = snapshot.data!;
                                 return ListView.builder(
+                                  shrinkWrap: true,
                                   itemCount: data.docs.length,
                                   itemBuilder: (context, index) {
                                     ReviewModel model = ReviewModel.fromJson(
@@ -439,8 +506,8 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                             },
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -456,37 +523,34 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               alignment: Alignment.center,
                               child: Icon(Icons.location_on),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 20, right: 10),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'GentiumPlus',
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text: "",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.salon.location,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 7, 93, 163),
-                                        fontFamily: 'GentiumPlus',
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _launchMaps(widget.salon.latitude,
-                                              widget.salon.longitude);
-                                        },
-                                    ),
-                                  ],
+                            const SizedBox(width: 20.0),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'GentiumPlus',
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                children: [
+                                  const TextSpan(
+                                    text: "",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.salon.location,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 7, 93, 163),
+                                      fontFamily: 'GentiumPlus',
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchMaps(widget.salon.latitude,
+                                            widget.salon.longitude);
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -498,25 +562,22 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           indent: 30,
                           endIndent: 30,
                         ),
-                        Row(
+                        const Row(
                           children: [
-                            const Padding(
+                            Padding(
                                 padding: EdgeInsets.only(
                                     left: 20, top: 20, right: 10)),
-                            const Align(
+                            Align(
                               alignment: Alignment.center,
                               child: Icon(Icons.access_time_filled_sharp),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 10, right: 10),
-                              child: const Text(
-                                'Open Hours:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    fontFamily: 'GentiumPlus'),
-                              ),
+                            SizedBox(width: 20.0),
+                            Text(
+                              'Open Hours:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontFamily: 'GentiumPlus'),
                             ),
                           ],
                         ),
@@ -525,8 +586,9 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           margin: const EdgeInsets.only(left: 75, right: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children:
-                                widget.salon.openHours.entries.map((entry) {
+                            children: daysOfTheWeek.map((day) {
+                              String openHours =
+                                  widget.salon.openHours[day] ?? "Closed";
                               return RichText(
                                 text: TextSpan(
                                   style: const TextStyle(
@@ -535,7 +597,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: '${entry.key}: ',
+                                      text: '$day:  ',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -544,7 +606,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                       ),
                                     ),
                                     TextSpan(
-                                      text: entry.value,
+                                      text: openHours,
                                       style: const TextStyle(
                                         fontFamily: 'GentiumPlus',
                                         color: Colors.black,
@@ -577,38 +639,35 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                                 height: 24,
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 10, right: 5),
-                              child: RichText(
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'GentiumPlus',
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text: " Follow:  ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.salon.salonName,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 7, 93, 163),
-                                        fontFamily: 'GentiumPlus',
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _launchURL(widget.salon.instagram);
-                                        },
-                                    ),
-                                  ],
+                            const SizedBox(width: 20.0),
+                            RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'GentiumPlus',
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                children: [
+                                  const TextSpan(
+                                    text: " Follow:  ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.salon.salonName,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 7, 93, 163),
+                                      fontFamily: 'GentiumPlus',
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchURL(widget.salon.instagram);
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -629,36 +688,33 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               alignment: Alignment.center,
                               child: Icon(Icons.public_rounded),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 20, right: 10),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'GentiumPlus',
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text: "",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.salon.website,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 7, 93, 163),
-                                        fontFamily: 'GentiumPlus',
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _launchURL(widget.salon.website);
-                                        },
-                                    ),
-                                  ],
+                            const SizedBox(width: 20.0),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'GentiumPlus',
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                children: [
+                                  const TextSpan(
+                                    text: "",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.salon.website,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 7, 93, 163),
+                                      fontFamily: 'GentiumPlus',
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchURL(widget.salon.website);
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -679,37 +735,34 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               alignment: Alignment.center,
                               child: Icon(Icons.phone_rounded),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 20, right: 10),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'GentiumPlus',
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text: "Call on:  ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.salon.number,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'GentiumPlus',
-                                        fontSize: 16,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _launchPhone(widget.salon.number);
-                                        },
-                                    ),
-                                  ],
+                            const SizedBox(width: 20.0),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'GentiumPlus',
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                children: [
+                                  const TextSpan(
+                                    text: "Call:  ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.salon.number,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'GentiumPlus',
+                                      fontSize: 16,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchPhone(widget.salon.number);
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -730,37 +783,34 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                               alignment: Alignment.center,
                               child: Icon(Icons.markunread_rounded),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, top: 20, right: 10),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'GentiumPlus',
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text: "",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.salon.email,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 7, 93, 163),
-                                        fontFamily: 'GentiumPlus',
-                                        fontSize: 16,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _launchEmail(widget.salon.email);
-                                        },
-                                    ),
-                                  ],
+                            const SizedBox(width: 20.0),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'GentiumPlus',
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                children: [
+                                  const TextSpan(
+                                    text: "",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.salon.email,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 7, 93, 163),
+                                      fontFamily: 'GentiumPlus',
+                                      fontSize: 16,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchEmail(widget.salon.email);
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -779,7 +829,7 @@ class _SalonDetailScreenState extends State<SalonDetailScreen>
                           margin: const EdgeInsets.only(
                               left: 20, top: 20, right: 10),
                           child: const Text(
-                              'This app serves as guidance not as a source of truth.\nPlease make sure you double check with the salons any of the information mentioned here, such as pricing, location and open hours before booking.',
+                              'This app serves as guidance not as a source of truth.\nPlease make sure you double check with the salons any of the information mentioned here, such as pricing, location and open hours before booking. Lastly, if you do make a booking with of the salons listed let a sis know, i.e. leave a review.',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,

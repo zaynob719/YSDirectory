@@ -28,7 +28,7 @@ Backend
     - Apple
 
 
-Imlementation details 
+Implementation details 
 
 Google Firebase
 - Application is set up for both ios and Android 

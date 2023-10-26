@@ -1,14 +1,11 @@
+import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/colors.dart';
-import 'package:YSDirectory/utils/dimensions.dart';
-import 'package:YSDirectory/widgets/app_button.dart';
 import 'package:YSDirectory/widgets/app_large_text.dart';
 import 'package:YSDirectory/widgets/app_text.dart';
-import 'package:YSDirectory/widgets/big_text.dart';
-import 'package:YSDirectory/widgets/responsive_button.dart';
+import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppIntroduction extends StatefulWidget {
   const AppIntroduction({Key? key}) : super(key: key);
@@ -18,6 +15,29 @@ class AppIntroduction extends StatefulWidget {
 }
 
 class _AppIntroductionState extends State<AppIntroduction> {
+  final String seenFlagKey = 'seen_flag';
+
+  Future<void> checkAndUpdateSeenFlag() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = prefs.getBool(seenFlagKey) ?? false;
+
+    if (!seen) {
+      // If the user hasn't seen the introduction screen yet, mark it as seen and show it.
+      await prefs.setBool(seenFlagKey, true);
+    } else {
+      // If the user has seen the introduction screen, navigate to another screen (e.g., SignInScreen).
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return SignInScreen();
+      }));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkAndUpdateSeenFlag();
+  }
+
   List images = [
     "options.jpeg",
     "reviewsY.jpeg",
@@ -26,9 +46,9 @@ class _AppIntroductionState extends State<AppIntroduction> {
 
   List text = ["Guides", "Reviews", "Near you"];
   List smallText = [
-    "More information about how the guides are created & how many are currently on here",
-    "More information about how premium members are able to read and write reviews",
-    "More information about how users can suggest international salons. Treat your hair on holiday"
+    "Discover your perfect salon with concise, well reaserched guides",
+    "Browse honest and accurate reviews from fellow users for your best salon experience",
+    "Locate nearby salons for a convenient beauty treatment – anytime, anywhere."
   ];
   @override
   Widget build(BuildContext context) {
@@ -43,8 +63,7 @@ class _AppIntroductionState extends State<AppIntroduction> {
                 height: double.maxFinite,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(
-                            "images/" + images[index]), //list of images above
+                        image: AssetImage("images/" + images[index]),
                         fit: BoxFit.cover)),
                 child: Container(
                   margin: const EdgeInsets.only(top: 115, left: 20, right: 20),
@@ -55,33 +74,52 @@ class _AppIntroductionState extends State<AppIntroduction> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AppLargeText(
-                              text: text[
-                                  index]), //list of text above - large text
+                          Text(text[index],
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'InknutAntiqua'))
+                              .animate()
+                              .fade(duration: 2000.ms)
+                              .slideY(curve: Curves.easeIn),
                           Container(
                             width: 250,
                             child: AppText(
-                                text: smallText[
-                                    index], //list of text above - small text
+                                text: smallText[index],
                                 color: AppColors.textColor2,
-                                size: 16),
+                                size: 18),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 320,
                           ),
                           if (index == images.length - 1)
                             Container(
                               height: 60,
-                              width: 325,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.brown),
-                              child: AppButton(
-                                onTap: () => Get.offAndToNamed("/home"),
-                                child: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 35,
-                                ),
+                              width: 342,
+                              child: CustomMainButton(
+                                color: orengy,
+                                isLoading: false,
+                                onPressed: () {
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return SignInScreen();
+                                  }));
+                                },
+                                child: const Text(
+                                  "Discover, Book, and Shine!", //or Salons, Your Way!
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.6,
+                                      fontFamily: 'GentiumPlus'),
+                                )
+                                    .animate()
+                                    .fade(delay: 1000.ms, duration: 1500.ms)
+                                    .tint(color: Colors.white)
+                                    .then()
+                                    .shake(),
                               ),
                             ),
                         ],

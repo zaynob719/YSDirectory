@@ -38,21 +38,21 @@ class ResetPasswordScreen extends StatelessWidget {
                   try {
                     await FirebaseAuth.instance
                         .sendPasswordResetEmail(email: email);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Password reset email sent',
                           style: TextStyle(fontFamily: 'GentiumPlus')),
                       backgroundColor: brown,
                     ));
                     Navigator.pop(context); // Close the reset password screen
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Error sending reset password email',
                           style: TextStyle(fontFamily: 'GentiumPlus')),
                       backgroundColor: brown,
                     ));
                   }
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Please enter your email address',
                         style: TextStyle(fontFamily: 'GentiumPlus')),
                     backgroundColor: brown,

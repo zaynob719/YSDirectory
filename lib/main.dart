@@ -1,22 +1,19 @@
 import 'package:YSDirectory/layout/screen_layout.dart';
-import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/introduction/introduction.dart';
-import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Future.delayed(const Duration(seconds: 1));
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -37,6 +34,12 @@ class _MyAppState extends State<MyApp> {
         authStream, salonStream, (auth, salons) => [auth, salons]);
   }
 
+  Future<bool> getSeenFlag() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = prefs.getBool('seen_flag') ?? false;
+    return seen;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,13 +56,28 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(brightness: Brightness.light),
-        home: StreamBuilder<List<dynamic>>(
-          stream: _combineStreams(),
+        home: FutureBuilder<bool>(
+          future: getSeenFlag(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const ScreenLayout();
+              if (snapshot.data == true) {
+                return StreamBuilder<List<dynamic>?>(
+                  stream: _combineStreams(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return const ScreenLayout();
+                    } else {
+                      return const AppIntroduction();
+                    }
+                  },
+                );
+              } else {
+                // Show the introduction screen for first-time users
+                return const AppIntroduction();
+              }
             } else {
-              return const AppIntroduction();
+              // Handle loading state or error
+              return const CircularProgressIndicator();
             }
           },
         ),

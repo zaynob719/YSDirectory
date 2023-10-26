@@ -8,7 +8,6 @@ import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/review_rating_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class PopularSalonswidget extends StatefulWidget {
@@ -53,6 +52,14 @@ class _PopularSalonswidgetState extends State<PopularSalonswidget> {
             salon.longitude,
           );
           salonDistances[salon.id] = calculatedDistance;
+        }
+        for (var salon in salons) {
+          salon.calculateTotalRating().then((_) {
+            setState(() {});
+          }).catchError((error) {
+            // Handle any errors that may occur during the calculation
+            print("Error calculating totalRating: $error");
+          });
         }
         salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
             .compareTo(salonDistances[b.id] ?? double.infinity));
@@ -205,7 +212,8 @@ class _PopularSalonswidgetState extends State<PopularSalonswidget> {
                                     final data = snapshot.data!;
                                     int noOfReview = data.docs.length;
                                     return ReviewRatingLocation(
-                                      noOfRating: salons[index].noOfRating,
+                                      salon: salon,
+                                      totalRating: salon.totalRating,
                                       salonDistance:
                                           salonDistances[salons[index].id],
                                       noOfReview: noOfReview,

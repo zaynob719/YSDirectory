@@ -141,7 +141,7 @@ class _AboutYSDState extends State<AboutYSD> {
                           }
                         },
                         child: Image.asset(
-                          'images/instagram.png',
+                          'images/instagramb.png',
                           width: 24,
                           height: 24,
                         ),
@@ -220,34 +220,29 @@ class _AboutYSDState extends State<AboutYSD> {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: () async {
-                          final Uri _emailLaunchUri = Uri(
-                            scheme: 'mailto',
-                            path: 'Yoursalondirectory@gmail.com',
-                          );
-                          final String _emailLaunchString =
-                              Uri.encodeFull(_emailLaunchUri.toString());
-                          await launch(_emailLaunchString);
-                        },
-                        child: Image.asset(
-                          'images/emailb.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                      ),
+                          onTap: () async {
+                            final Uri _emailLaunchUri = Uri(
+                              scheme: 'mailto',
+                              path: 'yoursalondirectory@gmail.com',
+                            );
+                            final String _emailLaunchString =
+                                Uri.encodeFull(_emailLaunchUri.toString());
+                            await launch(_emailLaunchString);
+                          },
+                          child: const Icon(Icons.markunread_rounded)),
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () async {
                           final Uri _emailLaunchUri = Uri(
                             scheme: 'mailto',
-                            path: 'Yoursalondirectory@gmail.com',
+                            path: 'yoursalondirectory@gmail.com',
                           );
                           final String _emailLaunchString =
                               Uri.encodeFull(_emailLaunchUri.toString());
                           await launch(_emailLaunchString);
                         },
                         child: const Text(
-                          'Yoursalondirectory@gmail.com',
+                          'yoursalondirectory@gmail.com',
                           style: TextStyle(
                               fontFamily: 'GentiumPlus',
                               fontSize: 16,

@@ -16,7 +16,6 @@ class AuthenticationMethods {
     double? userLat,
     double? userLng,
     String? profilePicture,
-    required String uid,
   }) async {
     firstName.trim();
     lastName.trim();
@@ -36,17 +35,25 @@ class AuthenticationMethods {
       try {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: emailAddress, password: confirmPassword);
-        UserDetailsModel user = UserDetailsModel(
-            uid: uid,
+        User? user = firebaseAuth.currentUser;
+
+        if (user != null) {
+          UserDetailsModel userDetailsModel = UserDetailsModel(
+            uid: user.uid,
             name: firstName,
             lastName: lastName,
             emailAddress: emailAddress,
             city: city,
             userLat: userLat,
             userLng: userLng,
-            profilePicture: profilePicture);
-        await cloudFirestoreClass.uploadNameAndCityToDatabase(user: user);
-        output = "success";
+            profilePicture: profilePicture,
+          );
+          await cloudFirestoreClass.uploadNameAndCityToDatabase(
+              user: userDetailsModel);
+          output = "success";
+        } else {
+          output = "User creation failed";
+        }
       } on FirebaseAuthException catch (e) {
         output = e.message.toString();
       }

@@ -47,7 +47,7 @@ class UserDetailBar extends StatelessWidget {
             SizedBox(
               width: screenSize.width * 0.7,
               child: Text(
-                'Location: ${userDetails.city}',
+                'Location: ${userDetails.city}' ?? "Add location in settings",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(

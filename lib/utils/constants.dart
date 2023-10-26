@@ -1,6 +1,10 @@
 import 'package:YSDirectory/screens/pages/addReviewPage.dart';
 import 'package:YSDirectory/screens/pages/home_screen.dart';
 import 'package:YSDirectory/screens/pages/profile_page.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/show_more.dart';
+import 'package:YSDirectory/screens/view_all_screen.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
 
 const double kAppBarHeight = 100;
@@ -49,7 +53,8 @@ const List<String> categoryLogos = [
 List<Widget> screens = [
   const HomeScreen(),
   const AddReviewPage(),
-  const ProfilePage(),
+  const viewAllScreen(onNoOfReviewUpdated: onNoOfReviewUpdated),
+  const ProfilePage(onNoOfReviewUpdated: onNoOfReviewUpdated),
 ];
 
 const List<String> appOffersHomePage = [
@@ -66,4 +71,14 @@ const List<String> appOffersHomePageNames = [
   "About us", // link to social media
 ];
 
-List<String> keysOfRating = ["Bad", "Poor", "Average", "Good", "Excellent"];
+//List<String> keysOfRating = ["Bad", "Poor", "Average", "Good", "Excellent"];
+
+final daysOfWeek = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];

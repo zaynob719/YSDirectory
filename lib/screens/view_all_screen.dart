@@ -53,6 +53,15 @@ class _viewAllScreenState extends State<viewAllScreen> {
           );
           salonDistances[salon.id] = calculatedDistance;
         }
+        for (var salon in salons) {
+          salon.calculateTotalRating().then((_) {
+            // Notify the widget that the totalRating has been updated
+            setState(() {});
+          }).catchError((error) {
+            // Handle any errors that may occur during the calculation
+            print("Error calculating totalRating: $error");
+          });
+        }
         salons.sort((a, b) => (salonDistances[a.id] ?? double.infinity)
             .compareTo(salonDistances[b.id] ?? double.infinity));
       });
@@ -86,26 +95,15 @@ class _viewAllScreenState extends State<viewAllScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'View all salons',
-          style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'GentiumPlus',
-              fontWeight: FontWeight.w500,
-              fontSize: 24),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: const Text(
+            'View all salons',
+            style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'GentiumPlus',
+                fontWeight: FontWeight.bold),
+          )),
       body: ListView.builder(
           itemCount: salons.length,
           shrinkWrap: true,
@@ -228,7 +226,8 @@ class _viewAllScreenState extends State<viewAllScreen> {
                                       final data = snapshot.data!;
                                       int noOfReview = data.docs.length;
                                       return ReviewRatingLocation(
-                                        noOfRating: salons[index].noOfRating,
+                                        salon: salon,
+                                        totalRating: salon.totalRating,
                                         salonDistance:
                                             salonDistances[salons[index].id],
                                         noOfReview: noOfReview,

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:YSDirectory/firestore/add_data_firestore.dart';
 import 'package:YSDirectory/firestore/cloudfirestore_methods.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
@@ -7,21 +5,28 @@ import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/pages/FAQPage.dart';
 import 'package:YSDirectory/screens/pages/disclaimer.dart';
 import 'package:YSDirectory/screens/pages/profile_setting.dart';
+import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
+import 'package:YSDirectory/screens/show_more.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:YSDirectory/screens/pages/about_ysd.dart';
+import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:YSDirectory/widgets/user_detail_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final Function(int)? onNoOfReviewUpdated;
+  const ProfilePage({
+    Key? key,
+    this.onNoOfReviewUpdated,
+  }) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -32,9 +37,14 @@ class _ProfilePageState extends State<ProfilePage> {
   String bigFontFamily = 'InknutAntiqua';
   String smallFontFamily = 'GentiumPlus';
 
+  List<Salon> salons = [];
+  Map<String, double> salonDistances = {};
+  List<String> bookmarkedSalonIds = [];
+
   @override
   void initState() {
     super.initState();
+    fetchSavedSalons();
   }
 
   void signOut() async {
@@ -42,30 +52,13 @@ class _ProfilePageState extends State<ProfilePage> {
       await FirebaseAuth.instance.signOut();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignInScreen()),
+        MaterialPageRoute(builder: (context) => const SignInScreen()),
       );
     } catch (e) {
       print('Error signing out: $e');
     }
   }
 
-  // void selectImage() async {
-  //   List<int>? imgData = await pickImage(ImageSource.gallery);
-  //   Uint8List? img;
-
-  //   if (imgData != null) {
-  //     img = Uint8List.fromList(imgData);
-  //     String imageUrl = await StoreData().saveData(file: img);
-  //     UserDetailsProvider userDetailsProvider =
-  //         Provider.of<UserDetailsProvider>(context, listen: false);
-  //     userDetailsProvider.updateProfilePictureUrl(imageUrl);
-  //     userDetailsProvider.userDetails.profilePicture = imageUrl;
-  //   }
-
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
   void selectImage() async {
     List<int>? imgData = await pickImage(ImageSource.gallery);
     Uint8List? img;
@@ -73,16 +66,11 @@ class _ProfilePageState extends State<ProfilePage> {
     if (imgData != null) {
       img = Uint8List.fromList(imgData);
       String imageUrl = await StoreData().saveData(file: img);
-
-      // Get the current user's UID
       String currentUid = FirebaseAuth.instance.currentUser!.uid;
 
       UserDetailsProvider userDetailsProvider =
           Provider.of<UserDetailsProvider>(context, listen: false);
-
-      // Check if the current user's UID matches the UID in userDetailsModel
       if (userDetailsProvider.userDetails.uid == currentUid) {
-        // Update the profile picture only if it's the current user
         userDetailsProvider.updateProfilePictureUrl(imageUrl);
         userDetailsProvider.userDetails.profilePicture = imageUrl;
       }
@@ -102,9 +90,57 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<List<Salon>> fetchSavedSalons() async {
+    final userDetailsProvider =
+        Provider.of<UserDetailsProvider>(context, listen: false);
+    final userId = userDetailsProvider.userDetails.uid;
+    final bookmarkedSalonIds =
+        await CloudFirestoreClass().getBookmarkedSalonIds(userId);
+
+    final List<Salon> savedSalons = [];
+
+    for (final salonId in bookmarkedSalonIds) {
+      final Salon? salon =
+          await CloudFirestoreClass().getSalonDetailsById(salonId);
+      if (salon != null) {
+        savedSalons.add(salon);
+      }
+    }
+    return savedSalons;
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
+  void _launchEmail(String email) async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'My recommendation',
+        'body':
+            'Hello, I think you should add such salons on the app: Name: , Location: , Contact details (this can be social media related or via email/phone number: )'
+      }),
+    );
+    launchUrl(emailLaunchUri);
+    // final String emailLaunchString = Uri.encodeFull(emailLaunchUri.toString());
+    // _launchURL(emailLaunchString);
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     UserDetailsModel userDetailsModel =
         Provider.of<UserDetailsProvider>(context).userDetails;
     Size screenSize = Utils().getScreenSize();
@@ -119,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Colors.black,
                   fontFamily: smallFontFamily,
                   fontWeight: FontWeight.bold)),
-          centerTitle: false,
+          centerTitle: true,
           actions: [
             IconButton(
               icon: const Icon(
@@ -161,6 +197,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA.."),
                           ),
                     Positioned(
+                      bottom: -10,
+                      right: -10,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -177,8 +215,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-                      bottom: -10,
-                      right: -10,
                     ),
                   ],
                 ),
@@ -197,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: 5,
                     ),
                     Text(
-                      userDetailsModel.lastName,
+                      userDetailsModel.lastName ?? "!",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -217,7 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 230,
                   child: ElevatedButton(
                     onPressed: () {
-                      // pop up text field to recommend salon
+                      _launchEmail("yoursalondirectory@gmail.com");
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: orengy,
@@ -243,35 +279,114 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         "Saved Salons",
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 19,
                             fontWeight: FontWeight.bold,
                             fontFamily: smallFontFamily),
                       ),
-                      const SizedBox(height: 10),
-                      // TODO: Implement list of saved salons
+                      const SizedBox(height: 15),
+                      FutureBuilder<List<Salon>>(
+                        future: fetchSavedSalons(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("Error: ${snapshot.error.toString()}");
+                          } else if (!snapshot.hasData) {
+                            return Center(
+                              child: Text(
+                                "No salons here yet. \nJust tap on the bookmark icon on the salon detail page!",
+                                style: TextStyle(
+                                    fontFamily: 'GentiumPlus',
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 15,
+                                    color: Colors.black.withOpacity(0.4)),
+                              ),
+                            );
+                          } else {
+                            final savedSalons = snapshot.data!;
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: savedSalons.map((salon) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SalonDetailScreen(
+                                                  salon: salon,
+                                                  onNoOfReviewUpdated:
+                                                      onNoOfReviewUpdated),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 250,
+                                          height: 150,
+                                          margin: const EdgeInsets.only(
+                                            right: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              image: NetworkImage(salon.url),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          salon.salonName,
+                                          style: TextStyle(
+                                            fontFamily: smallFontFamily,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          salon.location,
+                                          style: TextStyle(
+                                            fontFamily: smallFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          }
+                        },
+                      )
                     ],
                   ),
                 ),
-                // add saved salons section on container
-                // Expanded(
-                //   child: Container(),
-                // ),
-                SizedBox(
-                  width: 300,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AboutYSD()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: brown,
-                    ),
-                    child: Text(
-                      "About YSDirectory",
-                      style:
-                          TextStyle(fontFamily: smallFontFamily, fontSize: 18),
+                const SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: 300,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AboutYSD()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: brown,
+                      ),
+                      child: Text(
+                        "About YSDirectory",
+                        style: TextStyle(
+                            fontFamily: smallFontFamily, fontSize: 18),
+                      ),
                     ),
                   ),
                 ),
@@ -317,16 +432,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 20),
                 CustomMainButton(
+                    color: backgroundColor,
+                    isLoading: false,
+                    onPressed: signOut,
                     child: Text(
                       "Sign out",
                       style: TextStyle(
                           fontFamily: smallFontFamily,
                           fontSize: 18,
                           color: Colors.black),
-                    ),
-                    color: backgroundColor,
-                    isLoading: false,
-                    onPressed: signOut),
+                    )),
                 const SizedBox(height: 20),
               ],
             ),
