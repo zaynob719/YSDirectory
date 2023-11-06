@@ -12,6 +12,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 class BannerAddWidget extends StatefulWidget {
   final UserDetailsModel? user;
@@ -156,87 +157,165 @@ class _BannerAddWidgetState extends State<BannerAddWidget> {
         const SizedBox(
           height: 15,
         ),
-        Container(
-          color: Colors.white,
-          width: screenSize.width,
-          height: homeScreenFeatureDimension, //size of the white container
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                appOffersHomePageFromIndex(0, 110), //saved
-                appOffersHomePageFromIndex(1, 110), //ysd socials
-                appOffersHomePageFromIndex(2, 110), //discounts
-                appOffersHomePageFromIndex(3, 110), //about ysd
-              ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
+              },
+              child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      border: const GradientBoxBorder(
+                        gradient: LinearGradient(colors: [
+                          orengy,
+                          Color.fromARGB(255, 242, 211, 182)
+                        ]),
+                        width: 6,
+                      ),
+                      borderRadius: BorderRadius.circular(36),
+                      color: Colors.white),
+                  child: const Icon(
+                    Icons.bookmark_rounded,
+                    size: 40,
+                  )),
             ),
-          ),
-        ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ContactUs()));
+              },
+              child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      border: const GradientBoxBorder(
+                        gradient: LinearGradient(colors: [
+                          orengy,
+                          Color.fromARGB(255, 237, 223, 210)
+                        ]),
+                        width: 6,
+                      ),
+                      borderRadius: BorderRadius.circular(36),
+                      color: Colors.white),
+                  child: const Icon(
+                    Icons.contact_support_rounded,
+                    size: 40,
+                  )),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const discounts()));
+              },
+              child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      border: const GradientBoxBorder(
+                        gradient: LinearGradient(colors: [
+                          orengy,
+                          Color.fromARGB(255, 184, 141, 101)
+                        ]),
+                        width: 6,
+                      ),
+                      borderRadius: BorderRadius.circular(36),
+                      color: Colors.white),
+                  child: const Icon(
+                    Icons.discount_rounded,
+                    size: 40,
+                  )),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AboutYSD()));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    border: const GradientBoxBorder(
+                      gradient: LinearGradient(
+                          colors: [orengy, Color.fromARGB(255, 231, 223, 216)]),
+                      width: 6,
+                    ),
+                    borderRadius: BorderRadius.circular(36),
+                    color: Colors.white),
+                child: Image.asset(
+                  'images/originalLogo.png.png',
+                  height: 60,
+                  width: 60,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
 
-  Widget appOffersHomePageFromIndex(int index, double height) {
-    void navigateToScreen() {
-      switch (index) {
-        case 0:
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()));
-          break;
-        case 1:
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ContactUs(user: widget.user)));
-          break;
-        case 2:
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const discounts()));
-          break;
-        case 3:
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AboutYSD()));
-          break;
-      }
-    }
+  // Widget appOffersHomePageFromIndex(int index, double height) {
+  //   void navigateToScreen() {
+  //     switch (index) {
+  //       case 0:
+  //         Navigator.push(context,
+  //             MaterialPageRoute(builder: (context) => const ProfilePage()));
+  //         break;
+  //       case 1:
+  //         Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //                 builder: (context) => ContactUs(user: widget.user)));
+  //         break;
+  //       case 2:
+  //         Navigator.push(context,
+  //             MaterialPageRoute(builder: (context) => const discounts()));
+  //         break;
+  //       case 3:
+  //         Navigator.push(context,
+  //             MaterialPageRoute(builder: (context) => const AboutYSD()));
+  //         break;
+  //     }
+  //   }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: GestureDetector(
-        onTap: navigateToScreen,
-        child: Container(
-          height: height,
-          width: height,
-          decoration: ShapeDecoration(
-            color: Colors.white,
-            shadows: const [
-              BoxShadow(
-                color: tagColor,
-                spreadRadius: 1,
-              ),
-            ],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(appOffersHomePage[index]),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  appOffersHomePageNames[index],
-                  style: const TextStyle(fontFamily: 'GentiumPlus'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 5),
+  //     child: GestureDetector(
+  //       onTap: navigateToScreen,
+  //       child: Container(
+  //         height: height,
+  //         width: height,
+  //         decoration: ShapeDecoration(
+  //           color: Colors.white,
+  //           shadows: const [
+  //             BoxShadow(
+  //               color: tagColor,
+  //               spreadRadius: 1,
+  //             ),
+  //           ],
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(20),
+  //           ),
+  //         ),
+  //         child: Center(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Image.asset(appOffersHomePage[index]),
+  //               const SizedBox(
+  //                 height: 5,
+  //               ),
+  //               Text(
+  //                 appOffersHomePageNames[index],
+  //                 style: const TextStyle(fontFamily: 'GentiumPlus'),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

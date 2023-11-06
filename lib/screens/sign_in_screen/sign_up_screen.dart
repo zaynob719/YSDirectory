@@ -1,7 +1,9 @@
 import 'package:YSDirectory/calculateDistance.dart';
+import 'package:YSDirectory/firestore/add_data_firestore.dart';
 //import 'package:YSDirectory/fie/authentication_methods.dart';
 import 'package:YSDirectory/firestore/authentication_methods.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
+import 'package:YSDirectory/screens/sign_in_screen/emailVerification.dart';
 import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:YSDirectory/utils/utils.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
@@ -246,7 +248,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                   Text.rich(
                       TextSpan(
                         text:
-                            'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
+                            "Please make sure to read our Terms and Conditions and our Privacy Policy documents before registering an account. By proceeding you are agreeing to Your Salon Directoy's ",
                         style: const TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
@@ -254,13 +256,27 @@ class _SignUpScreenState extends State<SignUpScreen>
                             fontWeight: FontWeight.w400),
                         children: [
                           TextSpan(
-                            text: 'Terms and Conditions',
+                            text: 'Terms and Conditions ',
                             style: const TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.blue),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                // Add your logic here for what happens when the user taps the button
+                                // Add CC website
+                              },
+                          ),
+                          const TextSpan(
+                            text: ' and ',
+                            style: TextStyle(fontFamily: 'GentiumPlus'),
+                          ),
+                          TextSpan(
+                            text: ' Privacy Policy',
+                            style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Add CC website
                               },
                           ),
                         ],
@@ -269,41 +285,58 @@ class _SignUpScreenState extends State<SignUpScreen>
                   const SizedBox(height: 30),
                   CustomMainButton(
                     color: orengy,
-                    isLoading: false,
+                    isLoading: isLoading,
                     onPressed: () async {
                       setState(() {
                         isLoading = true;
                       });
-                      String output = await authenticationMethods.signUpUser(
-                        firstName: firstNameController.text,
-                        lastName: lastNameController.text,
-                        emailAddress: emailAddressController.text,
-                        confirmEmailAddress: confirmEmailAddressController.text,
-                        password: passwordController.text,
-                        confirmPassword: confirmPasswordController.text,
-                        city: cityController.text,
-                        userLat: userDetails.userLat,
-                        userLng: userDetails.userLng,
-                        profilePicture:
-                            "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..",
-                      );
-                      if (output == "success") {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) => SignInScreen()));
-                      } else {
-                        //error message
-                        Utils().showSnackBar(context: context, content: output);
+
+                      try {
+                        String output = await authenticationMethods.signUpUser(
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text,
+                          emailAddress: emailAddressController.text,
+                          confirmEmailAddress:
+                              confirmEmailAddressController.text,
+                          password: passwordController.text,
+                          confirmPassword: confirmPasswordController.text,
+                          city: cityController.text,
+                          userLat: userDetails.userLat,
+                          userLng: userDetails.userLng,
+                          profilePicture:
+                              "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fprofileb.png?alt=media&token=91b54dc7-cb7c-4d3e-bf09-5f1247219255&_gl=1*1e0fxe9*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5NjUxNDM5Ny4xNzguMS4xNjk2NTIxMjA1LjQ5LjAuMA..",
+                        );
+
+                        final User? user = firebaseAuth.currentUser;
+
+                        if (user != null) {
+                          user.sendEmailVerification();
+                        }
+
+                        // Navigate to the next page
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const EmailVerification()));
+                      } catch (error) {
+                        // Handle errors here, such as displaying a message or logging the error
+                        print("Error: $error");
+                        Utils().showSnackBar(
+                            context: context, content: "Failed to sign up");
+                      } finally {
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
-                      setState(() {
-                        isLoading = false;
-                      });
                     },
                     child: const Text(
                       "Sign Up!",
                       style: TextStyle(
-                          fontSize: 19,
-                          letterSpacing: 0.6,
-                          fontFamily: 'GentiumPlus'),
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.6,
+                        fontFamily: 'GentiumPlus',
+                      ),
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -319,9 +352,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                     child: const Text(
                       "Back",
                       style: TextStyle(
-                          fontSize: 19,
-                          letterSpacing: 0.6,
-                          fontFamily: 'GentiumPlus'),
+                        fontSize: 19,
+                        letterSpacing: 0.6,
+                        fontFamily: 'GentiumPlus',
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),

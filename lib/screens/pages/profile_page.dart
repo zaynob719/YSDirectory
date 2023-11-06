@@ -323,27 +323,56 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: 250,
-                                          height: 150,
-                                          margin: const EdgeInsets.only(
-                                            right: 10,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: NetworkImage(salon.url),
-                                              fit: BoxFit.cover,
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 250,
+                                              height: 150,
+                                              margin: const EdgeInsets.only(
+                                                right: 10,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image:
+                                                      NetworkImage(salon.url),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            Positioned(
+                                              top: 10,
+                                              left: 10,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.7),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Text(
+                                                  '${salon.totalRating} star',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'GentiumPlus',
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                    letterSpacing: 0.7,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(height: 5),
                                         Text(
                                           salon.salonName,
                                           style: TextStyle(
                                             fontFamily: smallFontFamily,
-                                            fontSize: 17,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

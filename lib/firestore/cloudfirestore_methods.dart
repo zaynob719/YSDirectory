@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/models/review_model.dart';
 import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
 
 class CloudFirestoreClass {

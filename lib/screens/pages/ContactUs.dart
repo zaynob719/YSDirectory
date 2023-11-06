@@ -226,7 +226,6 @@ class ContactUs extends StatelessWidget {
               placeholder: 'Enter text',
               padding: const EdgeInsets.all(20),
               style: const TextStyle(fontFamily: 'GentiumPlus'),
-              //cursorColor: orengy,
               expands: true,
               maxLines: null,
             ),

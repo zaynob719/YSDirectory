@@ -1,3 +1,4 @@
+import 'package:YSDirectory/widgets/compound_query_HA.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/show_more.dart';
@@ -9,7 +10,6 @@ import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -22,9 +22,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
-  //String userLocation = '';
-  double userLat = 0.0;
-  double userLng = 0.0;
 
   void resetSelectedCategory() {
     setState(() {
@@ -51,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Your Salon Directory",
           style: TextStyle(
             fontSize: 18.0,
@@ -84,22 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 15,
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Nearest to you ",
-                  style: TextStyle(
-                      fontFamily: 'GentiumPlus',
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: SizedBox(
@@ -108,6 +89,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   onNoOfReviewUpdated: onNoOfReviewUpdated,
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Hijabi & Afro + Curls salons",
+                  style: TextStyle(
+                      fontFamily: 'GentiumPlus',
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: CompoundQueryHA(),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               onPressed: () {
@@ -121,37 +128,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: const Text(
                 'Show more',
-                style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
+                style: TextStyle(
+                    fontFamily: 'GentiumPlus',
+                    fontSize: 16,
+                    wordSpacing: 0.6,
+                    letterSpacing: 0.7),
               ),
             ),
             const SizedBox(
               height: 10,
-            ),
-            //maybe add more widgets here
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text.rich(
-                  TextSpan(
-                    text:
-                        'Disclaimer: The information displayed may not be accurate. Please contact the salon specifically for updated information. Read our ',
-                    style: const TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.grey,
-                        fontFamily: 'GentiumPlus'),
-                    children: [
-                      TextSpan(
-                        text: 'Terms and Conditions',
-                        style: const TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Add your logic here for what happens when the user taps the button
-                          },
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center),
             ),
           ],
         ),

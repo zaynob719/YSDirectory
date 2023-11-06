@@ -1,10 +1,8 @@
 import 'package:YSDirectory/screens/pages/addReviewPage.dart';
 import 'package:YSDirectory/screens/pages/home_screen.dart';
 import 'package:YSDirectory/screens/pages/profile_page.dart';
-import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/show_more.dart';
 import 'package:YSDirectory/screens/view_all_screen.dart';
-import 'package:YSDirectory/widgets/result_widget.dart';
 import 'package:flutter/material.dart';
 
 const double kAppBarHeight = 100;
@@ -22,13 +20,11 @@ const List<String> categoryList = [
   "CURLDiD verified",
   "Male friendly",
   "Bridal services"
-  //near me,
-  //all salons - sentence at the buttom of the screen
 ];
 
 const List<String> categoryLogos = [
   //hijabi
-  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fhijabi-new.png?alt=media&token=69442e68-c7c5-44c8-879b-670d9790eb37",
+  "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fhijabi-new.png?alt=media&token=6e3dba87-59b8-48ea-9d01-7770385cd213&_gl=1*t1qq4z*_ga*MzE1NDgyMTQyLjE2NzE1NzQ2OTI.*_ga_CW55HF8NVT*MTY5OTExNDA5My4yNDYuMS4xNjk5MTE0MTcxLjQyLjAuMA..",
   //Children space
   "https://firebasestorage.googleapis.com/v0/b/your-salon-directory.appspot.com/o/salons_options_images%2Fkids-new.png?alt=media&token=793ba22e-4c48-4a2b-b945-6ddba6b2f6ff",
   //afro care
@@ -57,21 +53,12 @@ List<Widget> screens = [
   const ProfilePage(onNoOfReviewUpdated: onNoOfReviewUpdated),
 ];
 
-const List<String> appOffersHomePage = [
-  "images/save_salons.png",
-  "images/socials.png",
-  "images/discounts.png",
-  "images/new_logoc.png",
-];
-
-const List<String> appOffersHomePageNames = [
-  "Saved", //link to profile
-  "Contact us", //share to YSD insta
-  "Discounts", // link to YSD discounts
-  "About us", // link to social media
-];
-
-//List<String> keysOfRating = ["Bad", "Poor", "Average", "Good", "Excellent"];
+// const List<String> appOffersHomePageNames = [
+//   "Saved", //link to profile
+//   "Contact us", //share to YSD insta
+//   "Discounts", // link to YSD discounts
+//   "About us", // link to social media
+// ];
 
 final daysOfWeek = [
   'Monday',

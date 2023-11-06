@@ -28,8 +28,7 @@ class _CategoryChipWidgetState extends State<CategoryChipWidget> {
                 selected: selectedCategory == category,
                 selectedColor: brown,
                 backgroundColor: lightBrown,
-                labelStyle: TextStyle(fontFamily: 'GentiumPlus'),
-                //elevation: 2,
+                labelStyle: const TextStyle(fontFamily: 'GentiumPlus'),
                 onSelected: (isSelected) {
                   setState(() {
                     selectedCategory = isSelected ? category : '';

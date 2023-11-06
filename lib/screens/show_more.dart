@@ -1,13 +1,8 @@
-import 'package:YSDirectory/screens/view_all_screen.dart';
-import 'package:YSDirectory/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
-import 'package:YSDirectory/screens/result_screen.dart';
 import 'package:YSDirectory/utils/constants.dart';
-import 'package:YSDirectory/widgets/app_text.dart';
 import 'package:YSDirectory/widgets/category_widget.dart';
 import 'package:YSDirectory/widgets/result_widget.dart';
-import 'package:YSDirectory/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +28,9 @@ class _ShowMoreState extends State<ShowMore> {
           style: TextStyle(
               color: Colors.black,
               fontFamily: 'GentiumPlus',
-              fontWeight: FontWeight.w500,
-              fontSize: 24),
+              fontWeight: FontWeight.bold,
+              fontSize: 21,
+              letterSpacing: 0.6),
         ),
         leading: IconButton(
           icon: const Icon(
@@ -62,11 +58,11 @@ class _ShowMoreState extends State<ShowMore> {
             child: GestureDetector(
               onTap: (() {}),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(10.0),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 2.1 / 2.2,
+                      childAspectRatio: 1.1 / 1.1,
                       mainAxisSpacing: 9,
                       crossAxisSpacing: 9),
                   itemCount: categoryList.length,
@@ -75,29 +71,6 @@ class _ShowMoreState extends State<ShowMore> {
               ),
             ),
           ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(4.0),
-          //     child: ElevatedButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //               builder: (context) => const viewAllScreen(
-          //                   onNoOfReviewUpdated: onNoOfReviewUpdated)),
-          //         );
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: orengy,
-          //       ),
-          //       child: const Text(
-          //         'View all salons',
-          //         style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 16),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

@@ -239,11 +239,11 @@ class Salon {
   final double longitude;
   final String summary;
   final int noOfRating;
-  double totalRating; // shows avarage calculation of all rating
+  double totalRating;
   final String salonGeneralDescription;
   final Map services;
   final String id;
-  final String category; //CHANGE THIS TO MAP
+  final String category;
   final String website;
   final String instagram;
   final String number;
@@ -251,8 +251,6 @@ class Salon {
   final Map openHours;
   final int noOfReview;
   final Timestamp timestamp;
-  //Map<int, int>
-  //ratingDistribution; // shows how many users left rating with x amout of stars
 
   Stream<int> get noOfReviewStream => FirebaseFirestore.instance
       .collection('salons')
@@ -261,7 +259,6 @@ class Salon {
       .snapshots()
       .map((snapshot) => snapshot.docs.length);
 
-  // Method to update the noOfReview field in Firestore
   Future<void> updateNoOfReview(int newReviewCount) async {
     await FirebaseFirestore.instance.collection('salons').doc(id).update({
       'noOfReview': newReviewCount,
@@ -276,18 +273,12 @@ class Salon {
         .get();
 
     double totalRating = 0.0;
-    //Map<int, int> ratingDistribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
 
     for (final reviewDocument in reviewsSnapshot.docs) {
       final reviewData = reviewDocument.data();
       final reviewRating = reviewData['reviewRating'] as double?;
       if (reviewRating != null) {
         totalRating += reviewRating;
-
-        // int rating = reviewRating.round();
-        // if (rating >= 1 && rating <= 5) {
-        //   ratingDistribution[rating];
-        // }
       }
     }
 
@@ -296,11 +287,9 @@ class Salon {
     }
 
     this.totalRating = totalRating;
-    //this.ratingDistribution = ratingDistribution;
 
     await FirebaseFirestore.instance.collection('salons').doc(id).update({
       'totalRating': totalRating,
-      //'ratingDistribution': ratingDistribution,
     });
   }
 
@@ -312,12 +301,11 @@ class Salon {
     required this.summary,
     required this.salonGeneralDescription,
     required this.id,
-    required this.url,
+    required this.url, //image
     required this.category,
     required this.noOfRating,
     required this.noOfReview, //counts total reviews (salon detail page)
     required this.totalRating, //avarage rating (salon list view)
-    //required this.ratingDistribution, // how many per 1 to 5 stars left
     required this.website,
     required this.services,
     required this.instagram,
@@ -328,11 +316,6 @@ class Salon {
   });
 
   factory Salon.fromJson(Map<String, dynamic> json) {
-    // final Map<int, dynamic> jsonRatingDistribution =
-    //     json['ratingDistribution'] as Map<int, dynamic>? ?? {};
-    // final Map<int, int> ratingDistribution =
-    //     Map<int, int>.from(jsonRatingDistribution);
-
     return Salon(
       salonName: json['salonName'] as String? ?? '',
       location: json['location'] as String? ?? '',
@@ -357,7 +340,6 @@ class Salon {
       services: json['services'] as Map<dynamic, dynamic>? ?? {},
       timestamp: json['timestamp'] as Timestamp,
       noOfReview: json['noOfReview'] as int? ?? 0,
-      //ratingDistribution: ratingDistribution,
     );
   }
 }

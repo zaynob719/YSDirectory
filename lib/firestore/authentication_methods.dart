@@ -50,6 +50,7 @@ class AuthenticationMethods {
           );
           await cloudFirestoreClass.uploadNameAndCityToDatabase(
               user: userDetailsModel);
+          await user.sendEmailVerification();
           output = "success";
         } else {
           output = "User creation failed";
