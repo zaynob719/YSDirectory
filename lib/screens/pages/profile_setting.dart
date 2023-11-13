@@ -1,11 +1,10 @@
+import 'package:YSDirectory/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:YSDirectory/models/user_details_model.dart';
 import 'package:YSDirectory/utils/colors.dart';
 import 'package:YSDirectory/widgets/custom_main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:YSDirectory/provider/user_details_provider.dart';
 
 class ProfileSetting extends StatefulWidget {
   const ProfileSetting({Key? key}) : super(key: key);
@@ -24,6 +23,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     true,
   ];
   int count = 1;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -149,15 +149,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
               const SizedBox(height: 30),
               Center(
                 child: CustomMainButton(
+                    color: orengy,
+                    isLoading: isLoading,
+                    onPressed: () {
+                      updateUserDetails();
+                    },
                     child: const Text(
                       'Save',
                       style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 18),
-                    ),
-                    color: brown,
-                    isLoading: false,
-                    onPressed: () {
-                      updateUserDetails();
-                    }),
+                    )),
               ),
               const SizedBox(
                 height: 40,
@@ -169,7 +169,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               const Text(
@@ -219,6 +219,76 @@ class _ProfileSettingState extends State<ProfileSetting> {
               const Text(
                 "You can revoke your consent for each communication channel above by clicking the rrelevant button. If you withdraw your consent, you'll no longet receive Your Salon Direcory communication. ",
                 style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 14),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(
+                height: 5,
+                indent: 10,
+                endIndent: 10,
+                thickness: 2,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const Text(
+                "CAUTION!\nThe button below will permeently delete your account from our database. You'll have to recreate a new account if you want to continue using YSDirectory's services",
+                style: TextStyle(fontFamily: 'GentiumPlus', fontSize: 14),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: CustomMainButton(
+                    color: tagColor,
+                    isLoading: isLoading,
+                    onPressed: () async {
+                      User? user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        try {
+                          await user.delete();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: brown,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              )),
+                              content: Text("Account succesfully deleted "),
+                            ),
+                          );
+                          await Future.delayed(const Duration(seconds: 2));
+
+                          // Navigate to the login screen.
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const SignInScreen(),
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: brown,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              )),
+                              content: Text("Error deleting user: $e"),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: const Text(
+                      'Delete account',
+                      style: TextStyle(
+                          fontFamily: 'GentiumPlus',
+                          fontSize: 18,
+                          color: Colors.red),
+                    )),
               ),
               const SizedBox(
                 height: 20,

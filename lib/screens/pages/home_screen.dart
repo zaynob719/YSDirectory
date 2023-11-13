@@ -1,4 +1,5 @@
-import 'package:YSDirectory/widgets/compound_query_HA.dart';
+import 'package:YSDirectory/widgets/compound_query_A.dart';
+import 'package:YSDirectory/widgets/compound_query_H.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:YSDirectory/screens/pages/salon_detail_screen.dart';
 import 'package:YSDirectory/screens/show_more.dart';
@@ -51,12 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text(
           "Your Salon Directory",
           style: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'InknutAntiqua',
-            color: Colors.black,
-            wordSpacing: 0.10,
-          ),
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'InknutAntiqua',
+              color: Colors.black,
+              wordSpacing: 0.10,
+              letterSpacing: 0.7),
         ),
         actions: [
           IconButton(
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Hijabi & Afro + Curls salons",
+                  "Hijabi friendly",
                   style: TextStyle(
                       fontFamily: 'GentiumPlus',
                       fontSize: 21,
@@ -111,7 +112,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const Padding(
               padding: EdgeInsets.only(left: 20.0),
-              child: CompoundQueryHA(),
+              child: CompoundQueryH(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Afro + Curly care",
+                  style: TextStyle(
+                      fontFamily: 'GentiumPlus',
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: CompoundQueryA(),
             ),
             const SizedBox(
               height: 20,

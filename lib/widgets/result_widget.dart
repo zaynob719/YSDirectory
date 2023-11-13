@@ -330,7 +330,7 @@ class Salon {
       url: json['url'] as String? ?? '',
       category: json['category'] as String? ?? '',
       noOfRating: json['noOfRating'] as int? ?? 0,
-      totalRating: json['totalRating'] as double? ?? 0.0,
+      totalRating: (json['totalRating'] as num?)?.toDouble() ?? 0.0,
       id: json['id'] as String? ?? '',
       website: json['website'] as String? ?? '',
       instagram: json['instagram'] as String? ?? '',

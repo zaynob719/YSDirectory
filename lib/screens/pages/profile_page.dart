@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -47,15 +48,28 @@ class _ProfilePageState extends State<ProfilePage> {
     fetchSavedSalons();
   }
 
-  void signOut() async {
+  void signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('user_uid');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SignInScreen()),
       );
     } catch (e) {
-      print('Error signing out: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: brown,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          content: Text('Error signing out: $e'),
+        ),
+      );
     }
   }
 
@@ -353,15 +367,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   borderRadius:
                                                       BorderRadius.circular(5),
                                                 ),
-                                                child: Text(
-                                                  '${salon.totalRating} star',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'GentiumPlus',
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    letterSpacing: 0.7,
-                                                  ),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      '${salon.totalRating}',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            'GentiumPlus',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                        letterSpacing: 0.7,
+                                                      ),
+                                                    ),
+                                                    const Icon(
+                                                      Icons.star,
+                                                      color: Colors.white,
+                                                      size: 14,
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -463,7 +488,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 CustomMainButton(
                     color: backgroundColor,
                     isLoading: false,
-                    onPressed: signOut,
+                    onPressed: () => signOut(context),
                     child: Text(
                       "Sign out",
                       style: TextStyle(

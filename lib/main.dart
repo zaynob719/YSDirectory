@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:YSDirectory/layout/screen_layout.dart';
 import 'package:YSDirectory/provider/user_details_provider.dart';
 import 'package:YSDirectory/screens/introduction/introduction.dart';
+import 'package:YSDirectory/screens/splash/splash_screen.dart';
+import 'package:YSDirectory/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +30,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool isUserSignedIn() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
   Stream<List<dynamic>> _combineStreams() {
     final authStream = FirebaseAuth.instance.authStateChanges();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+      } else {}
+    });
     final salonStream =
         FirebaseFirestore.instance.collection('salons').snapshots();
     return Rx.combineLatest2(
@@ -38,6 +51,11 @@ class _MyAppState extends State<MyApp> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool seen = prefs.getBool('seen_flag') ?? false;
     return seen;
+  }
+
+  Future<void> clearUserUid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('user_uid');
   }
 
   @override
@@ -64,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                 return StreamBuilder<List<dynamic>?>(
                   stream: _combineStreams(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (isUserSignedIn()) {
                       return const ScreenLayout();
                     } else {
                       return const AppIntroduction();
@@ -72,11 +90,9 @@ class _MyAppState extends State<MyApp> {
                   },
                 );
               } else {
-                // Show the introduction screen for first-time users
                 return const AppIntroduction();
               }
             } else {
-              // Handle loading state or error
               return const CircularProgressIndicator();
             }
           },

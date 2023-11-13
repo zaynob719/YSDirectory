@@ -5,23 +5,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CompoundQueryHA extends StatefulWidget {
+class CompoundQueryA extends StatefulWidget {
   final Salon? salon;
-  const CompoundQueryHA({
+  const CompoundQueryA({
     Key? key,
     this.salon,
   }) : super(key: key);
 
   @override
-  State<CompoundQueryHA> createState() => _CompoundQueryHAState();
+  State<CompoundQueryA> createState() => _CompoundQueryAState();
 }
 
-class _CompoundQueryHAState extends State<CompoundQueryHA> {
+class _CompoundQueryAState extends State<CompoundQueryA> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance.collection("salons").where("category",
-          whereIn: ["Hijabi friendly", "Afro + Curly"]).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection("salons")
+          .where("category", isEqualTo: "Afro + Curly")
+          //.orderBy('timestamp', descending: true)
+          .limit(6)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CupertinoActivityIndicator();
@@ -40,7 +44,7 @@ class _CompoundQueryHAState extends State<CompoundQueryHA> {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: salons.take(5).map((salon) {
+                children: salons.map((salon) {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -79,14 +83,20 @@ class _CompoundQueryHAState extends State<CompoundQueryHA> {
                                   color: Colors.black.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: Text(
-                                  '${salon.totalRating} star',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'GentiumPlus',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 0.7),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${salon.totalRating}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'GentiumPlus',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 0.7),
+                                    ),
+                                    const Icon(Icons.star,
+                                        color: Colors.white, size: 14)
+                                  ],
                                 ),
                               ),
                             ),
